@@ -7,7 +7,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
-            <span className="pixel-text text-xl text-neon-cyan group-hover:neon-text transition-all duration-300">
+            <span className="pixel-text text-xl text-bright group-hover:neon-text transition-all duration-300">
               🕹️ GAMEHUB
             </span>
           </Link>
@@ -16,19 +16,19 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/games"
-              className="text-gray-300 hover:text-neon-pink transition-colors duration-300 font-medium"
+              className="text-bright hover:text-bright-pink transition-colors duration-300"
             >
               Games
             </Link>
             <Link
               href="/leaderboard"
-              className="text-gray-300 hover:text-neon-yellow transition-colors duration-300 font-medium"
+              className="text-bright hover:text-bright-yellow transition-colors duration-300"
             >
               Leaderboard
             </Link>
             <Link
               href="/about"
-              className="text-gray-300 hover:text-neon-purple transition-colors duration-300 font-medium"
+              className="text-bright hover:text-bright-purple transition-colors duration-300"
             >
               About
             </Link>

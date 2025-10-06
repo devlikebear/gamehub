@@ -15,8 +15,8 @@ const config: Config = {
         'neon-green': '#00ff00',
       },
       fontFamily: {
-        pixel: ['"Press Start 2P"', "cursive"],
-        sans: ["Inter", "sans-serif"],
+        pixel: ["var(--font-press-start)", "cursive"],
+        sans: ["var(--font-inter)", "sans-serif"],
         mono: ['"Courier New"', "monospace"],
       },
       boxShadow: {

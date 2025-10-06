@@ -9,33 +9,33 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="pixel-text text-sm text-neon-cyan mb-4">GAMEHUB</h3>
-            <p className="text-gray-400 text-sm">
+            <h3 className="pixel-text text-sm text-bright mb-4">GAMEHUB</h3>
+            <p className="text-bright text-sm">
               추억의 고전 아케이드 게임을 브라우저에서 즐겨보세요
             </p>
           </div>
 
           {/* Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Links</h4>
+            <h4 className="text-bright-pink font-bold mb-4">Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/games" className="text-gray-400 hover:text-neon-pink transition-colors text-sm">
+                <Link href="/games" className="text-bright hover:text-bright-pink transition-colors text-sm">
                   Games
                 </Link>
               </li>
               <li>
-                <Link href="/leaderboard" className="text-gray-400 hover:text-neon-yellow transition-colors text-sm">
+                <Link href="/leaderboard" className="text-bright hover:text-bright-yellow transition-colors text-sm">
                   Leaderboard
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-400 hover:text-neon-purple transition-colors text-sm">
+                <Link href="/about" className="text-bright hover:text-bright-purple transition-colors text-sm">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-400 hover:text-neon-green transition-colors text-sm">
+                <Link href="/contact" className="text-bright hover:text-bright-green transition-colors text-sm">
                   Contact
                 </Link>
               </li>
@@ -44,7 +44,7 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-white font-semibold mb-4">Connect</h4>
+            <h4 className="text-bright-pink font-bold mb-4">Connect</h4>
             <div className="flex space-x-4">
               <a
                 href="https://github.com/devlikebear/gamehub"
@@ -62,8 +62,8 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-gray-800 text-center">
-          <p className="text-gray-500 text-sm">
+        <div className="mt-8 pt-8 border-t border-neon-purple/30 text-center">
+          <p className="text-bright-purple text-sm">
             © {currentYear} GameHub. Open Source Project.
           </p>
         </div>
