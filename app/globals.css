@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+:root {
+  --neon-pink: #ff10f0;
+  --neon-cyan: #00f0ff;
+  --neon-purple: #9d00ff;
+  --neon-yellow: #ffff00;
+  --neon-green: #00ff00;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #001a33 100%);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* CRT Scanline Effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    transparent 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.1;
+}
+
+/* Grid Background */
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Pixel Font */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.pixel-text {
+  font-family: "Press Start 2P", cursive;
+  text-transform: uppercase;
+}
+
+/* Neon Glow Text */
+.neon-text {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 40px currentColor;
+}
+
+/* Arcade Button Effect */
+.arcade-button {
+  position: relative;
+  transform: translateY(0);
+  transition: all 0.1s;
+}
+
+.arcade-button:active {
+  transform: translateY(2px);
+  box-shadow: none;
+}
+
+/* Game Canvas */
+canvas {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
