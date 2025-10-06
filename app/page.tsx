@@ -29,20 +29,22 @@ export default function Home() {
 
         {/* Features Preview */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
-          {[
-            { name: 'SNAKE', icon: '🐍', color: 'neon-green' },
-            { name: 'TETRIS', icon: '🟦', color: 'neon-cyan' },
-            { name: 'PACMAN', icon: '👾', color: 'neon-yellow' },
-            { name: 'PONG', icon: '🏓', color: 'neon-pink' },
-          ].map((game) => (
-            <div
-              key={game.name}
-              className={`p-4 bg-black/30 border border-${game.color} rounded-lg hover:shadow-${game.color} transition-all duration-300 cursor-not-allowed opacity-50`}
-            >
-              <div className="text-4xl mb-2">{game.icon}</div>
-              <p className="pixel-text text-xs text-gray-400">{game.name}</p>
-            </div>
-          ))}
+          <div className="p-4 bg-black/30 border border-neon-green rounded-lg hover:shadow-neon-green transition-all duration-300 cursor-not-allowed opacity-50">
+            <div className="text-4xl mb-2">🐍</div>
+            <p className="pixel-text text-xs text-gray-400">SNAKE</p>
+          </div>
+          <div className="p-4 bg-black/30 border border-neon-cyan rounded-lg hover:shadow-neon-cyan transition-all duration-300 cursor-not-allowed opacity-50">
+            <div className="text-4xl mb-2">🟦</div>
+            <p className="pixel-text text-xs text-gray-400">TETRIS</p>
+          </div>
+          <div className="p-4 bg-black/30 border border-neon-yellow rounded-lg hover:shadow-neon-yellow transition-all duration-300 cursor-not-allowed opacity-50">
+            <div className="text-4xl mb-2">👾</div>
+            <p className="pixel-text text-xs text-gray-400">PACMAN</p>
+          </div>
+          <div className="p-4 bg-black/30 border border-neon-pink rounded-lg hover:shadow-neon-pink transition-all duration-300 cursor-not-allowed opacity-50">
+            <div className="text-4xl mb-2">🏓</div>
+            <p className="pixel-text text-xs text-gray-400">PONG</p>
+          </div>
         </div>
       </div>
     </main>

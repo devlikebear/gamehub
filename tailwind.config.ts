@@ -8,13 +8,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        neon: {
-          pink: "#ff10f0",
-          cyan: "#00f0ff",
-          purple: "#9d00ff",
-          yellow: "#ffff00",
-          green: "#00ff00",
-        },
+        'neon-pink': '#ff10f0',
+        'neon-cyan': '#00f0ff',
+        'neon-purple': '#9d00ff',
+        'neon-yellow': '#ffff00',
+        'neon-green': '#00ff00',
       },
       fontFamily: {
         pixel: ['"Press Start 2P"', "cursive"],
