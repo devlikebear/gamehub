@@ -53,29 +53,36 @@ export class NeonSerpentGame extends BaseGame {
   private readonly handleKeyDown = (event: KeyboardEvent) => {
     if (event.defaultPrevented) return;
 
+    let handled = false;
+
     switch (event.key) {
       case 'ArrowUp':
       case 'w':
       case 'W':
         this.queueDirection({ x: 0, y: -1 });
+        handled = true;
         break;
       case 'ArrowDown':
       case 's':
       case 'S':
         this.queueDirection({ x: 0, y: 1 });
+        handled = true;
         break;
       case 'ArrowLeft':
       case 'a':
       case 'A':
         this.queueDirection({ x: -1, y: 0 });
+        handled = true;
         break;
       case 'ArrowRight':
       case 'd':
       case 'D':
         this.queueDirection({ x: 1, y: 0 });
+        handled = true;
         break;
       case 'Shift':
         this.tryDash();
+        handled = true;
         break;
       case 'r':
       case 'R':
@@ -83,6 +90,10 @@ export class NeonSerpentGame extends BaseGame {
         break;
       default:
         break;
+    }
+
+    if (handled) {
+      event.preventDefault();
     }
   };
 
