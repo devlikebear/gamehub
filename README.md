@@ -48,11 +48,11 @@ This project is optimized for Cloudflare Pages:
 - **Hosting**: Cloudflare Pages
 - **Fonts**: Press Start 2P (pixel font), Inter
 
-## 🎯 Games (Planned)
+## 🎯 Games Roadmap
 
 | Game | Difficulty | Status |
 |------|-----------|--------|
-| Neon Serpent | ⭐ | Planned |
+| Neon Serpent | ⭐ | Playable (prototype) |
 | Pulse Paddles | ⭐ | Planned |
 | Prism Smash | ⭐⭐ | Planned |
 | Cascade Blocks | ⭐⭐⭐ | Planned |
