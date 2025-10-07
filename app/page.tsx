@@ -31,19 +31,19 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
           <div className="p-4 bg-black/30 border-2 border-bright-green rounded-lg hover:shadow-neon-green transition-all duration-300 cursor-not-allowed opacity-70 hover:opacity-90">
             <div className="text-4xl mb-2">🐍</div>
-            <p className="pixel-text text-xs text-bright-green">SNAKE</p>
+            <p className="pixel-text text-xs text-bright-green">NEON SERPENT</p>
           </div>
           <div className="p-4 bg-black/30 border-2 border-bright-cyan rounded-lg hover:shadow-neon-cyan transition-all duration-300 cursor-not-allowed opacity-70 hover:opacity-90">
-            <div className="text-4xl mb-2">🟦</div>
-            <p className="pixel-text text-xs text-bright">TETRIS</p>
+            <div className="text-4xl mb-2">🔷</div>
+            <p className="pixel-text text-xs text-bright">CASCADE BLOCKS</p>
           </div>
           <div className="p-4 bg-black/30 border-2 border-bright-yellow rounded-lg hover:shadow-neon-yellow transition-all duration-300 cursor-not-allowed opacity-70 hover:opacity-90">
-            <div className="text-4xl mb-2">👾</div>
-            <p className="pixel-text text-xs text-bright-yellow">PACMAN</p>
+            <div className="text-4xl mb-2">🔮</div>
+            <p className="pixel-text text-xs text-bright-yellow">SPECTRAL PURSUIT</p>
           </div>
           <div className="p-4 bg-black/30 border-2 border-bright-pink rounded-lg hover:shadow-neon-pink transition-all duration-300 cursor-not-allowed opacity-70 hover:opacity-90">
             <div className="text-4xl mb-2">🏓</div>
-            <p className="pixel-text text-xs text-bright-pink">PONG</p>
+            <p className="pixel-text text-xs text-bright-pink">PULSE PADDLES</p>
           </div>
         </div>
       </div>

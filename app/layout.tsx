@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     default: "GameHub - Retro Arcade Games",
     template: "%s | GameHub",
   },
-  description: "Play classic arcade games in your browser. Snake, Tetris, Pac-Man and more!",
-  keywords: ["arcade games", "retro games", "browser games", "classic games", "online games"],
+  description: "Play original neon arcade reinterpretations of maze runners, paddle duels, falling blocks and more.",
+  keywords: ["arcade", "retro-inspired", "original games", "browser arcade", "neon games"],
 };
 
 export default function RootLayout({

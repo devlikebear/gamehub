@@ -6,7 +6,7 @@
 
 ## 🎮 Features
 
-- 🕹️ **Classic Arcade Games**: Snake, Tetris, Pac-Man, and more
+- 🕹️ **Original Neon Arcade Series**: Maze runners, paddle duels, falling blocks, asteroid drift and more
 - 🎨 **Retro Design**: 80s-90s arcade aesthetic with neon colors
 - 📱 **Responsive**: Play on mobile, tablet, or desktop
 - ⚡ **Fast & Lightweight**: Built with Next.js 15 and Tailwind CSS 4
@@ -52,12 +52,13 @@ This project is optimized for Cloudflare Pages:
 
 | Game | Difficulty | Status |
 |------|-----------|--------|
-| Snake | ⭐ | Planned |
-| Pong | ⭐ | Planned |
-| Breakout | ⭐⭐ | Planned |
-| Tetris | ⭐⭐⭐ | Planned |
-| Space Invaders | ⭐⭐⭐ | Planned |
-| Pac-Man | ⭐⭐⭐⭐ | Planned |
+| Neon Serpent | ⭐ | Planned |
+| Pulse Paddles | ⭐ | Planned |
+| Prism Smash | ⭐⭐ | Planned |
+| Cascade Blocks | ⭐⭐⭐ | Planned |
+| Photon Vanguard | ⭐⭐⭐ | Planned |
+| Spectral Pursuit | ⭐⭐⭐⭐ | Planned |
+| Starshard Drift | ⭐⭐⭐⭐ | Planned |
 
 ## 📁 Project Structure
 
@@ -84,6 +85,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📄 License
 
 MIT License - feel free to use this project for learning or building your own arcade!
+
+## 🛡️ IP & Licensing
+
+- All code and gameplay systems are authored from scratch; no ROMs, reverse engineering, or extracted assets are used.
+- Visuals, audio, and fonts must be original creations or sourced from permissive licenses (CC0/CC-BY) with proper attribution.
+- Game titles, characters, layouts, and UI are intentionally distinct from trademarked classics. Project branding avoids names such as Pac-Man, Tetris, Space Invaders, Pong, Breakout, or Asteroids.
+- This project is an independent homage to arcade-era design and is not affiliated with or endorsed by the original rights holders.
 
 ## 🙏 Credits
 

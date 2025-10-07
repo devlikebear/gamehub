@@ -41,12 +41,12 @@ gamehub/
 │   ├── layout.tsx         # 루트 레이아웃
 │   ├── page.tsx           # 홈 (오락실 메인)
 │   ├── games/             # 게임 페이지들
-│   │   ├── snake/         # 스네이크
-│   │   ├── tetris/        # 테트리스
-│   │   ├── breakout/      # 벽돌깨기
-│   │   ├── pacman/        # 팩맨
-│   │   ├── pong/          # 퐁
-│   │   └── space-invaders/ # 스페이스 인베이더
+│   │   ├── neon-serpent/      # 네온 서펀트 (추적형 필드)
+│   │   ├── cascade-blocks/    # 캐스케이드 블록 (가변 필드)
+│   │   ├── prism-smash/       # 프리즘 스매시 (벽 구조 퍼즐)
+│   │   ├── spectral-pursuit/  # 스펙트럴 퍼슈트 (개방형 라비린스)
+│   │   ├── pulse-paddles/     # 펄스 패들 (에너지 듀얼)
+│   │   └── photon-vanguard/   # 포톤 뱅가드 (궤도 방어)
 │   ├── leaderboard/       # 리더보드
 │   ├── about/             # 소개 페이지
 │   └── contact/           # 연락처
@@ -59,8 +59,8 @@ gamehub/
 ├── lib/                  # 게임 로직 & 유틸리티
 │   ├── games/            # 게임 엔진 및 개별 게임
 │   │   ├── engine/       # 공통 게임 엔진
-│   │   ├── snake/        # 스네이크 로직
-│   │   ├── tetris/       # 테트리스 로직
+│   │   ├── neon-serpent/     # 네온 서펀트 로직
+│   │   ├── cascade-blocks/   # 캐스케이드 블록 로직
 │   │   └── ...
 │   ├── storage/          # 로컬 스토리지 관리
 │   └── i18n/             # 다국어 지원
@@ -97,48 +97,64 @@ gamehub/
 - [ ] 로컬 스토리지 관리 (최고 점수) [#15](https://github.com/devlikebear/gamehub/issues/15)
 - [ ] 게임 공통 UI (일시정지, 게임오버, 재시작) [#16](https://github.com/devlikebear/gamehub/issues/16)
 
+## 🛡️ IP 컴플라이언스 전략
+
+- **Pac-Man 계열 (고위험)**: 고정 미로, 노란 주인공, 4색 유령, 효과음을 사용하지 않는다. Spectral Pursuit는 개방형 지도를 기반으로 하고, 캐릭터 형태와 연출을 완전히 새롭게 디자인한다.
+- **Space Invaders 계열 (고위험)**: 대형 편대, 보호막, 상단 UFO 연출을 차용하지 않는다. Photon Vanguard는 방사형 궤도 진입 시스템과 시간 왜곡 능력을 중심으로 제작한다.
+- **Tetris 계열 (매우 고위험)**: 10×20 보드, 7 테트로미노, 고정 색 팔레트를 사용하지 않는다. Cascade Blocks는 가변 필드와 다각형 모듈, 에너지 루프 규칙을 사용한다.
+- **Asteroids 계열 (중고위험)**: 벡터 우주선, 파편화 연출, 명칭을 그대로 쓰지 않는다. Starshard Drift는 네온 파티클과 중력 파동을 활용한다.
+- **Breakout/Pong 계열 (중간)**: 명칭과 UI를 재창조하고, 물리 시스템과 필드 구성을 변형한다. Pulse Paddles와 Prism Smash는 네온 커브샷, 필드 재구성 등 신규 요소를 강조한다.
+- **Snake 계열 (낮음)**: 기본 장르는 허용되지만 Nokia 스타일, 원본 UI를 사용하지 않는다. Neon Serpent는 절차적 필드와 에너지 과부하 메커닉을 사용한다.
+- **자체 에셋 제작**: 그래픽·사운드·폰트를 직접 제작하거나 CC0/CC-BY 등 배포 허용 라이선스만 사용하며 출처를 명시한다.
+- **브랜딩/README 정책**: 상표권이 있는 명칭은 마케팅 타이틀에 포함하지 않고, README에는 독립 프로젝트임을 명시하며 필요한 경우 최소한의 설명적 언급만 한다.
+
 ### Phase 4: 클래식 게임 구현
 
 #### 우선순위 높음 (간단한 게임)
 
-- [ ] **Snake (스네이크)** [#17](https://github.com/devlikebear/gamehub/issues/17): 클래식 뱀 게임
-  - 방향키로 이동
-  - 먹이 먹고 점수 획득
-  - 벽/자기 몸 충돌 시 게임 오버
+- [ ] **Neon Serpent (네온 서펀트)** [#17](https://github.com/devlikebear/gamehub/issues/17): 절차적 필드 추적 게임
+  - 방향키 이동 + 대시로 변형된 필드 탐색
+  - 랜덤 에너지 오브 수집, 꼬리 세그먼트가 독자적 패턴 유지
+  - 충돌 대신 에너지 과부하 메커닉 적용 (속도 저하 후 리커버리)
   - 난이도: ⭐
 
-- [ ] **Pong (퐁)** [#18](https://github.com/devlikebear/gamehub/issues/18): 탁구 게임
-  - 상/하 키로 패들 조작
-  - AI 상대 또는 2인 플레이
+- [ ] **Pulse Paddles (펄스 패들)** [#18](https://github.com/devlikebear/gamehub/issues/18): 네온 커브샷 듀얼
+  - 상/하 키로 패들 제어, Space로 커브샷/스핀 구현
+  - AI vs Player 및 로컬 2P 지원
+  - 득점 시 필드 형상이 재구성되는 모듈형 아레나
   - 난이도: ⭐
 
-- [ ] **Breakout (벽돌깨기)** [#19](https://github.com/devlikebear/gamehub/issues/19): 클래식 벽돌깨기
-  - 좌/우 키로 패들 이동
-  - 공으로 벽돌 깨기
+- [ ] **Prism Smash (프리즘 스매시)** [#19](https://github.com/devlikebear/gamehub/issues/19): 모듈형 벽체 해체 게임
+  - 좌/우 키 + 필드 스왑 액션으로 패턴 변환
+  - 다각형 블록이 충돌 시 조각으로 분리되어 콤보 생성
   - 난이도: ⭐⭐
 
 #### 우선순위 중간
 
-- [ ] **Tetris (테트리스)** [#20](https://github.com/devlikebear/gamehub/issues/20): 블록 퍼즐 게임
-  - 방향키로 블록 회전/이동
-  - 라인 완성 시 제거
+- [ ] **Cascade Blocks (캐스케이드 블록)** [#20](https://github.com/devlikebear/gamehub/issues/20): 다각형 낙하 퍼즐
+  - 방향키로 다각형 모듈 회전/이동, Space 가속 낙하
+  - 필드 크기가 라운드마다 변하며 목표도 동적으로 변경
+  - 라인 대신 에너지 루프를 완성하면 점수 획득
   - 난이도: ⭐⭐⭐
 
-- [ ] **Space Invaders (스페이스 인베이더)** [#21](https://github.com/devlikebear/gamehub/issues/21): 슈팅 게임
-  - 좌/우 이동, 스페이스바 발사
-  - 외계인 격추
+- [ ] **Photon Vanguard (포톤 뱅가드)** [#21](https://github.com/devlikebear/gamehub/issues/21): 방사형 궤도 방어 슈팅
+  - 좌/우 이동 및 타임 슬로우/파동 발사 시스템
+  - 편대 대신 동심원 궤도로 진입하는 포톤 구체 대응
+  - 보호막 대신 가변 타임라인 실드 구현
   - 난이도: ⭐⭐⭐
 
 #### 우선순위 낮음 (복잡한 게임)
 
-- [ ] **Pac-Man (팩맨)** [#22](https://github.com/devlikebear/gamehub/issues/22): 미로 게임
-  - 방향키로 이동
-  - 점 먹고 유령 피하기
+- [ ] **Spectral Pursuit (스펙트럴 퍼슈트)** [#22](https://github.com/devlikebear/gamehub/issues/22): 스텔스 라비린스 체이스
+  - 방향키 이동 + 위장 능력으로 추적자 AI 회피
+  - 고정 미로 대신 오픈 라우팅 레이어, 수집 목표는 빛의 파편
+  - 긴장도 시스템(시야/사운드 노출)
   - 난이도: ⭐⭐⭐⭐
 
-- [ ] **Asteroids (아스테로이드)** [#23](https://github.com/devlikebear/gamehub/issues/23): 우주선 슈팅
-  - 회전/이동/발사
-  - 운석 파괴
+- [ ] **Starshard Drift (스타샤드 드리프트)** [#23](https://github.com/devlikebear/gamehub/issues/23): 중력 파편 드리프트 슈팅
+  - 회전/추진/펄스 방출로 파편 조각 관리
+  - 벡터 대신 네온 파티클 아트, 파편은 중력장에 따라 분기
+  - 스테이지마다 중력 파동 패턴이 변화
   - 난이도: ⭐⭐⭐⭐
 
 ### Phase 5: 리더보드 & 소셜 기능
@@ -238,23 +254,23 @@ gamehub/
 ### 게임 페이지 구조
 
 ```tsx
-// app/games/snake/page.tsx
+// app/games/neon-serpent/page.tsx
 'use client';
 
 import { GameCanvas } from '@/components/games/GameCanvas';
-import { SnakeGame } from '@/lib/games/snake/SnakeGame';
+import { NeonSerpentGame } from '@/lib/games/neon-serpent/NeonSerpentGame';
 import { ArcadeCard } from '@/components/ui/arcade/ArcadeCard';
 
-export default function SnakePage() {
+export default function NeonSerpentPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-cyan-900">
       <div className="container mx-auto px-4 py-8">
         <ArcadeCard neonColor="green">
-          <h1 className="pixel-text text-4xl mb-4">SNAKE</h1>
-          <GameCanvas game={SnakeGame} />
+          <h1 className="pixel-text text-4xl mb-4">NEON SERPENT</h1>
+          <GameCanvas game={NeonSerpentGame} />
           <div className="controls mt-4">
             <p>← → ↑ ↓ : 이동</p>
-            <p>SPACE : 일시정지</p>
+            <p>Shift : 대시 / SPACE : 일시정지</p>
           </div>
         </ArcadeCard>
       </div>
@@ -320,13 +336,13 @@ npm test           # 테스트 실행
 
 | 게임 | 난이도 | 컨트롤 | 상태 |
 |------|--------|--------|------|
-| Snake | ⭐ | 방향키 | 계획 |
-| Pong | ⭐ | ↑↓ | 계획 |
-| Breakout | ⭐⭐ | ←→ | 계획 |
-| Tetris | ⭐⭐⭐ | 방향키+Space | 계획 |
-| Space Invaders | ⭐⭐⭐ | ←→+Space | 계획 |
-| Pac-Man | ⭐⭐⭐⭐ | 방향키 | 계획 |
-| Asteroids | ⭐⭐⭐⭐ | 방향키+Space | 계획 |
+| Neon Serpent | ⭐ | 방향키 + 대시 | 계획 |
+| Pulse Paddles | ⭐ | ↑↓ + 커브샷 | 계획 |
+| Prism Smash | ⭐⭐ | ←→ + 필드 스왑 | 계획 |
+| Cascade Blocks | ⭐⭐⭐ | 방향키 + Space | 계획 |
+| Photon Vanguard | ⭐⭐⭐ | ←→ + 파동 | 계획 |
+| Spectral Pursuit | ⭐⭐⭐⭐ | 방향키 + 위장 | 계획 |
+| Starshard Drift | ⭐⭐⭐⭐ | 방향키 + 펄스 | 계획 |
 
 ## 🤝 기여 가이드
 
@@ -338,7 +354,7 @@ npm test           # 테스트 실행
 
 ### 커밋 컨벤션
 ```
-feat: 새 게임 추가 (Snake 게임 구현)
+feat: 새 게임 추가 (Neon Serpent 구현)
 fix: 게임 버그 수정
 docs: 문서 수정
 style: 코드 스타일 (포맷팅)
