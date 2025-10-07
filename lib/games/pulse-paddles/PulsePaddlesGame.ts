@@ -1,4 +1,4 @@
-import { BaseGame, GameConfig } from '../engine';
+import { BaseGame, GameConfig, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 import { ArenaPattern, pickRandomPattern } from './arena';
 import { Ball, Paddle, clamp, createBall, createPaddle } from './entities';
 
@@ -134,14 +134,14 @@ export class PulsePaddlesGame extends BaseGame {
   }
 
   protected render(): void {
-    this.clearCanvas('#04040a');
+    this.clearCanvas(BACKGROUND_COLORS.DARK);
     this.drawArena();
     this.drawZones();
     this.drawPaddles();
     this.drawBall();
     this.drawHUD();
     if (this.matchOver) {
-      this.drawOverlay('MATCH COMPLETE', '#ff10f0', 'Enter 키로 재시작');
+      this.drawOverlay('MATCH COMPLETE', NEON_COLORS.PINK, 'Enter 키로 재시작');
     }
     this.publishDebugState();
   }
@@ -367,8 +367,8 @@ export class PulsePaddlesGame extends BaseGame {
     ctx.save();
 
     const backgroundGradient = ctx.createLinearGradient(0, this.fieldTop, 0, this.fieldTop + this.fieldHeight);
-    backgroundGradient.addColorStop(0, '#08081c');
-    backgroundGradient.addColorStop(1, '#050512');
+    backgroundGradient.addColorStop(0, BACKGROUND_COLORS.FIELD_DARK);
+    backgroundGradient.addColorStop(1, BACKGROUND_COLORS.DARKER);
     ctx.fillStyle = backgroundGradient;
     ctx.fillRect(this.fieldLeft, this.fieldTop, this.fieldWidth, this.fieldHeight);
 
@@ -409,7 +409,7 @@ export class PulsePaddlesGame extends BaseGame {
       if (this.patternTimer < 1800) {
         this.drawText(zone.label, zoneLeft + zoneWidth / 2 - 24, this.fieldTop + this.fieldHeight / 2 - 8, {
           color: zone.color,
-          font: '12px "Press Start 2P"',
+          font: FONTS.PIXEL_SMALL,
         });
       }
     }
@@ -419,10 +419,10 @@ export class PulsePaddlesGame extends BaseGame {
     const ctx = this.ctx;
     ctx.save();
 
-    ctx.fillStyle = '#00f0ff';
+    ctx.fillStyle = NEON_COLORS.CYAN;
     ctx.fillRect(this.leftPaddle.x, this.leftPaddle.y, this.leftPaddle.width, this.leftPaddle.height);
 
-    ctx.fillStyle = '#ff10f0';
+    ctx.fillStyle = NEON_COLORS.PINK;
     ctx.fillRect(this.rightPaddle.x, this.rightPaddle.y, this.rightPaddle.width, this.rightPaddle.height);
 
     ctx.restore();
@@ -446,8 +446,8 @@ export class PulsePaddlesGame extends BaseGame {
 
   private drawHUD(): void {
     const headerY = this.fieldTop - 40;
-    const scoreColorLeft = this.comboGlow > 0.5 ? '#00f0ff' : '#8b9fff';
-    const scoreColorRight = this.comboGlow > 0.5 ? '#ff10f0' : '#ff89ff';
+    const scoreColorLeft = this.comboGlow > 0.5 ? NEON_COLORS.CYAN : '#8b9fff';
+    const scoreColorRight = this.comboGlow > 0.5 ? NEON_COLORS.PINK : '#ff89ff';
 
     this.drawText(`PLAYER ${this.scoreLeft}`, this.fieldLeft, headerY, {
       color: scoreColorLeft,
@@ -462,21 +462,21 @@ export class PulsePaddlesGame extends BaseGame {
 
     const modeText = this.isTwoPlayer ? 'MODE: LOCAL 2P (W/S + F)' : 'MODE: AI (1P)';
     this.drawText(modeText, this.fieldLeft + this.fieldWidth / 2, headerY, {
-      color: '#ffd966',
-      font: '12px "Press Start 2P"',
+      color: NEON_COLORS.YELLOW,
+      font: FONTS.PIXEL_SMALL,
       align: 'center',
     });
 
     const showingShift = this.patternTimer < 2200;
     if (showingShift) {
       this.drawText(`ARENA SHIFT · ${this.pattern.name}`, this.fieldLeft + this.fieldWidth / 2, this.fieldTop + this.fieldHeight + 24, {
-        color: '#ff10f0',
-        font: '12px "Press Start 2P"',
+        color: NEON_COLORS.PINK,
+        font: FONTS.PIXEL_SMALL,
         align: 'center',
       });
       this.drawText(this.pattern.description, this.fieldLeft + this.fieldWidth / 2, this.fieldTop + this.fieldHeight + 46, {
         color: '#8b9fff',
-        font: '10px "Press Start 2P"',
+        font: FONTS.PIXEL_TINY,
         align: 'center',
       });
     }
@@ -486,7 +486,7 @@ export class PulsePaddlesGame extends BaseGame {
     if (!showingShift) {
       this.drawText('←/→ 방향키: 이동 · Space/Shift: 커브샷 · 1: AI · 2: 로컬2P · Enter: 리셋', this.fieldLeft + this.fieldWidth / 2, this.height - 32, {
         color: '#7c86ff',
-        font: '10px "Press Start 2P"',
+        font: FONTS.PIXEL_TINY,
         align: 'center',
       });
     }
@@ -517,28 +517,6 @@ export class PulsePaddlesGame extends BaseGame {
     ctx.fillStyle = color;
     ctx.globalAlpha = 0.6;
     ctx.fillRect(x + 1, y + 1, (width - 2) * clamp(ratio, 0, 1), height - 2);
-    ctx.restore();
-  }
-
-  private drawOverlay(message: string, color: string, subtitle?: string): void {
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.fillRect(0, 0, this.width, this.height);
-
-    this.drawText(message, this.width / 2, this.height / 2 - 30, {
-      color,
-      font: '22px "Press Start 2P"',
-      align: 'center',
-    });
-
-    if (subtitle) {
-      this.drawText(subtitle, this.width / 2, this.height / 2 + 4, {
-        color: '#ffffff',
-        font: '12px "Press Start 2P"',
-        align: 'center',
-      });
-    }
     ctx.restore();
   }
 

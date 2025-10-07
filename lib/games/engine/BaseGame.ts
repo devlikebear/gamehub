@@ -1,4 +1,5 @@
 import { GameLoop } from './GameLoop';
+import { FONTS, NEON_COLORS, OVERLAY } from './constants';
 
 /**
  * BaseGame - 모든 게임의 기본 클래스
@@ -138,5 +139,41 @@ export abstract class BaseGame extends GameLoop {
     this.ctx.beginPath();
     this.ctx.arc(x, y, radius, 0, Math.PI * 2);
     this.ctx.fill();
+  }
+
+  /**
+   * 게임 오버레이 그리기 (일시정지, 게임오버 등)
+   */
+  protected drawOverlay(
+    message: string,
+    color: string = NEON_COLORS.CYAN,
+    subtitle?: string
+  ): void {
+    const ctx = this.ctx;
+    ctx.save();
+
+    // 반투명 배경
+    ctx.fillStyle = OVERLAY.BACKGROUND;
+    ctx.fillRect(0, 0, this.width, this.height);
+
+    // 메인 메시지
+    this.drawText(message, this.width / 2, this.height / 2 - 30, {
+      color,
+      font: FONTS.PIXEL_LARGE,
+      align: 'center',
+      baseline: 'middle',
+    });
+
+    // 서브 메시지
+    if (subtitle) {
+      this.drawText(subtitle, this.width / 2, this.height / 2 + 10, {
+        color: NEON_COLORS.WHITE,
+        font: FONTS.PIXEL_SMALL,
+        align: 'center',
+        baseline: 'middle',
+      });
+    }
+
+    ctx.restore();
   }
 }

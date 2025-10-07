@@ -1,4 +1,4 @@
-import { BaseGame, GameConfig, InputHandler } from '../engine';
+import { BaseGame, GameConfig, InputHandler, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 import { createInitialSerpent, SerpentSegment, updateSegmentAges } from './segments';
 import { generateHazardField, HazardField, spawnEnergyOrb, toKey } from './energyField';
 
@@ -165,7 +165,7 @@ export class NeonSerpentGame extends BaseGame {
   }
 
   protected render(): void {
-    this.clearCanvas('#050512');
+    this.clearCanvas(BACKGROUND_COLORS.DARKER);
 
     this.drawBoardBackground();
     this.drawHazards();
@@ -176,7 +176,7 @@ export class NeonSerpentGame extends BaseGame {
     if (this.gameOver) {
       this.drawOverlay('SYSTEM FAILURE', '#ff3366', 'ENTER / R TO REBOOT');
     } else if (this.getIsPaused()) {
-      this.drawOverlay('PAUSED', '#00f0ff', 'SPACE TO RESUME · R TO RESTART');
+      this.drawOverlay('PAUSED', NEON_COLORS.CYAN, 'SPACE TO RESUME · R TO RESTART');
     }
   }
 
@@ -321,7 +321,7 @@ export class NeonSerpentGame extends BaseGame {
   private drawBoardBackground(): void {
     const ctx = this.ctx;
     ctx.save();
-    ctx.fillStyle = '#08081a';
+    ctx.fillStyle = BACKGROUND_COLORS.FIELD;
     ctx.fillRect(this.boardOffsetX - 8, this.boardOffsetY - 8, this.boardPixelWidth + 16, this.boardPixelHeight + 16);
 
     ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
@@ -417,10 +417,12 @@ export class NeonSerpentGame extends BaseGame {
     const textY = this.boardOffsetY + this.boardPixelHeight + padding;
 
     this.drawText(`SCORE ${this.score.toString().padStart(5, '0')}`, this.boardOffsetX, textY, {
-      color: '#00f0ff',
+      color: NEON_COLORS.CYAN,
+      font: FONTS.PIXEL_MEDIUM,
     });
     this.drawText(`COMBO ${this.combo} (BEST ${this.bestCombo})`, this.boardOffsetX, textY + 22, {
-      color: '#ff8cf4',
+      color: NEON_COLORS.PINK,
+      font: FONTS.PIXEL_MEDIUM,
     });
 
     this.drawEnergyGauge();
@@ -431,11 +433,11 @@ export class NeonSerpentGame extends BaseGame {
     const gaugeWidth = 220;
     const gaugeHeight = 14;
     const x = this.boardOffsetX + this.boardPixelWidth - gaugeWidth;
-    const y = this.boardOffsetY + this.boardPixelHeight + 24;
+    const y = this.boardOffsetY + this.boardPixelHeight + 42;
 
     const ctx = this.ctx;
     ctx.save();
-    ctx.strokeStyle = '#00f0ff';
+    ctx.strokeStyle = NEON_COLORS.CYAN;
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, gaugeWidth, gaugeHeight);
 
@@ -444,47 +446,26 @@ export class NeonSerpentGame extends BaseGame {
 
     const gradient = ctx.createLinearGradient(x, y, x + gaugeWidth, y);
     gradient.addColorStop(0, '#3af6ff');
-    gradient.addColorStop(1, '#ff10f0');
+    gradient.addColorStop(1, NEON_COLORS.PINK);
 
     ctx.fillStyle = gradient;
     ctx.fillRect(x + 1, y + 1, filledWidth - 2, gaugeHeight - 2);
     ctx.restore();
 
     const status = this.overloadTimer > 0 ? 'OVERLOAD COOLDOWN' : this.dashCooldown > 0 ? 'DASH RECHARGING' : 'SHIFT FOR DASH';
-    const color = this.overloadTimer > 0 ? '#ff4f6d' : this.dashCooldown > 0 ? '#ffd966' : '#00f0ff';
-    this.drawText(status, x, y - 18, { color, font: '12px "Press Start 2P"' });
+    const color = this.overloadTimer > 0 ? '#ff4f6d' : this.dashCooldown > 0 ? NEON_COLORS.YELLOW : NEON_COLORS.CYAN;
+    this.drawText(status, x, y - 18, { color, font: FONTS.PIXEL_SMALL });
   }
 
   private drawInstruction(): void {
-    const infoX = this.boardOffsetX;
+    const infoX = this.boardOffsetX + this.boardPixelWidth / 2;
     const infoY = this.boardOffsetY - 32;
 
     this.drawText('ARROWS MOVE  |  SHIFT DASH  |  SPACE PAUSE  |  ENTER/R REBOOT', infoX, infoY, {
       color: '#8b9fff',
-      font: '12px "Press Start 2P"',
-    });
-  }
-
-  private drawOverlay(message: string, color: string, subtitle?: string): void {
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.55)';
-    ctx.fillRect(0, 0, this.width, this.height);
-
-    this.drawText(message, this.width / 2, this.height / 2 - 20, {
+      font: FONTS.PIXEL_SMALL,
       align: 'center',
-      color,
-      font: '22px "Press Start 2P"',
     });
-
-    if (subtitle) {
-      this.drawText(subtitle, this.width / 2, this.height / 2 + 12, {
-        align: 'center',
-        color: '#ffffff',
-        font: '12px "Press Start 2P"',
-      });
-    }
-    ctx.restore();
   }
 
   private wrap(value: number, max: number): number {

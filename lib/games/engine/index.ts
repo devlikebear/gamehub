@@ -5,3 +5,4 @@ export { InputHandler } from './InputHandler';
 export { CollisionDetector } from './CollisionDetector';
 export { ScoreManager } from './ScoreManager';
 export { StorageManager } from './StorageManager';
+export * from './constants';
