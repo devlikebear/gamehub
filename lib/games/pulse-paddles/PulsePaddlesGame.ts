@@ -467,7 +467,8 @@ export class PulsePaddlesGame extends BaseGame {
       align: 'center',
     });
 
-    if (this.patternTimer < 2200) {
+    const showingShift = this.patternTimer < 2200;
+    if (showingShift) {
       this.drawText(`ARENA SHIFT · ${this.pattern.name}`, this.fieldLeft + this.fieldWidth / 2, this.fieldTop + this.fieldHeight + 24, {
         color: '#ff10f0',
         font: '12px "Press Start 2P"',
@@ -482,11 +483,13 @@ export class PulsePaddlesGame extends BaseGame {
 
     this.drawSpinMeter();
 
-    this.drawText('←/→ 방향키: 이동 · Space/Shift: 커브샷 · 1: AI · 2: 로컬2P · Enter: 리셋', this.fieldLeft + this.fieldWidth / 2, this.height - 32, {
-      color: '#7c86ff',
-      font: '10px "Press Start 2P"',
-      align: 'center',
-    });
+    if (!showingShift) {
+      this.drawText('←/→ 방향키: 이동 · Space/Shift: 커브샷 · 1: AI · 2: 로컬2P · Enter: 리셋', this.fieldLeft + this.fieldWidth / 2, this.height - 32, {
+        color: '#7c86ff',
+        font: '10px "Press Start 2P"',
+        align: 'center',
+      });
+    }
   }
 
   private drawSpinMeter(): void {
