@@ -118,10 +118,11 @@ gamehub/
   - 게임 페이지 `/games/neon-serpent` 오픈 및 컨트롤 가이드 반영
   - 난이도: ⭐
 
-- [ ] **Pulse Paddles (펄스 패들)** [#18](https://github.com/devlikebear/gamehub/issues/18): 네온 커브샷 듀얼
-  - 상/하 키로 패들 제어, Space로 커브샷/스핀 구현
-  - AI vs Player 및 로컬 2P 지원
-  - 득점 시 필드 형상이 재구성되는 모듈형 아레나
+- [x] **Pulse Paddles (펄스 패들)** [#18](https://github.com/devlikebear/gamehub/issues/18): 네온 커브샷 듀얼
+  - 캔버스 프로토타입 구현 (곡선 궤적, 펄스 존, 7점 매치)
+  - AI 적응 난이도 및 로컬 2P 토글(1/2 키) 지원
+  - `/games/pulse-paddles` 페이지와 컨트롤 안내 추가
+  - 득점 시 필드 패턴 재구성(듀얼 펄스/브레이크 라이너 등)
   - 난이도: ⭐
 
 - [ ] **Prism Smash (프리즘 스매시)** [#19](https://github.com/devlikebear/gamehub/issues/19): 모듈형 벽체 해체 게임
@@ -337,7 +338,7 @@ npm test           # 테스트 실행
 | 게임 | 난이도 | 컨트롤 | 상태 |
 |------|--------|--------|------|
 | Neon Serpent | ⭐ | 방향키 + 대시 | 플레이 가능 |
-| Pulse Paddles | ⭐ | ↑↓ + 커브샷 | 계획 |
+| Pulse Paddles | ⭐ | ↑↓ + 커브샷 | 플레이 가능 |
 | Prism Smash | ⭐⭐ | ←→ + 필드 스왑 | 계획 |
 | Cascade Blocks | ⭐⭐⭐ | 방향키 + Space | 계획 |
 | Photon Vanguard | ⭐⭐⭐ | ←→ + 파동 | 계획 |

@@ -53,7 +53,7 @@ This project is optimized for Cloudflare Pages:
 | Game | Difficulty | Status |
 |------|-----------|--------|
 | Neon Serpent | ⭐ | Playable (prototype) |
-| Pulse Paddles | ⭐ | Planned |
+| Pulse Paddles | ⭐ | Playable (prototype) |
 | Prism Smash | ⭐⭐ | Planned |
 | Cascade Blocks | ⭐⭐⭐ | Planned |
 | Photon Vanguard | ⭐⭐⭐ | Planned |

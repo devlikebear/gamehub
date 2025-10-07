@@ -20,7 +20,8 @@ const games = [
     difficulty: '⭐',
     description: '곡선 궤적의 에너지 볼을 반사해 네온 골을 기록하세요',
     controls: '↑↓ 패들 제어, Space 커브샷',
-    status: 'coming-soon',
+    status: 'playable',
+    href: '/games/pulse-paddles',
   },
   {
     id: 'prism-smash',
