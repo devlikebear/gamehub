@@ -433,7 +433,7 @@ export class NeonSerpentGame extends BaseGame {
     const gaugeWidth = 220;
     const gaugeHeight = 14;
     const x = this.boardOffsetX + this.boardPixelWidth - gaugeWidth;
-    const y = this.boardOffsetY + this.boardPixelHeight + 24;
+    const y = this.boardOffsetY + this.boardPixelHeight + 42;
 
     const ctx = this.ctx;
     ctx.save();
@@ -458,12 +458,13 @@ export class NeonSerpentGame extends BaseGame {
   }
 
   private drawInstruction(): void {
-    const infoX = this.boardOffsetX;
+    const infoX = this.boardOffsetX + this.boardPixelWidth / 2;
     const infoY = this.boardOffsetY - 32;
 
     this.drawText('ARROWS MOVE  |  SHIFT DASH  |  SPACE PAUSE  |  ENTER/R REBOOT', infoX, infoY, {
       color: '#8b9fff',
       font: FONTS.PIXEL_SMALL,
+      align: 'center',
     });
   }
 
