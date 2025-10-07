@@ -1,6 +1,6 @@
 /**
  * Cascade Blocks - Energy Modules
- * 다각형 에너지 모듈 정의 (테트로미노 + 추가 형태)
+ * 네온 에너지 모듈 정의 (테트로미노와 다른 독창적 형태)
  */
 
 import { ModuleShape, CellPosition } from './types';
@@ -31,135 +31,108 @@ function generateRotations(baseCells: CellPosition[]): CellPosition[][] {
   return rotations;
 }
 
-/** 기본 모듈 세트 (레벨 1-3) */
-export const BASIC_MODULES: ModuleShape[] = [
-  // I 모듈 (4칸 일자)
-  {
-    id: 'I',
-    name: 'Line',
-    cells: [
-      { x: -1, y: 0 },
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: 2, y: 0 },
-    ],
-    color: '#00f0ff', // 시안
-    rotations: [],
-  },
-  // O 모듈 (2x2 정사각형)
-  {
-    id: 'O',
-    name: 'Square',
-    cells: [
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: 0, y: 1 },
-      { x: 1, y: 1 },
-    ],
-    color: '#ffff00', // 노랑
-    rotations: [],
-  },
-  // T 모듈 (T자)
-  {
-    id: 'T',
-    name: 'T-Shape',
-    cells: [
-      { x: -1, y: 0 },
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: 0, y: 1 },
-    ],
-    color: '#ff10f0', // 핑크
-    rotations: [],
-  },
-  // L 모듈 (L자)
-  {
-    id: 'L',
-    name: 'L-Shape',
-    cells: [
-      { x: -1, y: 0 },
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: 1, y: 1 },
-    ],
-    color: '#00ff00', // 그린
-    rotations: [],
-  },
-  // J 모듈 (역L자)
-  {
-    id: 'J',
-    name: 'J-Shape',
-    cells: [
-      { x: -1, y: 0 },
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: -1, y: 1 },
-    ],
-    color: '#9d00ff', // 보라
-    rotations: [],
-  },
-  // S 모듈 (S자)
-  {
-    id: 'S',
-    name: 'S-Shape',
-    cells: [
-      { x: 0, y: 0 },
-      { x: 1, y: 0 },
-      { x: -1, y: 1 },
-      { x: 0, y: 1 },
-    ],
-    color: '#ff6b35', // 오렌지
-    rotations: [],
-  },
-  // Z 모듈 (Z자)
-  {
-    id: 'Z',
-    name: 'Z-Shape',
-    cells: [
-      { x: -1, y: 0 },
-      { x: 0, y: 0 },
-      { x: 0, y: 1 },
-      { x: 1, y: 1 },
-    ],
-    color: '#ff4d4d', // 레드
-    rotations: [],
-  },
-];
+/**
+ * 모듈 초기화 (회전 상태 생성)
+ */
+function initializeModules(modules: Omit<ModuleShape, 'rotations'>[]): ModuleShape[] {
+  return modules.map((module) => ({
+    ...module,
+    rotations: generateRotations(module.cells),
+  }));
+}
 
-/** 고급 모듈 세트 (레벨 4+) - 5칸 블록 */
-export const ADVANCED_MODULES: ModuleShape[] = [
-  // + 모듈 (십자가)
+const FOUNDATION_MODULES = initializeModules([
   {
-    id: 'PLUS',
-    name: 'Plus',
+    id: 'COLUMN',
+    name: 'Column',
     cells: [
       { x: 0, y: 0 },
-      { x: -1, y: 0 },
-      { x: 1, y: 0 },
-      { x: 0, y: -1 },
       { x: 0, y: 1 },
+      { x: 0, y: 2 },
+      { x: 0, y: 3 },
+      { x: 0, y: 4 },
     ],
-    color: '#00f0ff',
-    rotations: [],
+    color: '#00d5ff',
   },
-  // U 모듈 (U자)
   {
-    id: 'U',
-    name: 'U-Shape',
+    id: 'SLAB',
+    name: 'Slab',
     cells: [
-      { x: -1, y: 0 },
-      { x: -1, y: 1 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
       { x: 0, y: 1 },
       { x: 1, y: 1 },
-      { x: 1, y: 0 },
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
     ],
-    color: '#ff10f0',
-    rotations: [],
+    color: '#ffe66b',
   },
-  // W 모듈 (W자)
   {
-    id: 'W',
-    name: 'W-Shape',
+    id: 'ANGLE',
+    name: 'Angle',
+    cells: [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 0, y: 2 },
+      { x: 1, y: 1 },
+      { x: 1, y: 2 },
+    ],
+    color: '#8d7bff',
+  },
+  {
+    id: 'BRIDGE',
+    name: 'Bridge',
+    cells: [
+      { x: -1, y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: -1, y: 1 },
+      { x: 1, y: 1 },
+    ],
+    color: '#64ff9c',
+  },
+]);
+
+const CORE_MODULES = initializeModules([
+  {
+    id: 'SPIRE',
+    name: 'Spire',
+    cells: [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
+      { x: -1, y: 1 },
+    ],
+    color: '#00d5ff',
+  },
+  {
+    id: 'GLYPH',
+    name: 'Glyph',
+    cells: [
+      { x: -1, y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+    ],
+    color: '#ff6bf3',
+  },
+  {
+    id: 'PRISM',
+    name: 'Prism',
+    cells: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: -1, y: 1 },
+      { x: 0, y: 2 },
+    ],
+    color: '#ffe66b',
+  },
+  {
+    id: 'WAVE',
+    name: 'Wave',
     cells: [
       { x: -1, y: 0 },
       { x: 0, y: 0 },
@@ -167,27 +140,111 @@ export const ADVANCED_MODULES: ModuleShape[] = [
       { x: 1, y: 1 },
       { x: 1, y: 2 },
     ],
-    color: '#9d00ff',
-    rotations: [],
+    color: '#8d7bff',
   },
-];
+  {
+    id: 'TORCH',
+    name: 'Torch',
+    cells: [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+      { x: 0, y: 2 },
+    ],
+    color: '#64ff9c',
+  },
+]);
 
-/**
- * 모듈 초기화 (회전 상태 생성)
- */
-export function initializeModules(modules: ModuleShape[]): ModuleShape[] {
-  return modules.map((module) => ({
-    ...module,
-    rotations: generateRotations(module.cells),
-  }));
-}
+const EXPANDED_MODULES = initializeModules([
+  {
+    id: 'NEXUS',
+    name: 'Nexus',
+    cells: [
+      { x: 0, y: 0 },
+      { x: -1, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ],
+    color: '#ff8a5c',
+  },
+  {
+    id: 'ARC',
+    name: 'Arc',
+    cells: [
+      { x: -1, y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: -1, y: 1 },
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+    ],
+    color: '#3ac6ff',
+  },
+  {
+    id: 'HALO',
+    name: 'Halo',
+    cells: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: -1, y: 1 },
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
+    ],
+    color: '#f5c2ff',
+  },
+]);
+
+const ASCENDANT_MODULES = initializeModules([
+  {
+    id: 'ORBIT',
+    name: 'Orbit',
+    cells: [
+      { x: -1, y: 0 },
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 0, y: 1 },
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
+      { x: -1, y: 2 },
+    ],
+    color: '#00f0c8',
+  },
+  {
+    id: 'SINGULAR',
+    name: 'Singular',
+    cells: [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+      { x: 0, y: 1 },
+      { x: -1, y: 1 },
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
+    ],
+    color: '#ffa64d',
+  },
+]);
 
 /**
  * 레벨에 따른 모듈 세트 반환
  */
 export function getModuleSetForLevel(level: number): ModuleShape[] {
-  const modules = level < 4 ? BASIC_MODULES : [...BASIC_MODULES, ...ADVANCED_MODULES];
-  return initializeModules(modules);
+  if (level < 2) {
+    return FOUNDATION_MODULES;
+  }
+
+  if (level < 4) {
+    return [...FOUNDATION_MODULES, ...CORE_MODULES];
+  }
+
+  if (level < 5) {
+    return [...FOUNDATION_MODULES, ...CORE_MODULES, ...EXPANDED_MODULES];
+  }
+
+  return [...FOUNDATION_MODULES, ...CORE_MODULES, ...EXPANDED_MODULES, ...ASCENDANT_MODULES];
 }
 
 /**

@@ -1,152 +1,83 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { GameCanvas } from '@/components/games/GameCanvas';
 import { CascadeBlocksGame } from '@/lib/games/cascade-blocks';
 
 export default function CascadeBlocksPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gameRef = useRef<CascadeBlocksGame | null>(null);
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (!isClient || !canvasRef.current) return;
-
-    const canvas = canvasRef.current;
-    const dpr = window.devicePixelRatio || 1;
-
-    // 캔버스 크기 설정
-    canvas.width = 800 * dpr;
-    canvas.height = 600 * dpr;
-    canvas.style.width = '800px';
-    canvas.style.height = '600px';
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    ctx.scale(dpr, dpr);
-
-    // 게임 인스턴스 생성
-    gameRef.current = new CascadeBlocksGame({
-      canvas,
-      width: 800,
-      height: 600,
-    });
-
-    return () => {
-      if (gameRef.current) {
-        gameRef.current.stop();
-        gameRef.current = null;
-      }
-    };
-  }, [isClient]);
-
-  if (!isClient) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-cyan-900 flex items-center justify-center">
-        <div className="text-cyan-400 text-xl font-pixel">Loading...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-black to-cyan-900 py-16 px-4 md:py-20">
-      <div className="max-w-6xl mx-auto space-y-8 md:space-y-12">
-        {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-pixel text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-500 to-purple-500 drop-shadow-[0_0_20px_rgba(0,240,255,0.5)]">
+    <main className="min-h-screen py-16 px-4 md:py-20">
+      <div className="container mx-auto max-w-6xl space-y-8 md:space-y-12">
+        {/* 헤더 */}
+        <section className="text-center space-y-3 md:space-y-4">
+          <p className="pixel-text text-xs text-bright-cyan uppercase tracking-wider">
+            NEON FABRICATION GRID
+          </p>
+          <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text">
             CASCADE BLOCKS
           </h1>
-          <p className="text-cyan-400 text-sm md:text-base max-w-2xl mx-auto">
-            다각형 에너지 모듈을 조합하여 가변 필드를 완성하세요
+          <p className="text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
+            비정형 에너지 모듈을 cascade 라인에 연결해 필드 안정도를 유지하세요. 라운드가 진행될수록 격자 스케일과
+            모듈 구성이 동적으로 재구성되며, 연속 클리어로 네온 루프가 증폭됩니다.
           </p>
-        </div>
+        </section>
 
-        {/* Game Canvas */}
-        <div className="flex justify-center">
-          <div className="relative">
-            <canvas
-              ref={canvasRef}
-              className="border-2 border-cyan-400 shadow-[0_0_30px_rgba(0,240,255,0.3)] rounded-lg bg-black"
-            />
-          </div>
-        </div>
+        {/* 게임 캔버스 */}
+        <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-4 md:p-6 lg:p-8">
+          <GameCanvas GameClass={CascadeBlocksGame} width={840} height={600} pauseOnSpace={false} />
+        </section>
 
-        {/* Controls & Info */}
-        <div className="grid md:grid-cols-2 gap-4 md:gap-6 max-w-4xl mx-auto">
-          {/* Controls */}
-          <div className="bg-black/80 border-2 border-cyan-400/50 rounded-lg p-4 md:p-6 lg:p-8 shadow-[0_0_20px_rgba(0,240,255,0.2)] hover:bg-black/50 transition-colors">
-            <h2 className="text-xl md:text-2xl font-pixel text-cyan-400 mb-4">
-              조작법
+        {/* 게임 정보 */}
+        <section className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          <div className="bg-black/40 border border-bright-green/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
+            <h2 className="pixel-text text-xs md:text-sm text-bright-green uppercase">
+              Controls
             </h2>
-            <div className="space-y-3 text-sm md:text-base">
-              <div className="flex items-center gap-3">
-                <span className="text-pink-400 font-mono">←→</span>
-                <span className="text-gray-300">좌우 이동</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-pink-400 font-mono">↑</span>
-                <span className="text-gray-300">회전</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-pink-400 font-mono">↓</span>
-                <span className="text-gray-300">빠른 낙하</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-pink-400 font-mono">SPACE</span>
-                <span className="text-gray-300">즉시 낙하</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-pink-400 font-mono">ESC/P</span>
-                <span className="text-gray-300">일시정지</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-pink-400 font-mono">R</span>
-                <span className="text-gray-300">재시작</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Game Info */}
-          <div className="bg-black/80 border-2 border-pink-400/50 rounded-lg p-4 md:p-6 lg:p-8 shadow-[0_0_20px_rgba(255,16,240,0.2)] hover:bg-black/50 transition-colors">
-            <h2 className="text-xl md:text-2xl font-pixel text-pink-400 mb-4">
-              게임 정보
-            </h2>
-            <ul className="space-y-2 text-sm md:text-base text-gray-300">
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">•</span>
-                <span>다양한 다각형 모듈을 조합하세요</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">•</span>
-                <span>완전한 라인을 만들어 점수를 획득하세요</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">•</span>
-                <span>레벨이 오를수록 보드 크기가 변화합니다</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-cyan-400">•</span>
-                <span>고급 레벨에서는 5칸 블록이 등장합니다</span>
-              </li>
+            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>← → : 좌우 이동</li>
+              <li>↑ : 회전</li>
+              <li>↓ : 빠른 낙하</li>
+              <li>Space : 즉시 낙하</li>
+              <li>Esc / P : 일시정지</li>
+              <li>Enter / R : 재시작</li>
             </ul>
           </div>
-        </div>
 
-        {/* Back Button */}
-        <div className="text-center">
+          <div className="bg-black/40 border border-bright-pink/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
+            <h2 className="pixel-text text-xs md:text-sm text-bright-pink uppercase">
+              Objectives
+            </h2>
+            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>불규칙 모듈을 맞춰 cascade 라인을 안정화하세요.</li>
+              <li>연속 회수로 필드 안정도 게이지를 채우고 보너스를 확보하세요.</li>
+              <li>레벨이 오를 때마다 격자 크기와 모듈 셋이 재편성됩니다.</li>
+              <li>하이스코어를 갱신해 네온 패브릭을 기록하세요.</li>
+            </ul>
+          </div>
+
+          <div className="bg-black/40 border border-bright-yellow/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
+            <h2 className="pixel-text text-xs md:text-sm text-bright-yellow uppercase">
+              Field Notes
+            </h2>
+            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>격자 폭과 높이는 단계별로 확장되어 새로운 라우팅을 요구합니다.</li>
+              <li>고급 라운드에서는 비대칭 6~7칸 모듈이 등장합니다.</li>
+              <li>incoming cascade 패널로 다음 에너지 흐름을 파악하세요.</li>
+              <li>필드 안정도 패널은 진행 상황과 모듈 투입량을 즉시 보여줍니다.</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* 하단 네비게이션 */}
+        <section className="text-center pt-4">
           <Link
             href="/games"
-            className="inline-block px-8 py-3 bg-gradient-to-r from-cyan-500 to-pink-500 text-white font-pixel text-sm rounded-lg hover:shadow-[0_0_20px_rgba(0,240,255,0.5)] transition-all duration-300 shadow-neon-cyan hover:shadow-none"
+            className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
           >
-            게임 목록으로
+            Back to Arcade List
           </Link>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 }

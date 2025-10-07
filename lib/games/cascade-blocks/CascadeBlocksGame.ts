@@ -3,7 +3,7 @@
  * 가변 필드 낙하 퍼즐 게임
  */
 
-import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager, NEON_COLORS, BACKGROUND_COLORS } from '../engine';
+import { BaseGame, GameConfig, InputHandler, StorageManager, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 import { GameBoard, ActiveModule, RoundConfig, GameStats } from './types';
 import { createEmptyBoard, generateRoundConfig, isValidPosition, lockModule, getModuleCells, findCompletedLines, clearLines, calculateGhostPosition } from './board';
 import { getRandomModule } from './modules';
@@ -41,8 +41,22 @@ export class CascadeBlocksGame extends BaseGame {
   private fieldHeight = 0;
 
   private inputHandler!: InputHandler;
-  private scoreManager!: ScoreManager;
   private storageManager!: StorageManager;
+  private readonly handleGlobalKeyDown = (event: KeyboardEvent) => {
+    if (this.isGameOver && (event.key === 'Enter' || event.key === 'r' || event.key === 'R')) {
+      event.preventDefault();
+      if (this.getIsPaused()) {
+        this.resume();
+      }
+      this.startNewGame();
+      return;
+    }
+
+    if (this.getIsPaused() && (event.key === 'Escape' || event.key === 'p' || event.key === 'P')) {
+      event.preventDefault();
+      this.togglePause();
+    }
+  };
 
   constructor(config: GameConfig) {
     super(config);
@@ -51,7 +65,6 @@ export class CascadeBlocksGame extends BaseGame {
 
   protected init(): void {
     this.inputHandler = new InputHandler({ targetElement: this.canvas });
-    this.scoreManager = new ScoreManager();
     this.storageManager = new StorageManager({ namespace: 'cascade-blocks' });
 
     this.startNewGame();
@@ -112,6 +125,20 @@ export class CascadeBlocksGame extends BaseGame {
     }
   }
 
+  protected onStart(): void {
+    this.inputHandler.attach();
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', this.handleGlobalKeyDown);
+    }
+  }
+
+  protected onStop(): void {
+    this.inputHandler.detach();
+    if (typeof window !== 'undefined') {
+      window.removeEventListener('keydown', this.handleGlobalKeyDown);
+    }
+  }
+
   protected update(deltaTime: number): void {
     if (this.getIsPaused() || this.isGameOver || !this.currentModule) return;
 
@@ -158,38 +185,38 @@ export class CascadeBlocksGame extends BaseGame {
     if (this.inputHandler.justPressed('Escape') || this.inputHandler.justPressed('p')) {
       this.togglePause();
     }
-
-    // 재시작
-    if (this.isGameOver && (this.inputHandler.justPressed('Enter') || this.inputHandler.justPressed('r'))) {
-      this.startNewGame();
-    }
   }
 
   private updateFalling(deltaTime: number): void {
     if (!this.currentModule) return;
 
+    if (this.isLocking) {
+      this.lockTimer += deltaTime;
+      if (this.lockTimer >= LOCK_DELAY) {
+        this.lockCurrentModule();
+        return;
+      }
+    }
+
     this.fallTimer += deltaTime;
 
-    if (this.fallTimer >= this.fallInterval) {
-      this.fallTimer = 0;
+    if (this.fallTimer < this.fallInterval) {
+      return;
+    }
 
-      if (this.moveModule(0, 1)) {
-        // 성공적으로 아래로 이동
-        this.isLocking = false;
-        this.lockTimer = 0;
-      } else {
-        // 더 이상 아래로 이동 불가 - 착지 상태
-        if (!this.isLocking) {
-          this.isLocking = true;
-          this.lockTimer = 0;
-        }
+    this.fallTimer = 0;
 
-        this.lockTimer += deltaTime;
+    if (this.moveModule(0, 1)) {
+      // 성공적으로 아래로 이동
+      this.isLocking = false;
+      this.lockTimer = 0;
+      return;
+    }
 
-        if (this.lockTimer >= LOCK_DELAY) {
-          this.lockCurrentModule();
-        }
-      }
+    // 더 이상 아래로 이동 불가 - 착지 상태
+    if (!this.isLocking) {
+      this.isLocking = true;
+      this.lockTimer = 0;
     }
   }
 
@@ -292,12 +319,13 @@ export class CascadeBlocksGame extends BaseGame {
 
   protected render(): void {
     this.clearCanvas(BACKGROUND_COLORS.DARKER);
+    this.drawBackdrop();
     this.drawField();
     this.drawBoard();
-    this.drawCurrentModule();
     this.drawGhostModule();
-    this.drawNextModule();
-    this.drawHUD();
+    this.drawCurrentModule();
+    this.drawIncomingModule();
+    this.drawStatusPanel();
 
     if (this.getIsPaused()) {
       this.drawOverlay('PAUSED', NEON_COLORS.CYAN, 'Press ESC to resume');
@@ -308,39 +336,118 @@ export class CascadeBlocksGame extends BaseGame {
     }
   }
 
+  private drawBackdrop(): void {
+    const ctx = this.ctx;
+    ctx.save();
+
+    const haloGradient = ctx.createRadialGradient(
+      this.fieldOffsetX + this.fieldWidth / 2,
+      this.fieldOffsetY + this.fieldHeight / 2,
+      this.fieldWidth / 4,
+      this.fieldOffsetX + this.fieldWidth / 2,
+      this.fieldOffsetY + this.fieldHeight / 2,
+      this.fieldWidth
+    );
+    haloGradient.addColorStop(0, 'rgba(0, 240, 255, 0.15)');
+    haloGradient.addColorStop(1, 'rgba(0, 240, 255, 0)');
+
+    ctx.fillStyle = haloGradient;
+    ctx.fillRect(0, this.fieldOffsetY - 120, this.width, this.fieldHeight + 240);
+
+    ctx.globalAlpha = 0.12;
+    ctx.strokeStyle = 'rgba(255, 106, 243, 0.35)';
+    ctx.lineWidth = 2;
+
+    const bandHeight = 36;
+    for (let i = -4; i < 10; i++) {
+      const y = this.fieldOffsetY - 100 + i * bandHeight;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(this.width, y + 40);
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+
   private drawField(): void {
     const ctx = this.ctx;
     ctx.save();
 
-    // 필드 배경
-    ctx.fillStyle = BACKGROUND_COLORS.FIELD;
+    // 필드 배경 (각진 캡슐 형태)
+    const panelX = this.fieldOffsetX - 20;
+    const panelY = this.fieldOffsetY - 20;
+    const panelWidth = this.fieldWidth + 40;
+    const panelHeight = this.fieldHeight + 40;
+
+    const panelGradient = ctx.createLinearGradient(panelX, panelY, panelX + panelWidth, panelY + panelHeight);
+    panelGradient.addColorStop(0, 'rgba(5, 10, 32, 0.9)');
+    panelGradient.addColorStop(1, 'rgba(12, 24, 54, 0.92)');
+
+    ctx.fillStyle = panelGradient;
+    ctx.strokeStyle = 'rgba(0, 240, 200, 0.45)';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(panelX + 24, panelY);
+    ctx.lineTo(panelX + panelWidth - 24, panelY);
+    ctx.quadraticCurveTo(panelX + panelWidth, panelY, panelX + panelWidth, panelY + 24);
+    ctx.lineTo(panelX + panelWidth, panelY + panelHeight - 24);
+    ctx.quadraticCurveTo(panelX + panelWidth, panelY + panelHeight, panelX + panelWidth - 24, panelY + panelHeight);
+    ctx.lineTo(panelX + 24, panelY + panelHeight);
+    ctx.quadraticCurveTo(panelX, panelY + panelHeight, panelX, panelY + panelHeight - 24);
+    ctx.lineTo(panelX, panelY + 24);
+    ctx.quadraticCurveTo(panelX, panelY, panelX + 24, panelY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(panelX + 24, panelY);
+    ctx.lineTo(panelX + panelWidth - 24, panelY);
+    ctx.quadraticCurveTo(panelX + panelWidth, panelY, panelX + panelWidth, panelY + 24);
+    ctx.lineTo(panelX + panelWidth, panelY + panelHeight - 24);
+    ctx.quadraticCurveTo(panelX + panelWidth, panelY + panelHeight, panelX + panelWidth - 24, panelY + panelHeight);
+    ctx.lineTo(panelX + 24, panelY + panelHeight);
+    ctx.quadraticCurveTo(panelX, panelY + panelHeight, panelX, panelY + panelHeight - 24);
+    ctx.lineTo(panelX, panelY + 24);
+    ctx.quadraticCurveTo(panelX, panelY, panelX + 24, panelY);
+    ctx.closePath();
+    ctx.clip();
+
+    const fieldGradient = ctx.createLinearGradient(
+      this.fieldOffsetX,
+      this.fieldOffsetY,
+      this.fieldOffsetX + this.fieldWidth,
+      this.fieldOffsetY + this.fieldHeight
+    );
+    fieldGradient.addColorStop(0, 'rgba(8, 8, 32, 0.95)');
+    fieldGradient.addColorStop(1, 'rgba(4, 10, 24, 0.95)');
+
+    ctx.fillStyle = fieldGradient;
     ctx.fillRect(this.fieldOffsetX, this.fieldOffsetY, this.fieldWidth, this.fieldHeight);
 
     // 필드 테두리
-    ctx.strokeStyle = NEON_COLORS.CYAN;
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.5)';
     ctx.lineWidth = 2;
     ctx.strokeRect(this.fieldOffsetX, this.fieldOffsetY, this.fieldWidth, this.fieldHeight);
 
-    // 그리드 그리기
-    ctx.strokeStyle = 'rgba(0, 240, 255, 0.1)';
+    // 에너지 격자 (대각선 패턴)
+    ctx.globalAlpha = 0.22;
+    ctx.strokeStyle = 'rgba(100, 255, 156, 0.25)';
     ctx.lineWidth = 1;
+    ctx.setLineDash([8, 14]);
 
-    for (let x = 0; x <= this.board.width; x++) {
-      const px = this.fieldOffsetX + x * CELL_SIZE;
+    for (let y = -this.board.height; y < this.board.height * 2; y += 3) {
+      const startX = this.fieldOffsetX;
+      const startY = this.fieldOffsetY + y * (CELL_SIZE / 2);
       ctx.beginPath();
-      ctx.moveTo(px, this.fieldOffsetY);
-      ctx.lineTo(px, this.fieldOffsetY + this.fieldHeight);
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(startX + this.fieldWidth, startY + this.fieldWidth * 0.45);
       ctx.stroke();
     }
 
-    for (let y = 0; y <= this.board.height; y++) {
-      const py = this.fieldOffsetY + y * CELL_SIZE;
-      ctx.beginPath();
-      ctx.moveTo(this.fieldOffsetX, py);
-      ctx.lineTo(this.fieldOffsetX + this.fieldWidth, py);
-      ctx.stroke();
-    }
-
+    ctx.restore();
     ctx.restore();
   }
 
@@ -404,52 +511,136 @@ export class CascadeBlocksGame extends BaseGame {
     ctx.restore();
   }
 
-  private drawNextModule(): void {
+  private drawIncomingModule(): void {
     if (!this.nextModule) return;
 
     const ctx = this.ctx;
+    const previewWidth = CELL_SIZE * 6;
+    const previewHeight = CELL_SIZE * 3 + 30;
     const previewX = this.fieldOffsetX + this.fieldWidth + 40;
-    const previewY = this.fieldOffsetY + 60;
+    const previewY = this.fieldOffsetY + 16;
 
     ctx.save();
 
-    this.drawText('NEXT', previewX, previewY - 30, {
-      color: NEON_COLORS.CYAN,
-      font: '14px "Press Start 2P"',
+    ctx.fillStyle = 'rgba(4, 12, 28, 0.85)';
+    ctx.strokeStyle = 'rgba(255, 106, 243, 0.45)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(previewX + 12, previewY);
+    ctx.lineTo(previewX + previewWidth - 12, previewY);
+    ctx.quadraticCurveTo(previewX + previewWidth, previewY, previewX + previewWidth, previewY + 12);
+    ctx.lineTo(previewX + previewWidth, previewY + previewHeight);
+    ctx.lineTo(previewX, previewY + previewHeight + 20);
+    ctx.lineTo(previewX, previewY + 12);
+    ctx.quadraticCurveTo(previewX, previewY, previewX + 12, previewY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    this.drawText('incoming cascade', previewX + 18, previewY + 14, {
+      color: NEON_COLORS.YELLOW,
+      font: FONTS.PIXEL_TINY,
     });
 
     const cells = this.nextModule.shape.rotations[0];
     for (const cell of cells) {
-      const px = previewX + cell.x * CELL_SIZE;
-      const py = previewY + cell.y * CELL_SIZE;
+      const px = previewX + previewWidth / 2 + (cell.x - 0.5) * CELL_SIZE;
+      const py = previewY + 36 + (cell.y + 0.2) * CELL_SIZE;
 
       ctx.fillStyle = this.nextModule.shape.color;
-      ctx.fillRect(px, py, CELL_SIZE - 2, CELL_SIZE - 2);
+      ctx.fillRect(px, py, CELL_SIZE - 3, CELL_SIZE - 3);
       ctx.strokeStyle = this.nextModule.shape.color;
-      ctx.strokeRect(px, py, CELL_SIZE - 2, CELL_SIZE - 2);
+      ctx.strokeRect(px, py, CELL_SIZE - 3, CELL_SIZE - 3);
     }
 
     ctx.restore();
+
+    const labelY = previewY + previewHeight + 32;
+    this.drawText(this.nextModule.shape.name.toUpperCase(), previewX + previewWidth / 2, labelY, {
+      color: '#64ff9c',
+      font: FONTS.PIXEL_TINY,
+      align: 'center',
+    });
   }
 
-  private drawHUD(): void {
-    const hudX = this.fieldOffsetX;
-    const hudY = 30;
+  private drawStatusPanel(): void {
+    const ctx = this.ctx;
+    ctx.save();
 
-    this.drawText(`SCORE  ${this.stats.score.toString().padStart(6, '0')}`, hudX, hudY, {
+    const panelWidth = Math.max(this.fieldWidth, 520);
+    const panelHeight = 82;
+    const panelX = this.fieldOffsetX + (this.fieldWidth - panelWidth) / 2;
+    const panelY = Math.min(this.height - panelHeight - 24, this.fieldOffsetY + this.fieldHeight + 32);
+
+    ctx.fillStyle = 'rgba(6, 16, 36, 0.88)';
+    ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
+    ctx.lineWidth = 2;
+    ctx.fillRect(panelX, panelY, panelWidth, panelHeight);
+    ctx.strokeRect(panelX, panelY, panelWidth, panelHeight);
+
+    const leftColumnX = panelX + 28;
+    const centerColumnX = panelX + panelWidth / 2;
+    const rightColumnX = panelX + panelWidth - 180;
+
+    this.drawText(`SCORE`, leftColumnX, panelY + 16, {
       color: NEON_COLORS.YELLOW,
-      font: '12px "Press Start 2P"',
+      font: FONTS.PIXEL_TINY,
+    });
+    this.drawText(this.stats.score.toString().padStart(7, '0'), leftColumnX, panelY + 40, {
+      color: NEON_COLORS.YELLOW,
+      font: FONTS.PIXEL_SMALL,
     });
 
-    this.drawText(`LEVEL  ${this.stats.level}`, hudX, hudY + 25, {
-      color: NEON_COLORS.CYAN,
-      font: '12px "Press Start 2P"',
+    const cycleX = leftColumnX + 140;
+    this.drawText(`CYCLE`, cycleX, panelY + 16, {
+      color: '#64ff9c',
+      font: FONTS.PIXEL_TINY,
+    });
+    this.drawText(this.stats.level.toString().padStart(2, '0'), cycleX, panelY + 40, {
+      color: '#64ff9c',
+      font: FONTS.PIXEL_SMALL,
     });
 
-    this.drawText(`LINES  ${this.stats.linesCleared}`, hudX + 200, hudY, {
+    this.drawText(`LINES`, centerColumnX, panelY + 16, {
       color: NEON_COLORS.PINK,
-      font: '12px "Press Start 2P"',
+      font: FONTS.PIXEL_SMALL,
+      align: 'center',
     });
+
+    this.drawText(this.stats.linesCleared.toString().padStart(3, '0'), centerColumnX, panelY + 40, {
+      color: NEON_COLORS.PINK,
+      font: FONTS.PIXEL_SMALL,
+      align: 'center',
+    });
+
+    this.drawText(`MODULES`, rightColumnX, panelY + 16, {
+      color: '#ff8a5c',
+      font: FONTS.PIXEL_TINY,
+    });
+
+    this.drawText(this.stats.modulesPlaced.toString().padStart(3, '0'), rightColumnX, panelY + 40, {
+      color: '#ff8a5c',
+      font: FONTS.PIXEL_SMALL,
+    });
+
+    const gaugeWidth = 160;
+    const gaugeX = rightColumnX;
+    const gaugeY = panelY + 52;
+
+    ctx.strokeStyle = 'rgba(255, 138, 92, 0.6)';
+    ctx.strokeRect(gaugeX, gaugeY, gaugeWidth, 12);
+    ctx.fillStyle = 'rgba(255, 138, 92, 0.65)';
+    const cycleTarget = this.stats.level * 4 + 6;
+    const progress = Math.min(1, (this.stats.linesCleared % cycleTarget) / cycleTarget);
+    ctx.fillRect(gaugeX, gaugeY, gaugeWidth * progress, 12);
+
+    this.drawText('FIELD STABILITY', gaugeX, gaugeY + 20, {
+      color: '#f5c2ff',
+      font: FONTS.PIXEL_TINY,
+      align: 'left',
+    });
+
+    ctx.restore();
   }
 
   private gameOver(): void {

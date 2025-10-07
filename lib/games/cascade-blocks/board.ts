@@ -32,23 +32,23 @@ export function createEmptyBoard(width: number, height: number): GameBoard {
  * 라운드 설정 생성
  */
 export function generateRoundConfig(level: number): RoundConfig {
-  // 레벨에 따라 보드 크기 변화 (10-14 폭, 18-22 높이)
-  const baseWidth = 10;
-  const baseHeight = 18;
-  const widthVariation = Math.min(Math.floor(level / 3), 4);
-  const heightVariation = Math.min(Math.floor(level / 2), 4);
+  // 레벨에 따라 보드 크기 변화 (12-18 폭, 16-24 높이)
+  const baseWidth = 12;
+  const baseHeight = 14;
+  const widthIncrease = Math.min(Math.max(level - 1, 0) >> 1, 3) * 2; // 2칸 단위 확대
+  const heightIncrease = Math.min(Math.max(level - 1, 0), 3) * 2;
 
-  const boardWidth = baseWidth + widthVariation;
-  const boardHeight = baseHeight + heightVariation;
+  const boardWidth = baseWidth + widthIncrease;
+  const boardHeight = baseHeight + heightIncrease;
 
   // 목표 영역 생성 (보드 중앙 부근)
   const targetZones: CellPosition[] = generateTargetZones(boardWidth, boardHeight, level);
 
-  // 색상 팔레트 (레벨별로 변화)
+  // 색상 팔레트 (라운드마다 다른 에너지 톤 적용)
   const colorPalettes = [
-    [NEON_COLORS.CYAN, NEON_COLORS.PINK, NEON_COLORS.YELLOW],
-    [NEON_COLORS.PURPLE, NEON_COLORS.GREEN, NEON_COLORS.CYAN],
-    [NEON_COLORS.PINK, NEON_COLORS.PURPLE, NEON_COLORS.YELLOW],
+    [NEON_COLORS.CYAN, '#8d7bff', '#64ff9c'],
+    [NEON_COLORS.PINK, '#ff8a5c', '#ffe66b'],
+    [NEON_COLORS.PURPLE, '#00f0c8', '#f5c2ff'],
   ];
   const paletteIndex = (level - 1) % colorPalettes.length;
 

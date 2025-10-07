@@ -213,7 +213,15 @@ function normalizeKey(key: string | undefined): KeyCode {
 }
 
 function shouldPreventDefault(key: string): boolean {
-  return key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight' || key === 'Enter' || key === ' ';
+  return (
+    key === 'ArrowUp' ||
+    key === 'ArrowDown' ||
+    key === 'ArrowLeft' ||
+    key === 'ArrowRight' ||
+    key === 'Enter' ||
+    key === 'Space' ||
+    key === ' '
+  );
 }
 
 function clamp(value: number, min: number, max: number): number {
