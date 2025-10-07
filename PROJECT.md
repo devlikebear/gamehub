@@ -112,10 +112,10 @@ gamehub/
 
 #### 우선순위 높음 (간단한 게임)
 
-- [ ] **Neon Serpent (네온 서펀트)** [#17](https://github.com/devlikebear/gamehub/issues/17): 절차적 필드 추적 게임
-  - 방향키 이동 + 대시로 변형된 필드 탐색
-  - 랜덤 에너지 오브 수집, 꼬리 세그먼트가 독자적 패턴 유지
-  - 충돌 대신 에너지 과부하 메커닉 적용 (속도 저하 후 리커버리)
+- [x] **Neon Serpent (네온 서펀트)** [#17](https://github.com/devlikebear/gamehub/issues/17): 절차적 필드 추적 게임
+  - 캔버스 엔진 기반 60 FPS 프로토타입 구현 (대시/과부하/위험 구역)
+  - 에너지 게이지, 콤보, 필드 재구성 및 EMP 슬로우 메커닉 지원
+  - 게임 페이지 `/games/neon-serpent` 오픈 및 컨트롤 가이드 반영
   - 난이도: ⭐
 
 - [ ] **Pulse Paddles (펄스 패들)** [#18](https://github.com/devlikebear/gamehub/issues/18): 네온 커브샷 듀얼
@@ -336,7 +336,7 @@ npm test           # 테스트 실행
 
 | 게임 | 난이도 | 컨트롤 | 상태 |
 |------|--------|--------|------|
-| Neon Serpent | ⭐ | 방향키 + 대시 | 계획 |
+| Neon Serpent | ⭐ | 방향키 + 대시 | 플레이 가능 |
 | Pulse Paddles | ⭐ | ↑↓ + 커브샷 | 계획 |
 | Prism Smash | ⭐⭐ | ←→ + 필드 스왑 | 계획 |
 | Cascade Blocks | ⭐⭐⭐ | 방향키 + Space | 계획 |

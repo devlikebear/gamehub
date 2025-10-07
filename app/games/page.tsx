@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 const games = [
   {
     id: 'neon-serpent',
@@ -7,7 +9,8 @@ const games = [
     difficulty: '⭐',
     description: '모듈형 네온 필드를 누비며 에너지 오브를 수집하세요',
     controls: '방향키로 이동, Shift 대시',
-    status: 'coming-soon',
+    status: 'playable',
+    href: '/games/neon-serpent',
   },
   {
     id: 'pulse-paddles',
@@ -87,6 +90,14 @@ const textColorClasses = {
   purple: 'text-bright-purple',
 };
 
+const playButtonClasses = {
+  green: 'border-bright-green text-bright-green hover:bg-bright-green hover:text-black',
+  pink: 'border-bright-pink text-bright-pink hover:bg-bright-pink hover:text-black',
+  cyan: 'border-bright-cyan text-bright hover:bg-bright-cyan hover:text-black',
+  yellow: 'border-bright-yellow text-bright-yellow hover:bg-bright-yellow hover:text-black',
+  purple: 'border-bright-purple text-bright-purple hover:bg-bright-purple hover:text-black',
+} as const;
+
 export default function GamesPage() {
   return (
     <main className="min-h-screen py-20 px-4">
@@ -152,19 +163,33 @@ export default function GamesPage() {
                   </span>
                 </div>
               )}
+              {game.status === 'playable' && (
+                <div className="absolute top-4 right-4">
+                  <span className="pixel-text text-bright-green text-xs bg-black/80 px-2 py-1 rounded border border-bright-green">
+                    LIVE
+                  </span>
+                </div>
+              )}
 
-              {/* Play Button (disabled for now) */}
+              {/* Play Button */}
               <div className="text-center">
-                <button
-                  disabled={game.status === 'coming-soon'}
-                  className={`pixel-text text-xs px-6 py-2 rounded transition-all duration-300 ${
-                    game.status === 'coming-soon'
-                      ? 'bg-black/50 border border-gray-600 text-gray-600 cursor-not-allowed'
-                      : `bg-${game.color}-500/20 border-2 border-${game.color}-500 text-${game.color}-500 hover:bg-${game.color}-500 hover:text-black`
-                  }`}
-                >
-                  {game.status === 'coming-soon' ? 'COMING SOON' : 'PLAY'}
-                </button>
+                {game.status === 'coming-soon' ? (
+                  <button
+                    disabled
+                    className="pixel-text text-xs px-6 py-2 rounded bg-black/50 border border-gray-600 text-gray-600 cursor-not-allowed"
+                  >
+                    COMING SOON
+                  </button>
+                ) : (
+                  <Link
+                    href={game.href ?? '#'}
+                    className={`pixel-text text-xs px-6 py-2 rounded border-2 transition-all duration-300 inline-block ${
+                      playButtonClasses[game.color as keyof typeof playButtonClasses]
+                    }`}
+                  >
+                    PLAY
+                  </Link>
+                )}
               </div>
             </div>
           ))}
