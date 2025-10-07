@@ -292,7 +292,7 @@ export class PhotonVanguardGame extends BaseGame {
 
     const wave: Wave = {
       id: `wave_${Date.now()}`,
-      position: { x: this.playerX, y: this.height - 50 },
+      position: { x: this.playerX, y: this.height - 100 },
       radius: 0,
       maxRadius: 300,
       damage: 1,
@@ -312,7 +312,7 @@ export class PhotonVanguardGame extends BaseGame {
   }
 
   private checkCollisions(): void {
-    const playerPos: Position = { x: this.playerX, y: this.height - 50 };
+    const playerPos: Position = { x: this.playerX, y: this.height - 100 };
 
     // 파동과 적 충돌
     for (const wave of this.waves) {
@@ -516,7 +516,7 @@ export class PhotonVanguardGame extends BaseGame {
   }
 
   private drawPlayer(): void {
-    const playerY = this.height - 50;
+    const playerY = this.height - 100;
 
     // 플레이어 (삼각형)
     this.ctx.fillStyle = NEON_COLORS.CYAN;
@@ -534,12 +534,12 @@ export class PhotonVanguardGame extends BaseGame {
   }
 
   private drawUI(): void {
-    const panelHeight = 80;
-    const panelY = this.height - panelHeight - 10;
+    const panelHeight = 70;
+    const panelY = this.height - panelHeight;
 
     // 패널 배경
-    this.drawRect(10, panelY, this.width - 20, panelHeight, 'rgba(0, 0, 0, 0.7)');
-    this.strokeRect(10, panelY, this.width - 20, panelHeight, NEON_COLORS.CYAN, 2);
+    this.drawRect(0, panelY, this.width, panelHeight, 'rgba(0, 0, 0, 0.8)');
+    this.strokeRect(0, panelY, this.width, panelHeight, NEON_COLORS.CYAN, 2);
 
     // 점수
     this.drawText(`SCORE: ${this.stats.score}`, 20, panelY + 25, {
