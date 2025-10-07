@@ -54,7 +54,7 @@ This project is optimized for Cloudflare Pages:
 |------|-----------|--------|
 | Neon Serpent | ⭐ | Playable (prototype) |
 | Pulse Paddles | ⭐ | Playable (prototype) |
-| Prism Smash | ⭐⭐ | Planned |
+| Prism Smash | ⭐⭐ | Playable (prototype) |
 | Cascade Blocks | ⭐⭐⭐ | Planned |
 | Photon Vanguard | ⭐⭐⭐ | Planned |
 | Spectral Pursuit | ⭐⭐⭐⭐ | Planned |

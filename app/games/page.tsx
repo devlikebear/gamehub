@@ -31,7 +31,8 @@ const games = [
     difficulty: '⭐⭐',
     description: '가변 패턴의 프리즘 블록을 해체하며 모듈을 수집하세요',
     controls: '←→ 패들 이동, Space 필드 스왑',
-    status: 'coming-soon',
+    status: 'playable',
+    href: '/games/prism-smash',
   },
   {
     id: 'cascade-blocks',
