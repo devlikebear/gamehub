@@ -40,9 +40,9 @@ export class InputHandler {
   private readonly listeners: Array<(keys: Set<KeyCode>) => void> = [];
   private readonly onKeyDown = (event: KeyboardEvent) => this.handleKeyDown(event);
   private readonly onKeyUp = (event: KeyboardEvent) => this.handleKeyUp(event);
-  private readonly onTouchStart = (event: TouchEvent) => this.handleTouchStart(event);
-  private readonly onTouchMove = (event: TouchEvent) => this.handleTouchMove(event);
-  private readonly onTouchEnd = () => this.resetJoystick();
+  private readonly onTouchStart = (event: Event) => this.handleTouchStart(event);
+  private readonly onTouchMove = (event: Event) => this.handleTouchMove(event);
+  private readonly onTouchEnd = (_event: Event) => this.resetJoystick();
 
   private joystick: JoystickState = { active: false, x: 0, y: 0, angle: 0, intensity: 0 };
   private touchOrigin: { x: number; y: number } | null = null;
@@ -138,14 +138,16 @@ export class InputHandler {
     this.notify();
   }
 
-  private handleTouchStart(event: TouchEvent): void {
+  private handleTouchStart(event: Event): void {
+    if (!isTouchEvent(event)) return;
     const touch = event.touches[0];
     if (!touch) return;
     this.touchOrigin = { x: touch.clientX, y: touch.clientY };
     this.joystick = { active: true, x: 0, y: 0, angle: 0, intensity: 0 };
   }
 
-  private handleTouchMove(event: TouchEvent): void {
+  private handleTouchMove(event: Event): void {
+    if (!isTouchEvent(event)) return;
     if (!this.touchOrigin) return;
     const touch = event.touches[0];
     if (!touch) return;
@@ -216,4 +218,8 @@ function shouldPreventDefault(key: string): boolean {
 
 function clamp(value: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, value));
+}
+
+function isTouchEvent(event: Event): event is TouchEvent {
+  return typeof TouchEvent !== 'undefined' && event instanceof TouchEvent;
 }

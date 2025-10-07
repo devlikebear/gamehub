@@ -109,9 +109,10 @@ export class PrismSmashGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.lives <= 0) {
-      if (this.keys.has('Enter') || this.keys.has('r') || this.keys.has('R')) {
+      if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.resetMatch();
       }
+      this.publishDebugState();
       return;
     }
 
@@ -121,14 +122,6 @@ export class PrismSmashGame extends BaseGame {
     this.messageTimer = Math.max(0, this.messageTimer - deltaTime);
 
     this.scoreManager.tick(deltaTime);
-
-    if (this.lives <= 0) {
-      if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
-        this.resetMatch();
-      }
-      this.publishDebugState();
-      return;
-    }
 
     this.updatePaddle(deltaTime);
 
@@ -522,13 +515,13 @@ export class PrismSmashGame extends BaseGame {
         color: '#ffb3ff',
         font: '12px "Press Start 2P"',
       });
+    } else {
+      const instructions = '←/→ 이동 · Space 필드 스왑 · Shift 가속 · Enter/R 시작·재시작';
+      this.drawText(instructions, this.fieldLeft, this.height - 30, {
+        color: '#7c86ff',
+        font: '10px "Press Start 2P"',
+      });
     }
-
-    const instructions = '←/→ 이동 · Space 필드 스왑 · Shift 가속 · Enter/R 시작·재시작';
-    this.drawText(instructions, this.fieldLeft, this.height - 30, {
-      color: '#7c86ff',
-      font: '10px "Press Start 2P"',
-    });
   }
 
   private drawOverlay(message: string, color: string, subtitle?: string): void {
