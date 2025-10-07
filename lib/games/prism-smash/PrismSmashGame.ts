@@ -139,6 +139,9 @@ export class PrismSmashGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.lives <= 0) {
+      if (this.keys.has('Enter') || this.keys.has('r') || this.keys.has('R')) {
+        this.resetMatch();
+      }
       return;
     }
 
@@ -159,11 +162,6 @@ export class PrismSmashGame extends BaseGame {
 
     if (this.keys.has('Enter') && this.ball.stuck) {
       this.releaseBall();
-    }
-
-    if (this.lives <= 0 && (this.keys.has('Enter') || this.keys.has('r') || this.keys.has('R'))) {
-      this.resetMatch();
-      return;
     }
 
     if (this.keys.has(' ') && this.swapCooldown === 0) {
