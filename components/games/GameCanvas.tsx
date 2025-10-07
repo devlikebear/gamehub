@@ -3,7 +3,11 @@
 import { useEffect, useRef } from 'react';
 
 interface GameCanvasProps {
-  GameClass: new (config: { canvas: HTMLCanvasElement }) => {
+  GameClass: new (config: {
+    canvas: HTMLCanvasElement;
+    width?: number;
+    height?: number;
+  }) => {
     start: () => void;
     stop: () => void;
     togglePause: () => void;
