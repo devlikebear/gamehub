@@ -40,3 +40,16 @@ export interface MatchGroup {
   positions: Position[];
   color: BlockColor;
 }
+
+export interface CellPosition {
+  x: number;
+  y: number;
+}
+
+export interface ModuleShape {
+  id: string;
+  name: string;
+  color: string;
+  cells: CellPosition[];
+  rotations: CellPosition[][];
+}
