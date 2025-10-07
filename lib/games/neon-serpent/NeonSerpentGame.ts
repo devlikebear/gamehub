@@ -84,9 +84,14 @@ export class NeonSerpentGame extends BaseGame {
         this.tryDash();
         handled = true;
         break;
+      case 'Enter':
+        this.restart();
+        handled = true;
+        break;
       case 'r':
       case 'R':
         this.restart();
+        handled = true;
         break;
       default:
         break;
@@ -190,7 +195,7 @@ export class NeonSerpentGame extends BaseGame {
     this.drawHUD();
 
     if (this.gameOver) {
-      this.drawOverlay('SYSTEM FAILURE', '#ff3366', 'PRESS R TO REBOOT');
+      this.drawOverlay('SYSTEM FAILURE', '#ff3366', 'ENTER / R TO REBOOT');
     } else if (this.getIsPaused()) {
       this.drawOverlay('PAUSED', '#00f0ff', 'SPACE TO RESUME · R TO RESTART');
     }
@@ -475,7 +480,7 @@ export class NeonSerpentGame extends BaseGame {
     const infoX = this.boardOffsetX;
     const infoY = this.boardOffsetY - 32;
 
-    this.drawText('ARROWS MOVE  |  SHIFT DASH  |  SPACE PAUSE', infoX, infoY, {
+    this.drawText('ARROWS MOVE  |  SHIFT DASH  |  SPACE PAUSE  |  ENTER REBOOT', infoX, infoY, {
       color: '#8b9fff',
       font: '12px "Press Start 2P"',
     });
