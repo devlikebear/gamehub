@@ -64,7 +64,8 @@ const games = [
     difficulty: '⭐⭐⭐⭐',
     description: '개방형 라비린스에서 추적자를 교란하며 빛의 파편을 모으세요',
     controls: '방향키 이동, Space 위장',
-    status: 'coming-soon',
+    status: 'playable',
+    href: '/games/spectral-pursuit',
   },
   {
     id: 'starshard-drift',
