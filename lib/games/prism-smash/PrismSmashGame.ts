@@ -1,4 +1,4 @@
-import { BaseGame, GameConfig } from '../engine';
+import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager } from '../engine';
 
 interface Paddle {
   x: number;
@@ -55,55 +55,27 @@ export class PrismSmashGame extends BaseGame {
   private activeLayer = 0;
   private swapCooldown = 0;
 
-  private readonly keys = new Set<string>();
+  private readonly input: InputHandler;
+  private readonly storage = new StorageManager({ namespace: 'prism-smash' });
+  private highScore = 0;
 
   private fieldLeft = FIELD_MARGIN_X;
   private fieldTop = FIELD_MARGIN_Y;
   private fieldWidth = 0;
   private fieldHeight = 0;
 
-  private score = 0;
+  private readonly scoreManager = new ScoreManager({ comboDecayMs: 1500, comboStep: 0.18, maxComboMultiplier: 3 });
   private stage = 1;
-  private combo = 0;
-  private comboTimer = 0;
   private lives = MAX_LIVES;
   private flashTimer = 0;
   private swapPulse = 0;
   private messageTimer = 0;
   private messageText = '';
 
-  private readonly handleKeyDown = (event: KeyboardEvent) => {
-    if (event.defaultPrevented) return;
-
-    let handled = false;
-
-    switch (event.key) {
-      case 'ArrowLeft':
-      case 'ArrowRight':
-      case ' ': // Space - field swap
-      case 'Shift':
-      case 'Enter':
-      case 'r':
-      case 'R':
-        handled = true;
-        break;
-      default:
-        break;
-    }
-
-    this.keys.add(event.key);
-
-    if (handled) {
-      event.preventDefault();
-    }
-  };
-
-  private readonly handleKeyUp = (event: KeyboardEvent) => {
-    this.keys.delete(event.key);
-  };
-
   constructor(config: GameConfig) {
     super(config);
+    this.input = new InputHandler({ targetElement: config.canvas });
+    this.highScore = this.storage.getHighScore('global');
     this.recalculateField();
 
     this.paddle = {
@@ -128,20 +100,19 @@ export class PrismSmashGame extends BaseGame {
   }
 
   protected onStart(): void {
-    window.addEventListener('keydown', this.handleKeyDown);
-    window.addEventListener('keyup', this.handleKeyUp);
+    this.input.attach();
   }
 
   protected onStop(): void {
-    window.removeEventListener('keydown', this.handleKeyDown);
-    window.removeEventListener('keyup', this.handleKeyUp);
+    this.input.detach();
   }
 
   protected update(deltaTime: number): void {
     if (this.lives <= 0) {
-      if (this.keys.has('Enter') || this.keys.has('r') || this.keys.has('R')) {
+      if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.resetMatch();
       }
+      this.publishDebugState();
       return;
     }
 
@@ -150,23 +121,23 @@ export class PrismSmashGame extends BaseGame {
     this.swapPulse = Math.max(0, this.swapPulse - deltaTime);
     this.messageTimer = Math.max(0, this.messageTimer - deltaTime);
 
-    if (this.combo > 0) {
-      this.comboTimer -= deltaTime;
-      if (this.comboTimer <= 0) {
-        this.combo = Math.max(0, this.combo - 1);
-        this.comboTimer = 1200;
-      }
-    }
+    this.scoreManager.tick(deltaTime);
 
     this.updatePaddle(deltaTime);
 
-    if (this.keys.has('Enter') && this.ball.stuck) {
+    if (this.ball.stuck && this.input.justPressed('Enter')) {
       this.releaseBall();
     }
 
-    if (this.keys.has(' ') && this.swapCooldown === 0) {
+    if (this.swapCooldown === 0 && this.input.justPressed('Space')) {
       this.swapField();
       this.swapCooldown = SWAP_COOLDOWN;
+    }
+
+    if (this.input.justPressed('r') || this.input.justPressed('R')) {
+      this.resetMatch();
+      this.publishDebugState();
+      return;
     }
 
     if (!this.ball.stuck) {
@@ -201,8 +172,8 @@ export class PrismSmashGame extends BaseGame {
   }
 
   private updatePaddle(deltaTime: number): void {
-    const direction = (this.keys.has('ArrowRight') ? 1 : 0) - (this.keys.has('ArrowLeft') ? 1 : 0);
-    const booster = this.keys.has('Shift') ? 1.4 : 1;
+    const direction = (this.input.isPressed('ArrowRight') ? 1 : 0) - (this.input.isPressed('ArrowLeft') ? 1 : 0);
+    const booster = this.input.isPressed('Shift') ? 1.4 : 1;
     this.paddle.x += this.paddle.speed * direction * booster * deltaTime;
     this.paddle.x = clamp(this.paddle.x, this.fieldLeft, this.fieldLeft + this.fieldWidth - this.paddle.width);
   }
@@ -212,7 +183,7 @@ export class PrismSmashGame extends BaseGame {
     this.ball.vx = Math.cos(angle) * this.ball.speed;
     this.ball.vy = -Math.abs(Math.sin(angle)) * this.ball.speed - 0.25;
     this.ball.stuck = false;
-    this.combo = 0;
+    this.scoreManager.breakCombo();
   }
 
   private updateBall(deltaTime: number): void {
@@ -252,8 +223,7 @@ export class PrismSmashGame extends BaseGame {
       this.ball.vx += offset * 0.18;
       this.ball.vx = clamp(this.ball.vx, -0.55, 0.55);
       this.ball.y = this.paddle.y - this.ball.radius - 1;
-      this.combo = Math.max(0, this.combo - 1);
-      this.comboTimer = 1500;
+      this.scoreManager.breakCombo();
       this.flashTimer = 200;
     }
 
@@ -295,10 +265,8 @@ export class PrismSmashGame extends BaseGame {
 
   private handleBrickBreak(brick: Brick): void {
     const baseScore = brick.isPrism ? 120 : 80;
-    this.combo += 1;
-    this.comboTimer = 1500;
-    const multiplier = 1 + Math.min(this.combo, 12) * 0.12;
-    this.score += Math.round(baseScore * multiplier);
+    this.scoreManager.add(baseScore, 1);
+    this.updateHighScore();
     this.flashTimer = 280;
     if (brick.isPrism) {
       this.messageText = 'PRISM SPLIT!';
@@ -333,7 +301,7 @@ export class PrismSmashGame extends BaseGame {
 
   private loseLife(): void {
     this.lives -= 1;
-    this.combo = 0;
+    this.scoreManager.breakCombo();
     this.ball.stuck = true;
     this.ball.vx = 0.22;
     this.ball.vy = -0.36;
@@ -344,15 +312,15 @@ export class PrismSmashGame extends BaseGame {
     if (this.lives <= 0) {
       this.messageText = '필드 붕괴!';
       this.messageTimer = 2000;
+      this.updateHighScore();
     }
   }
 
   private resetMatch(): void {
-    this.score = 0;
+    this.scoreManager.reset();
+    this.highScore = this.storage.getHighScore('global');
     this.stage = 1;
     this.lives = MAX_LIVES;
-    this.combo = 0;
-    this.comboTimer = 0;
     this.messageText = '';
     this.messageTimer = 0;
     this.flashTimer = 0;
@@ -376,12 +344,19 @@ export class PrismSmashGame extends BaseGame {
     this.stage += 1;
     this.messageText = `STAGE ${this.stage}`;
     this.messageTimer = 1200;
+    this.scoreManager.breakCombo();
     this.layers = this.generateLayers();
     this.activeLayer = this.stage % 2;
     this.swapPulse = 400;
     this.ball.stuck = true;
     this.ball.x = this.paddle.x + this.paddle.width / 2;
     this.ball.y = this.paddle.y - this.ball.radius - 2;
+  }
+
+  private updateHighScore(): void {
+    const current = this.scoreManager.getScore();
+    this.storage.setHighScore('global', current);
+    this.highScore = Math.max(this.highScore, current, this.storage.getHighScore('global'));
   }
 
   private generateLayers(): LayerState[] {
@@ -498,7 +473,10 @@ export class PrismSmashGame extends BaseGame {
   private drawHud(): void {
     const infoY = this.fieldTop - 36;
 
-    this.drawText(`SCORE ${this.score.toString().padStart(6, '0')}`, this.fieldLeft, infoY, {
+    const score = this.scoreManager.getScore();
+    const combo = this.scoreManager.getCombo();
+
+    this.drawText(`SCORE ${score.toString().padStart(6, '0')}`, this.fieldLeft, infoY, {
       color: '#8b9fff',
       font: '14px "Press Start 2P"',
     });
@@ -516,8 +494,15 @@ export class PrismSmashGame extends BaseGame {
       font: '16px "Press Start 2P"',
     });
 
-    if (this.combo > 1) {
-      this.drawText(`COMBO x${this.combo}`, this.fieldLeft + this.fieldWidth / 2, this.fieldTop + this.fieldHeight + 28, {
+    const hiScore = Math.max(this.highScore, score);
+    this.drawText(`HI ${hiScore.toString().padStart(6, '0')}`, this.fieldLeft + this.fieldWidth / 2, infoY + 18, {
+      align: 'center',
+      color: '#8b9fff',
+      font: '12px "Press Start 2P"',
+    });
+
+    if (combo > 1) {
+      this.drawText(`COMBO x${combo}`, this.fieldLeft + this.fieldWidth / 2, this.fieldTop + this.fieldHeight + 28, {
         align: 'center',
         color: '#ff8cf4',
         font: '12px "Press Start 2P"',
@@ -530,13 +515,13 @@ export class PrismSmashGame extends BaseGame {
         color: '#ffb3ff',
         font: '12px "Press Start 2P"',
       });
+    } else {
+      const instructions = '←/→ 이동 · Space 필드 스왑 · Shift 가속 · Enter/R 시작·재시작';
+      this.drawText(instructions, this.fieldLeft, this.height - 30, {
+        color: '#7c86ff',
+        font: '10px "Press Start 2P"',
+      });
     }
-
-    const instructions = '←/→ 이동 · Space 필드 스왑 · Shift 가속 · Enter/R 시작·재시작';
-    this.drawText(instructions, this.fieldLeft, this.height - 30, {
-      color: '#7c86ff',
-      font: '10px "Press Start 2P"',
-    });
   }
 
   private drawOverlay(message: string, color: string, subtitle?: string): void {
@@ -567,11 +552,12 @@ export class PrismSmashGame extends BaseGame {
       ball: { ...this.ball },
       paddle: { ...this.paddle },
       activeLayer: this.activeLayer,
-      score: this.score,
+      score: this.scoreManager.getScore(),
       lives: this.lives,
       stage: this.stage,
-      combo: this.combo,
+      combo: this.scoreManager.getCombo(),
       swapCooldown: this.swapCooldown,
+      highScore: this.highScore,
     };
   }
 }

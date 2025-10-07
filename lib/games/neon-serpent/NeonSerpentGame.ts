@@ -1,4 +1,4 @@
-import { BaseGame, GameConfig } from '../engine';
+import { BaseGame, GameConfig, InputHandler } from '../engine';
 import { createInitialSerpent, SerpentSegment, updateSegmentAges } from './segments';
 import { generateHazardField, HazardField, spawnEnergyOrb, toKey } from './energyField';
 
@@ -50,70 +50,21 @@ export class NeonSerpentGame extends BaseGame {
   private gameOver = false;
   private pulseTimer = 0;
 
-  private readonly handleKeyDown = (event: KeyboardEvent) => {
-    if (event.defaultPrevented) return;
-
-    let handled = false;
-
-    switch (event.key) {
-      case 'ArrowUp':
-      case 'w':
-      case 'W':
-        this.queueDirection({ x: 0, y: -1 });
-        handled = true;
-        break;
-      case 'ArrowDown':
-      case 's':
-      case 'S':
-        this.queueDirection({ x: 0, y: 1 });
-        handled = true;
-        break;
-      case 'ArrowLeft':
-      case 'a':
-      case 'A':
-        this.queueDirection({ x: -1, y: 0 });
-        handled = true;
-        break;
-      case 'ArrowRight':
-      case 'd':
-      case 'D':
-        this.queueDirection({ x: 1, y: 0 });
-        handled = true;
-        break;
-      case 'Shift':
-        this.tryDash();
-        handled = true;
-        break;
-      case 'Enter':
-        this.restart();
-        handled = true;
-        break;
-      case 'r':
-      case 'R':
-        this.restart();
-        handled = true;
-        break;
-      default:
-        break;
-    }
-
-    if (handled) {
-      event.preventDefault();
-    }
-  };
+  private readonly input: InputHandler;
 
   constructor(config: GameConfig) {
     super(config);
     this.recalculateBoardOffset();
+    this.input = new InputHandler({ targetElement: config.canvas });
     this.resetState();
   }
 
   protected onStart(): void {
-    window.addEventListener('keydown', this.handleKeyDown);
+    this.input.attach();
   }
 
   protected onStop(): void {
-    window.removeEventListener('keydown', this.handleKeyDown);
+    this.input.detach();
   }
 
   private resetState(): void {
@@ -145,6 +96,29 @@ export class NeonSerpentGame extends BaseGame {
     this.resetState();
   }
 
+  private processInput(): void {
+    if (this.input.isPressed('ArrowUp') || this.input.isPressed('w') || this.input.isPressed('W')) {
+      this.queueDirection({ x: 0, y: -1 });
+    }
+    if (this.input.isPressed('ArrowDown') || this.input.isPressed('s') || this.input.isPressed('S')) {
+      this.queueDirection({ x: 0, y: 1 });
+    }
+    if (this.input.isPressed('ArrowLeft') || this.input.isPressed('a') || this.input.isPressed('A')) {
+      this.queueDirection({ x: -1, y: 0 });
+    }
+    if (this.input.isPressed('ArrowRight') || this.input.isPressed('d') || this.input.isPressed('D')) {
+      this.queueDirection({ x: 1, y: 0 });
+    }
+
+    if (this.input.justPressed('Shift')) {
+      this.tryDash();
+    }
+
+    if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
+      this.restart();
+    }
+  }
+
   private recalculateBoardOffset(): void {
     this.boardOffsetX = Math.floor((this.width - this.boardPixelWidth) / 2);
     this.boardOffsetY = Math.floor((this.height - this.boardPixelHeight) / 2);
@@ -152,8 +126,13 @@ export class NeonSerpentGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.gameOver) {
+      if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
+        this.restart();
+      }
       return;
     }
+
+    this.processInput();
 
     this.pulseTimer += deltaTime;
     this.fieldTimer += deltaTime;
@@ -480,7 +459,7 @@ export class NeonSerpentGame extends BaseGame {
     const infoX = this.boardOffsetX;
     const infoY = this.boardOffsetY - 32;
 
-    this.drawText('ARROWS MOVE  |  SHIFT DASH  |  SPACE PAUSE  |  ENTER REBOOT', infoX, infoY, {
+    this.drawText('ARROWS MOVE  |  SHIFT DASH  |  SPACE PAUSE  |  ENTER/R REBOOT', infoX, infoY, {
       color: '#8b9fff',
       font: '12px "Press Start 2P"',
     });
