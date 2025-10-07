@@ -31,6 +31,7 @@ export class PulsePaddlesGame extends BaseGame {
 
   private pattern: ArenaPattern = pickRandomPattern();
   private patternTimer = 0;
+  private zoneStates: boolean[] = [];
 
   private readonly aiState = {
     agility: 0.65,
@@ -98,6 +99,7 @@ export class PulsePaddlesGame extends BaseGame {
     this.leftPaddle = createPaddle(this.fieldLeft + 20, centerY - 60, 16, 120, 0.45);
     this.rightPaddle = createPaddle(this.fieldLeft + this.fieldWidth - 36, centerY - 60, 16, 120, 0.46);
     this.ball = createBall(centerX, centerY, 10, 0.42);
+    this.zoneStates = this.pattern.zones.map(() => false);
     this.scheduleServe('left');
   }
 
@@ -141,6 +143,7 @@ export class PulsePaddlesGame extends BaseGame {
     if (this.matchOver) {
       this.drawOverlay('MATCH COMPLETE', '#ff10f0', 'Enter 키로 재시작');
     }
+    this.publishDebugState();
   }
 
   private recalculateField(): void {
@@ -159,6 +162,7 @@ export class PulsePaddlesGame extends BaseGame {
     this.ball.vy = 0;
     this.lastServer = server;
     this.pattern = pickRandomPattern();
+    this.zoneStates = this.pattern.zones.map(() => false);
     this.patternTimer = 0;
 
     const centerY = this.fieldTop + this.fieldHeight / 2;
@@ -252,18 +256,25 @@ export class PulsePaddlesGame extends BaseGame {
     const left = this.fieldLeft;
     const width = this.fieldWidth;
 
-    for (const zone of this.pattern.zones) {
+    this.pattern.zones.forEach((zone, index) => {
       const zoneLeft = left + zone.start * width;
       const zoneRight = left + zone.end * width;
-      if (this.ball.x + this.ball.radius >= zoneLeft && this.ball.x - this.ball.radius <= zoneRight) {
+      const inside = this.ball.x + this.ball.radius >= zoneLeft && this.ball.x - this.ball.radius <= zoneRight;
+
+      if (inside && !this.zoneStates[index]) {
         this.ball.vx *= zone.multiplier;
         this.ball.vy *= zone.multiplier;
         const speedLimit = this.ball.baseSpeed * 1.9;
         this.ball.vx = clamp(this.ball.vx, -speedLimit, speedLimit);
         this.ball.vy = clamp(this.ball.vy, -speedLimit, speedLimit);
+        this.zoneStates[index] = true;
         this.pulseFlash = 1;
       }
-    }
+
+      if (!inside && this.zoneStates[index]) {
+        this.zoneStates[index] = false;
+      }
+    });
 
     const minSpeed = this.ball.baseSpeed * 0.38;
     if (Math.abs(this.ball.vx) < minSpeed) {
@@ -526,5 +537,19 @@ export class PulsePaddlesGame extends BaseGame {
       });
     }
     ctx.restore();
+  }
+
+  private publishDebugState(): void {
+    if (typeof window === 'undefined') return;
+    (window as unknown as { __pulsePaddlesDebug?: unknown }).__pulsePaddlesDebug = {
+      ball: { ...this.ball },
+      leftPaddle: { ...this.leftPaddle },
+      rightPaddle: { ...this.rightPaddle },
+      isBallActive: this.isBallActive,
+      pattern: this.pattern,
+      score: { left: this.scoreLeft, right: this.scoreRight },
+      roundResetTimer: this.roundResetTimer,
+      matchOver: this.matchOver,
+    };
   }
 }
