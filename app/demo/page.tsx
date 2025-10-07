@@ -1,3 +1,5 @@
+'use client';
+
 import { GameCanvas } from '@/components/games/GameCanvas';
 import { DemoGame } from '@/lib/games/demo/DemoGame';
 
