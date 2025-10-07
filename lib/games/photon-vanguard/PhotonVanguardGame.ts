@@ -570,7 +570,7 @@ export class PhotonVanguardGame extends BaseGame {
       ctx.save();
       ctx.translate(pos.x, pos.y);
 
-      let color = NEON_COLORS.YELLOW;
+      let color: string = NEON_COLORS.YELLOW;
       switch (enemy.type) {
         case EnemyType.Splitter:
           color = NEON_COLORS.PURPLE;
