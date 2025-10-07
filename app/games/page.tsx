@@ -53,7 +53,8 @@ const games = [
     difficulty: '⭐⭐⭐',
     description: '방사형 궤도로 진입하는 포톤 군단을 시간 왜곡으로 제압하세요',
     controls: '←→ 이동, Space 파동 발사',
-    status: 'coming-soon',
+    status: 'playable',
+    href: '/games/photon-vanguard',
   },
   {
     id: 'spectral-pursuit',
