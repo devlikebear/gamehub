@@ -1,4 +1,4 @@
-import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager } from '../engine';
+import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 
 interface Paddle {
   x: number;
@@ -152,7 +152,7 @@ export class PrismSmashGame extends BaseGame {
   }
 
   protected render(): void {
-    this.clearCanvas('#050713');
+    this.clearCanvas(BACKGROUND_COLORS.DARKER);
     this.drawField();
     this.drawLayers();
     this.drawPaddle();
@@ -446,7 +446,7 @@ export class PrismSmashGame extends BaseGame {
   private drawPaddle(): void {
     const ctx = this.ctx;
     ctx.save();
-    ctx.fillStyle = '#00f0ff';
+    ctx.fillStyle = NEON_COLORS.CYAN;
     ctx.fillRect(this.paddle.x, this.paddle.y, this.paddle.width, this.paddle.height);
     ctx.restore();
   }
@@ -455,7 +455,7 @@ export class PrismSmashGame extends BaseGame {
     const ctx = this.ctx;
     ctx.save();
     const gradient = ctx.createRadialGradient(this.ball.x, this.ball.y, 2, this.ball.x, this.ball.y, this.ball.radius + 4);
-    gradient.addColorStop(0, '#ffffff');
+    gradient.addColorStop(0, NEON_COLORS.WHITE);
     gradient.addColorStop(1, this.flashTimer > 0 ? 'rgba(255, 100, 200, 0.5)' : 'rgba(160, 255, 255, 0.3)');
 
     ctx.fillStyle = gradient;
@@ -463,7 +463,7 @@ export class PrismSmashGame extends BaseGame {
     ctx.arc(this.ball.x, this.ball.y, this.ball.radius + 2, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = '#ffffff';
+    ctx.fillStyle = NEON_COLORS.WHITE;
     ctx.beginPath();
     ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
     ctx.fill();
@@ -524,27 +524,6 @@ export class PrismSmashGame extends BaseGame {
     }
   }
 
-  private drawOverlay(message: string, color: string, subtitle?: string): void {
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.65)';
-    ctx.fillRect(0, 0, this.width, this.height);
-
-    this.drawText(message, this.width / 2, this.height / 2 - 24, {
-      align: 'center',
-      color,
-      font: '22px "Press Start 2P"',
-    });
-
-    if (subtitle) {
-      this.drawText(subtitle, this.width / 2, this.height / 2 + 8, {
-        align: 'center',
-        color: '#ffffff',
-        font: '12px "Press Start 2P"',
-      });
-    }
-    ctx.restore();
-  }
 
   private publishDebugState(): void {
     if (typeof window === 'undefined') return;
