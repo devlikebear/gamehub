@@ -73,88 +73,96 @@ gamehub/
 
 ## 🎯 주요 기능 (로드맵)
 
-### Phase 1: 기본 구조 🚧
-- [ ] Next.js 프로젝트 초기 설정
-- [ ] Tailwind CSS 설정 (네온 컬러 팔레트)
-- [ ] 아케이드 테마 랜딩 페이지 구현
-- [ ] Git 저장소 초기화
-- [ ] 배포 가이드 작성
+### Phase 1: 기본 구조 ✅
+- [x] Next.js 프로젝트 초기 설정 [#1](https://github.com/devlikebear/gamehub/issues/1) ✅
+- [x] Tailwind CSS 설정 (네온 컬러 팔레트) [#2](https://github.com/devlikebear/gamehub/issues/2) ✅
+- [x] 아케이드 테마 랜딩 페이지 구현 [#3](https://github.com/devlikebear/gamehub/issues/3) ✅
+- [x] Git 저장소 초기화 [#4](https://github.com/devlikebear/gamehub/issues/4) ✅
+- [ ] 배포 가이드 작성 [#5](https://github.com/devlikebear/gamehub/issues/5) 🚧
 
 ### Phase 2: 핵심 페이지 🚧
-- [ ] Navigation Bar 컴포넌트 (네온 스타일)
-- [ ] Footer 컴포넌트
-- [ ] About (소개) 페이지
-- [ ] Games 목록 페이지 (아케이드 캐비닛 스타일)
-- [ ] Contact (연락처) 페이지
+
+- [x] Navigation Bar 컴포넌트 (네온 스타일) [#6](https://github.com/devlikebear/gamehub/issues/6) ✅
+- [x] Footer 컴포넌트 [#7](https://github.com/devlikebear/gamehub/issues/7) ✅
+- [ ] About (소개) 페이지 [#8](https://github.com/devlikebear/gamehub/issues/8)
+- [ ] Games 목록 페이지 (아케이드 캐비닛 스타일) [#9](https://github.com/devlikebear/gamehub/issues/9)
+- [ ] Contact (연락처) 페이지 [#10](https://github.com/devlikebear/gamehub/issues/10)
 
 ### Phase 3: 공통 게임 엔진 구현 🚧
-- [ ] 게임 루프 엔진 (requestAnimationFrame)
-- [ ] 입력 핸들러 (키보드 + 터치)
-- [ ] 충돌 감지 시스템
-- [ ] 점수 시스템
-- [ ] 로컬 스토리지 관리 (최고 점수)
-- [ ] 게임 공통 UI (일시정지, 게임오버, 재시작)
+
+- [ ] 게임 루프 엔진 (requestAnimationFrame) [#11](https://github.com/devlikebear/gamehub/issues/11)
+- [ ] 입력 핸들러 (키보드 + 터치) [#12](https://github.com/devlikebear/gamehub/issues/12)
+- [ ] 충돌 감지 시스템 [#13](https://github.com/devlikebear/gamehub/issues/13)
+- [ ] 점수 시스템 [#14](https://github.com/devlikebear/gamehub/issues/14)
+- [ ] 로컬 스토리지 관리 (최고 점수) [#15](https://github.com/devlikebear/gamehub/issues/15)
+- [ ] 게임 공통 UI (일시정지, 게임오버, 재시작) [#16](https://github.com/devlikebear/gamehub/issues/16)
 
 ### Phase 4: 클래식 게임 구현
 
 #### 우선순위 높음 (간단한 게임)
-- [ ] **Snake (스네이크)**: 클래식 뱀 게임
+
+- [ ] **Snake (스네이크)** [#17](https://github.com/devlikebear/gamehub/issues/17): 클래식 뱀 게임
   - 방향키로 이동
   - 먹이 먹고 점수 획득
   - 벽/자기 몸 충돌 시 게임 오버
   - 난이도: ⭐
 
-- [ ] **Pong (퐁)**: 탁구 게임
+- [ ] **Pong (퐁)** [#18](https://github.com/devlikebear/gamehub/issues/18): 탁구 게임
   - 상/하 키로 패들 조작
   - AI 상대 또는 2인 플레이
   - 난이도: ⭐
 
-- [ ] **Breakout (벽돌깨기)**: 클래식 벽돌깨기
+- [ ] **Breakout (벽돌깨기)** [#19](https://github.com/devlikebear/gamehub/issues/19): 클래식 벽돌깨기
   - 좌/우 키로 패들 이동
   - 공으로 벽돌 깨기
   - 난이도: ⭐⭐
 
 #### 우선순위 중간
-- [ ] **Tetris (테트리스)**: 블록 퍼즐 게임
+
+- [ ] **Tetris (테트리스)** [#20](https://github.com/devlikebear/gamehub/issues/20): 블록 퍼즐 게임
   - 방향키로 블록 회전/이동
   - 라인 완성 시 제거
   - 난이도: ⭐⭐⭐
 
-- [ ] **Space Invaders (스페이스 인베이더)**: 슈팅 게임
+- [ ] **Space Invaders (스페이스 인베이더)** [#21](https://github.com/devlikebear/gamehub/issues/21): 슈팅 게임
   - 좌/우 이동, 스페이스바 발사
   - 외계인 격추
   - 난이도: ⭐⭐⭐
 
 #### 우선순위 낮음 (복잡한 게임)
-- [ ] **Pac-Man (팩맨)**: 미로 게임
+
+- [ ] **Pac-Man (팩맨)** [#22](https://github.com/devlikebear/gamehub/issues/22): 미로 게임
   - 방향키로 이동
   - 점 먹고 유령 피하기
   - 난이도: ⭐⭐⭐⭐
 
-- [ ] **Asteroids (아스테로이드)**: 우주선 슈팅
+- [ ] **Asteroids (아스테로이드)** [#23](https://github.com/devlikebear/gamehub/issues/23): 우주선 슈팅
   - 회전/이동/발사
   - 운석 파괴
   - 난이도: ⭐⭐⭐⭐
 
 ### Phase 5: 리더보드 & 소셜 기능
+
+- [ ] 리더보드 페이지 [#24](https://github.com/devlikebear/gamehub/issues/24)
 - [ ] 로컬 최고 점수 기록 (게임별)
-- [ ] 리더보드 페이지
 - [ ] 점수 공유 기능 (SNS)
 - [ ] 친구 초대 기능
 
 ### Phase 6: 개선 & 최적화
-- [ ] SEO 최적화 (메타 태그, sitemap)
+
+- [ ] SEO 최적화 (메타 태그, sitemap) [#25](https://github.com/devlikebear/gamehub/issues/25)
+- [ ] 게임 효과음 & BGM [#26](https://github.com/devlikebear/gamehub/issues/26)
+- [ ] PWA 지원 (오프라인 플레이) [#27](https://github.com/devlikebear/gamehub/issues/27)
 - [ ] Open Graph 이미지 (게임별)
 - [ ] 다국어 지원 (한국어/영어)
 - [ ] 다크모드 토글 (기본: 다크)
-- [ ] 게임 효과음 & BGM
 - [ ] 애니메이션 효과 (CRT 스캔라인, 글로우)
 - [ ] 성능 최적화 (Canvas, 코드 스플리팅)
-- [ ] PWA 지원 (오프라인 플레이)
 
 ### Phase 7: 추가 기능
+
+- [ ] 업적 시스템 (뱃지/트로피) [#28](https://github.com/devlikebear/gamehub/issues/28)
 - [ ] 게임 통계 (플레이 시간, 플레이 횟수)
-- [ ] 업적 시스템 (뱃지/트로피)
 - [ ] 키보드 단축키 가이드
 - [ ] 난이도 선택 (쉬움/보통/어려움)
 - [ ] 방문자 통계 (Cloudflare Analytics)
