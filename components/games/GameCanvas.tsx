@@ -18,7 +18,7 @@ interface GameCanvasProps {
 
 export function GameCanvas({ GameClass, width = 800, height = 600 }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const gameRef = useRef<any>(null);
+  const gameRef = useRef<ReturnType<typeof GameClass.prototype.constructor> | null>(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
