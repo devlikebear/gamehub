@@ -1,8 +1,7 @@
 /**
- * Cascade Blocks - Entry Point
+ * Color Match Cascade - Entry Point
  */
 
 export { CascadeBlocksGame } from './CascadeBlocksGame';
 export * from './types';
-export * from './modules';
 export * from './board';

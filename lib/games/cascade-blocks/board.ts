@@ -1,26 +1,34 @@
 /**
- * Cascade Blocks - Board Management
- * 게임 보드 생성 및 관리
+ * Color Match Cascade - Board Management
+ * 보드 생성 및 매칭 로직
  */
 
-import { GameBoard, BoardCell, CellPosition, ActiveModule, RoundConfig } from './types';
-import { getModuleSetForLevel } from './modules';
+import { GameBoard, Cell, Position, FallingBlock, BlockColor, MatchGroup } from './types';
 import { NEON_COLORS } from '../engine';
+
+const COLORS: BlockColor[] = ['pink', 'cyan', 'purple', 'yellow'];
+
+const COLOR_MAP: Record<BlockColor, string> = {
+  pink: NEON_COLORS.PINK,
+  cyan: NEON_COLORS.CYAN,
+  purple: NEON_COLORS.PURPLE,
+  yellow: NEON_COLORS.YELLOW,
+};
+
+export function getColorHex(color: BlockColor): string {
+  return COLOR_MAP[color];
+}
 
 /**
  * 빈 보드 생성
  */
 export function createEmptyBoard(width: number, height: number): GameBoard {
-  const cells: BoardCell[][] = [];
+  const cells: Cell[][] = [];
 
   for (let y = 0; y < height; y++) {
-    const row: BoardCell[] = [];
+    const row: Cell[] = [];
     for (let x = 0; x < width; x++) {
-      row.push({
-        filled: false,
-        color: null,
-        energy: false,
-      });
+      row.push({ color: null });
     }
     cells.push(row);
   }
@@ -29,175 +37,184 @@ export function createEmptyBoard(width: number, height: number): GameBoard {
 }
 
 /**
- * 라운드 설정 생성
+ * 랜덤 색상 블록 생성
  */
-export function generateRoundConfig(level: number): RoundConfig {
-  // 레벨에 따라 보드 크기 변화 (12-18 폭, 16-24 높이)
-  const baseWidth = 12;
-  const baseHeight = 14;
-  const widthIncrease = Math.min(Math.max(level - 1, 0) >> 1, 3) * 2; // 2칸 단위 확대
-  const heightIncrease = Math.min(Math.max(level - 1, 0), 3) * 2;
-
-  const boardWidth = baseWidth + widthIncrease;
-  const boardHeight = baseHeight + heightIncrease;
-
-  // 목표 영역 생성 (보드 중앙 부근)
-  const targetZones: CellPosition[] = generateTargetZones(boardWidth, boardHeight, level);
-
-  // 색상 팔레트 (라운드마다 다른 에너지 톤 적용)
-  const colorPalettes = [
-    [NEON_COLORS.CYAN, '#8d7bff', '#64ff9c'],
-    [NEON_COLORS.PINK, '#ff8a5c', '#ffe66b'],
-    [NEON_COLORS.PURPLE, '#00f0c8', '#f5c2ff'],
-  ];
-  const paletteIndex = (level - 1) % colorPalettes.length;
-
+export function createRandomBlock(): FallingBlock {
   return {
-    level,
-    boardWidth,
-    boardHeight,
-    targetZones,
-    colorPalette: colorPalettes[paletteIndex],
-    moduleSet: getModuleSetForLevel(level),
+    cells: [
+      COLORS[Math.floor(Math.random() * COLORS.length)],
+      COLORS[Math.floor(Math.random() * COLORS.length)],
+    ],
+    position: { x: 4, y: 0 },
+    orientation: 'vertical',
   };
 }
 
 /**
- * 목표 영역 생성 (에너지 루프를 만들어야 하는 위치)
+ * 블록이 차지하는 셀 위치 반환
  */
-function generateTargetZones(width: number, height: number, level: number): CellPosition[] {
-  const zones: CellPosition[] = [];
-  const centerX = Math.floor(width / 2);
-  const centerY = Math.floor(height / 2);
-  const zoneCount = Math.min(3 + Math.floor(level / 2), 8);
+export function getBlockCells(block: FallingBlock): Position[] {
+  const { position, orientation } = block;
 
-  // 중앙 부근에 원형으로 목표 영역 배치
-  for (let i = 0; i < zoneCount; i++) {
-    const angle = (i / zoneCount) * Math.PI * 2;
-    const radius = Math.min(width, height) / 4;
-    const x = Math.round(centerX + Math.cos(angle) * radius);
-    const y = Math.round(centerY + Math.sin(angle) * radius);
-
-    if (x >= 0 && x < width && y >= 0 && y < height) {
-      zones.push({ x, y });
-    }
+  if (orientation === 'vertical') {
+    return [
+      position,
+      { x: position.x, y: position.y + 1 },
+    ];
+  } else {
+    return [
+      position,
+      { x: position.x + 1, y: position.y },
+    ];
   }
-
-  return zones;
 }
 
 /**
- * 셀이 보드 범위 내인지 확인
+ * 블록이 유효한 위치인지 확인
  */
-export function isInBounds(board: GameBoard, x: number, y: number): boolean {
-  return x >= 0 && x < board.width && y >= 0 && y < board.height;
-}
-
-/**
- * 셀이 채워져 있는지 확인
- */
-export function isCellFilled(board: GameBoard, x: number, y: number): boolean {
-  if (!isInBounds(board, x, y)) return true;
-  return board.cells[y][x].filled;
-}
-
-/**
- * 활성 모듈의 절대 좌표 계산
- */
-export function getModuleCells(module: ActiveModule): CellPosition[] {
-  const cells = module.shape.rotations[module.rotationIndex];
-  return cells.map((cell) => ({
-    x: module.position.x + cell.x,
-    y: module.position.y + cell.y,
-  }));
-}
-
-/**
- * 모듈이 유효한 위치인지 확인 (충돌 감지)
- */
-export function isValidPosition(board: GameBoard, module: ActiveModule): boolean {
-  const cells = getModuleCells(module);
+export function isValidPosition(board: GameBoard, block: FallingBlock): boolean {
+  const cells = getBlockCells(block);
 
   for (const cell of cells) {
-    if (!isInBounds(board, cell.x, cell.y)) return false;
-    if (isCellFilled(board, cell.x, cell.y)) return false;
+    if (cell.x < 0 || cell.x >= board.width || cell.y >= board.height) {
+      return false;
+    }
+    if (cell.y >= 0 && board.cells[cell.y][cell.x].color !== null) {
+      return false;
+    }
   }
 
   return true;
 }
 
 /**
- * 모듈을 보드에 고정
+ * 블록을 보드에 고정
  */
-export function lockModule(board: GameBoard, module: ActiveModule): void {
-  const cells = getModuleCells(module);
+export function lockBlock(board: GameBoard, block: FallingBlock): void {
+  const cells = getBlockCells(block);
 
-  for (const cell of cells) {
-    if (isInBounds(board, cell.x, cell.y)) {
-      board.cells[cell.y][cell.x] = {
-        filled: true,
-        color: module.shape.color,
-        energy: false,
-      };
+  cells.forEach((pos, index) => {
+    if (pos.y >= 0 && pos.y < board.height && pos.x >= 0 && pos.x < board.width) {
+      board.cells[pos.y][pos.x].color = block.cells[index];
     }
-  }
+  });
 }
 
 /**
- * 완성된 라인 찾기
+ * BFS로 연결된 같은 색 블록 찾기
  */
-export function findCompletedLines(board: GameBoard): number[] {
-  const completedLines: number[] = [];
+export function findConnectedBlocks(
+  board: GameBoard,
+  startX: number,
+  startY: number,
+  color: BlockColor
+): Position[] {
+  const visited = new Set<string>();
+  const queue: Position[] = [{ x: startX, y: startY }];
+  const connected: Position[] = [];
+
+  while (queue.length > 0) {
+    const pos = queue.shift()!;
+    const key = `${pos.x},${pos.y}`;
+
+    if (visited.has(key)) continue;
+    if (pos.x < 0 || pos.x >= board.width || pos.y < 0 || pos.y >= board.height) continue;
+    if (board.cells[pos.y][pos.x].color !== color) continue;
+
+    visited.add(key);
+    connected.push(pos);
+
+    // 상하좌우 탐색
+    queue.push({ x: pos.x + 1, y: pos.y });
+    queue.push({ x: pos.x - 1, y: pos.y });
+    queue.push({ x: pos.x, y: pos.y + 1 });
+    queue.push({ x: pos.x, y: pos.y - 1 });
+  }
+
+  return connected;
+}
+
+/**
+ * 모든 매칭 그룹 찾기 (3개 이상 연결)
+ */
+export function findAllMatches(board: GameBoard): MatchGroup[] {
+  const visited = new Set<string>();
+  const matches: MatchGroup[] = [];
 
   for (let y = 0; y < board.height; y++) {
-    let isComplete = true;
     for (let x = 0; x < board.width; x++) {
-      if (!board.cells[y][x].filled) {
-        isComplete = false;
-        break;
+      const key = `${x},${y}`;
+      if (visited.has(key)) continue;
+
+      const color = board.cells[y][x].color;
+      if (!color) continue;
+
+      const connected = findConnectedBlocks(board, x, y, color);
+
+      // 3개 이상 연결되어 있으면 매칭
+      if (connected.length >= 3) {
+        matches.push({ positions: connected, color });
+        connected.forEach(pos => visited.add(`${pos.x},${pos.y}`));
+      } else {
+        connected.forEach(pos => visited.add(`${pos.x},${pos.y}`));
       }
     }
-    if (isComplete) {
-      completedLines.push(y);
-    }
   }
 
-  return completedLines;
+  return matches;
 }
 
 /**
- * 라인 제거 및 위 블록 낙하
+ * 매칭된 블록 제거
  */
-export function clearLines(board: GameBoard, lines: number[]): void {
-  // 아래에서 위로 정렬
-  lines.sort((a, b) => b - a);
+export function removeMatches(board: GameBoard, matches: MatchGroup[]): number {
+  let totalRemoved = 0;
 
-  for (const lineY of lines) {
-    // 해당 라인 제거
-    board.cells.splice(lineY, 1);
-    // 맨 위에 빈 라인 추가
-    const newRow: BoardCell[] = [];
-    for (let x = 0; x < board.width; x++) {
-      newRow.push({ filled: false, color: null, energy: false });
+  for (const match of matches) {
+    for (const pos of match.positions) {
+      board.cells[pos.y][pos.x].color = null;
+      totalRemoved++;
     }
-    board.cells.unshift(newRow);
   }
+
+  return totalRemoved;
 }
 
 /**
- * 모듈의 그림자 위치 계산 (낙하 예측)
+ * 중력 적용 (빈 공간 채우기)
  */
-export function calculateGhostPosition(board: GameBoard, module: ActiveModule): CellPosition {
-  let ghostY = module.position.y;
+export function applyGravity(board: GameBoard): boolean {
+  let hasFallen = false;
 
-  while (
-    isValidPosition(board, {
-      ...module,
-      position: { x: module.position.x, y: ghostY + 1 },
-    })
-  ) {
-    ghostY++;
+  // 아래에서 위로 스캔
+  for (let x = 0; x < board.width; x++) {
+    let writeY = board.height - 1;
+
+    for (let readY = board.height - 1; readY >= 0; readY--) {
+      if (board.cells[readY][x].color !== null) {
+        if (writeY !== readY) {
+          board.cells[writeY][x].color = board.cells[readY][x].color;
+          board.cells[readY][x].color = null;
+          hasFallen = true;
+        }
+        writeY--;
+      }
+    }
   }
 
-  return { x: module.position.x, y: ghostY };
+  return hasFallen;
+}
+
+/**
+ * 그림자(고스트) 위치 계산
+ */
+export function calculateGhostPosition(board: GameBoard, block: FallingBlock): Position {
+  const ghostBlock = { ...block, position: { ...block.position } };
+
+  while (isValidPosition(board, ghostBlock)) {
+    ghostBlock.position.y++;
+  }
+
+  ghostBlock.position.y--;
+  return ghostBlock.position;
 }

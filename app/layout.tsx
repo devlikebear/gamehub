@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     default: "GameHub - Retro Arcade Games",
     template: "%s | GameHub",
   },
-  description: "Play original neon arcade reinterpretations of maze runners, paddle duels, falling blocks and more.",
+  description: "Play original neon arcade reinterpretations of maze runners, paddle duels, color matching puzzles and more.",
   keywords: ["arcade", "retro-inspired", "original games", "browser arcade", "neon games"],
 };
 

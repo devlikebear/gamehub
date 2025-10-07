@@ -42,7 +42,7 @@ gamehub/
 │   ├── page.tsx           # 홈 (오락실 메인)
 │   ├── games/             # 게임 페이지들
 │   │   ├── neon-serpent/      # 네온 서펀트 (추적형 필드)
-│   │   ├── cascade-blocks/    # 캐스케이드 블록 (가변 필드)
+│   │   ├── cascade-blocks/    # 컬러 매치 캐스케이드 (컬러 매칭 퍼즐)
 │   │   ├── prism-smash/       # 프리즘 스매시 (벽 구조 퍼즐)
 │   │   ├── spectral-pursuit/  # 스펙트럴 퍼슈트 (개방형 라비린스)
 │   │   ├── pulse-paddles/     # 펄스 패들 (에너지 듀얼)
@@ -60,7 +60,7 @@ gamehub/
 │   ├── games/            # 게임 엔진 및 개별 게임
 │   │   ├── engine/       # 공통 게임 엔진
 │   │   ├── neon-serpent/     # 네온 서펀트 로직
-│   │   ├── cascade-blocks/   # 캐스케이드 블록 로직
+│   │   ├── cascade-blocks/   # 컬러 매치 캐스케이드 로직
 │   │   └── ...
 │   ├── storage/          # 로컬 스토리지 관리
 │   └── i18n/             # 다국어 지원
@@ -101,7 +101,7 @@ gamehub/
 
 - **Pac-Man 계열 (고위험)**: 고정 미로, 노란 주인공, 4색 유령, 효과음을 사용하지 않는다. Spectral Pursuit는 개방형 지도를 기반으로 하고, 캐릭터 형태와 연출을 완전히 새롭게 디자인한다.
 - **Space Invaders 계열 (고위험)**: 대형 편대, 보호막, 상단 UFO 연출을 차용하지 않는다. Photon Vanguard는 방사형 궤도 진입 시스템과 시간 왜곡 능력을 중심으로 제작한다.
-- **Tetris 계열 (매우 고위험)**: 10×20 보드, 7 테트로미노, 고정 색 팔레트를 사용하지 않는다. Cascade Blocks는 가변 필드와 다각형 모듈, 에너지 루프 규칙을 사용한다.
+- **Tetris/Puyo Puyo 계열 (매우 고위험)**: 10×20 보드, 7 테트로미노, 고정 색 팔레트, 4개 연결 제거 방식을 그대로 사용하지 않는다. Color Match Cascade는 2셀 블록, 3개 이상 매칭, BFS 기반 연결 감지, 네온 컬러 팔레트를 사용한다.
 - **Asteroids 계열 (중고위험)**: 벡터 우주선, 파편화 연출, 명칭을 그대로 쓰지 않는다. Starshard Drift는 네온 파티클과 중력 파동을 활용한다.
 - **Breakout/Pong 계열 (중간)**: 명칭과 UI를 재창조하고, 물리 시스템과 필드 구성을 변형한다. Pulse Paddles와 Prism Smash는 네온 커브샷, 필드 재구성 등 신규 요소를 강조한다.
 - **Snake 계열 (낮음)**: 기본 장르는 허용되지만 Nokia 스타일, 원본 UI를 사용하지 않는다. Neon Serpent는 절차적 필드와 에너지 과부하 메커닉을 사용한다.
@@ -133,11 +133,12 @@ gamehub/
 
 #### 우선순위 중간
 
-- [ ] **Cascade Blocks (캐스케이드 블록)** [#20](https://github.com/devlikebear/gamehub/issues/20): 다각형 낙하 퍼즐
-  - 방향키로 다각형 모듈 회전/이동, Space 가속 낙하
-  - 필드 크기가 라운드마다 변하며 목표도 동적으로 변경
-  - 라인 대신 에너지 루프를 완성하면 점수 획득
-  - 난이도: ⭐⭐⭐
+- [x] **Color Match Cascade (컬러 매치 캐스케이드)** [#20](https://github.com/devlikebear/gamehub/issues/20): 컬러 매칭 퍼즐
+  - 캔버스 프로토타입 구현 (2셀 블록 낙하, 3개 이상 매칭 제거)
+  - `/games/cascade-blocks` 페이지와 컨트롤 안내 추가
+  - 연쇄 반응 콤보 시스템 및 중력 적용
+  - BFS 알고리즘 기반 컬러 매칭 및 점수 시스템
+  - 난이도: ⭐⭐
 
 - [ ] **Photon Vanguard (포톤 뱅가드)** [#21](https://github.com/devlikebear/gamehub/issues/21): 방사형 궤도 방어 슈팅
   - 좌/우 이동 및 타임 슬로우/파동 발사 시스템
@@ -341,7 +342,7 @@ npm test           # 테스트 실행
 | Neon Serpent | ⭐ | 방향키 + 대시 | 플레이 가능 |
 | Pulse Paddles | ⭐ | ↑↓ + 커브샷 | 플레이 가능 |
 | Prism Smash | ⭐⭐ | ←→ + 필드 스왑 | 플레이 가능 |
-| Cascade Blocks | ⭐⭐⭐ | 방향키 + Space | 계획 |
+| Color Match Cascade | ⭐⭐ | 방향키 + Space | 플레이 가능 |
 | Photon Vanguard | ⭐⭐⭐ | ←→ + 파동 | 계획 |
 | Spectral Pursuit | ⭐⭐⭐⭐ | 방향키 + 위장 | 계획 |
 | Starshard Drift | ⭐⭐⭐⭐ | 방향키 + 펄스 | 계획 |
