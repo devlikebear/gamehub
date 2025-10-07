@@ -3,6 +3,7 @@
  * 방사형 궤도로 진입하는 포톤 군단을 시간 왜곡으로 제압하세요
  */
 
+import { BaseGame, GameConfig, InputHandler, StorageManager, NEON_COLORS } from '../engine';
 import type {
   Enemy,
   GameState,
@@ -10,7 +11,6 @@ import type {
   Position,
   TimeWarp,
   Wave,
-  AfterimageBarrier,
 } from './types';
 import {
   createEnemy,
@@ -22,12 +22,9 @@ import {
 } from './enemies';
 import { calculateOrbitPosition, updateOrbitAngle, distance } from './orbits';
 
-export class PhotonVanguardGame {
-  private canvas: HTMLCanvasElement;
-  private ctx: CanvasRenderingContext2D;
-  private width: number;
-  private height: number;
+const GAME_ID = 'photon-vanguard';
 
+export class PhotonVanguardGame extends BaseGame {
   private state: GameState = 'ready';
   private stats: GameStats = {
     score: 0,
@@ -39,19 +36,19 @@ export class PhotonVanguardGame {
 
   // 플레이어
   private playerX: number;
-  private playerSpeed = 5;
-  private playerSize = 20;
+  private readonly playerSpeed = 5;
+  private readonly playerSize = 20;
 
   // 적
   private enemies: Enemy[] = [];
   private spawnTimer = 0;
-  private spawnInterval = 2000; // 2초마다 스폰
+  private readonly spawnInterval = 2000; // 2초마다 스폰
 
   // 파동 공격
   private waves: Wave[] = [];
   private waveCharge = 0;
-  private maxWaveCharge = 100;
-  private waveChargeRate = 30; // per second
+  private readonly maxWaveCharge = 100;
+  private readonly waveChargeRate = 30; // per second
   private waveHits = 0;
 
   // 시간 왜곡
@@ -63,119 +60,45 @@ export class PhotonVanguardGame {
     currentCooldown: 0,
   };
 
-  // 잔상 방어벽
-  private afterimageBarrier: AfterimageBarrier = {
-    positions: [],
-    opacity: 0,
-    duration: 0,
-    isActive: false,
-  };
-
-  // 입력
-  private keys: Set<string> = new Set();
-
-  // 게임 루프
-  private rafId: number | null = null;
-  private lastTime = 0;
+  // 입력 및 저장소
+  private readonly input: InputHandler;
+  private readonly storage: StorageManager;
 
   // 고득점
   private highScore = 0;
 
-  constructor(config: { canvas: HTMLCanvasElement; width?: number; height?: number }) {
-    this.canvas = config.canvas;
-    this.ctx = config.canvas.getContext('2d')!;
-    this.width = config.width ?? 800;
-    this.height = config.height ?? 600;
-
-    // 캔버스 크기 설정
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
+  constructor(config: GameConfig) {
+    super(config);
 
     this.playerX = this.width / 2;
 
+    this.input = new InputHandler({ targetElement: config.canvas });
+    this.storage = new StorageManager();
+
     this.loadHighScore();
-    this.setupEventListeners();
   }
 
-  private setupEventListeners(): void {
-    window.addEventListener('keydown', this.handleKeyDown);
-    window.addEventListener('keyup', this.handleKeyUp);
-  }
-
-  private handleKeyDown = (e: KeyboardEvent): void => {
-    this.keys.add(e.key);
-
-    if (this.state === 'ready' && e.key === ' ') {
-      this.start();
-      e.preventDefault();
-    } else if (this.state === 'playing') {
-      if (e.key === ' ') {
-        this.fireWave();
-        e.preventDefault();
-      } else if (e.key === 'Shift') {
-        this.activateTimeWarp();
-        e.preventDefault();
-      } else if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
-        this.pause();
-        e.preventDefault();
-      }
-    } else if (this.state === 'paused') {
-      if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
-        this.resume();
-        e.preventDefault();
-      }
-    } else if (this.state === 'gameover') {
-      if (e.key === 'Enter' || e.key === 'r' || e.key === 'R') {
-        this.restart();
-        e.preventDefault();
-      }
-    }
-  };
-
-  private handleKeyUp = (e: KeyboardEvent): void => {
-    this.keys.delete(e.key);
-  };
-
-  start(): void {
+  protected onStart(): void {
+    this.input.attach();
     if (this.state === 'ready') {
       this.state = 'playing';
-      this.lastTime = performance.now();
       this.spawnWave();
-      this.loop(this.lastTime);
     }
   }
 
-  stop(): void {
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-    this.destroy();
+  protected onStop(): void {
+    this.input.detach();
   }
 
-  togglePause(): void {
-    if (this.state === 'playing') {
-      this.pause();
-    } else if (this.state === 'paused') {
-      this.resume();
-    }
+  protected onPause(): void {
+    this.state = 'paused';
   }
 
-  private pause(): void {
-    if (this.state === 'playing') {
-      this.state = 'paused';
-    }
+  protected onResume(): void {
+    this.state = 'playing';
   }
 
-  private resume(): void {
-    if (this.state === 'paused') {
-      this.state = 'playing';
-      this.lastTime = performance.now();
-      this.loop(this.lastTime);
-    }
-  }
-
-  restart(): void {
+  private restart(): void {
     this.state = 'ready';
     this.stats = {
       score: 0,
@@ -191,26 +114,25 @@ export class PhotonVanguardGame {
     this.waveHits = 0;
     this.timeWarp.isActive = false;
     this.timeWarp.currentCooldown = 0;
-    this.afterimageBarrier.isActive = false;
-    this.keys.clear();
-    this.render();
+
+    this.start();
   }
 
-  private loop = (currentTime: number): void => {
+  protected update(deltaTime: number): void {
+    if (this.state === 'ready') {
+      this.processReadyInput();
+      return;
+    }
+
+    if (this.state === 'gameover') {
+      this.processGameOverInput();
+      return;
+    }
+
     if (this.state !== 'playing') return;
 
-    const deltaTime = currentTime - this.lastTime;
-    this.lastTime = currentTime;
-
-    this.update(deltaTime);
-    this.render();
-
-    this.rafId = requestAnimationFrame(this.loop);
-  };
-
-  private update(deltaTime: number): void {
-    // 플레이어 이동
-    this.updatePlayer(deltaTime);
+    // 게임플레이 입력
+    this.processGameplayInput(deltaTime);
 
     // 시간 왜곡 업데이트
     this.updateTimeWarp(deltaTime);
@@ -235,18 +157,41 @@ export class PhotonVanguardGame {
     this.checkLevelUp();
   }
 
-  private updatePlayer(deltaTime: number): void {
+  private processReadyInput(): void {
+    if (this.input.isPressed('Space') || this.input.isPressed('Enter')) {
+      this.start();
+    }
+  }
+
+  private processGameOverInput(): void {
+    if (this.input.isPressed('Enter') || this.input.isPressed('r') || this.input.isPressed('R')) {
+      this.restart();
+    }
+  }
+
+  private processGameplayInput(deltaTime: number): void {
     const deltaSeconds = deltaTime / 1000;
 
-    if (this.keys.has('ArrowLeft') || this.keys.has('a') || this.keys.has('A')) {
+    // 플레이어 이동
+    if (this.input.isPressed('ArrowLeft') || this.input.isPressed('a') || this.input.isPressed('A')) {
       this.playerX -= this.playerSpeed * deltaSeconds * 60;
     }
-    if (this.keys.has('ArrowRight') || this.keys.has('d') || this.keys.has('D')) {
+    if (this.input.isPressed('ArrowRight') || this.input.isPressed('d') || this.input.isPressed('D')) {
       this.playerX += this.playerSpeed * deltaSeconds * 60;
     }
 
     // 화면 경계 제한
     this.playerX = Math.max(this.playerSize, Math.min(this.width - this.playerSize, this.playerX));
+
+    // 파동 발사
+    if (this.input.justPressed('Space')) {
+      this.fireWave();
+    }
+
+    // 시간 왜곡
+    if (this.input.justPressed('Shift')) {
+      this.activateTimeWarp();
+    }
   }
 
   private updateTimeWarp(deltaTime: number): void {
@@ -261,6 +206,7 @@ export class PhotonVanguardGame {
       if (this.timeWarp.duration <= 0) {
         this.timeWarp.isActive = false;
         this.timeWarp.currentCooldown = this.timeWarp.cooldown;
+        this.timeWarp.duration = 3000; // 리셋
       }
     }
   }
@@ -419,17 +365,11 @@ export class PhotonVanguardGame {
       this.highScore = this.stats.score;
       this.saveHighScore();
     }
-
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
   }
 
-  private render(): void {
+  protected render(): void {
     // 배경
-    this.ctx.fillStyle = '#000000';
-    this.ctx.fillRect(0, 0, this.width, this.height);
+    this.clearCanvas('#000000');
 
     // 그리드 배경
     this.drawGrid();
@@ -460,7 +400,7 @@ export class PhotonVanguardGame {
     this.drawUI();
 
     if (this.state === 'paused') {
-      this.drawPausedScreen();
+      this.drawOverlay('PAUSED', NEON_COLORS.YELLOW, 'Press ESC to Resume');
     } else if (this.state === 'gameover') {
       this.drawGameOverScreen();
     }
@@ -521,14 +461,12 @@ export class PhotonVanguardGame {
         this.ctx.globalAlpha = opacity;
       }
 
-      // 적 본체
+      // 적 본체 (네온 글로우)
       this.ctx.fillStyle = color;
       this.ctx.shadowBlur = 15;
       this.ctx.shadowColor = color;
 
-      this.ctx.beginPath();
-      this.ctx.arc(enemy.position.x, enemy.position.y, size / 2, 0, Math.PI * 2);
-      this.ctx.fill();
+      this.drawCircle(enemy.position.x, enemy.position.y, size / 2, color);
 
       // 체력 바
       if (enemy.health < enemy.maxHealth) {
@@ -536,20 +474,20 @@ export class PhotonVanguardGame {
         const barHeight = 3;
         const healthPercent = enemy.health / enemy.maxHealth;
 
-        this.ctx.fillStyle = '#ff0000';
-        this.ctx.fillRect(
+        this.drawRect(
           enemy.position.x - barWidth / 2,
           enemy.position.y - size / 2 - 5,
           barWidth,
-          barHeight
+          barHeight,
+          '#ff0000'
         );
 
-        this.ctx.fillStyle = '#00ff00';
-        this.ctx.fillRect(
+        this.drawRect(
           enemy.position.x - barWidth / 2,
           enemy.position.y - size / 2 - 5,
           barWidth * healthPercent,
-          barHeight
+          barHeight,
+          '#00ff00'
         );
       }
 
@@ -581,9 +519,9 @@ export class PhotonVanguardGame {
     const playerY = this.height - 50;
 
     // 플레이어 (삼각형)
-    this.ctx.fillStyle = '#00f0ff';
+    this.ctx.fillStyle = NEON_COLORS.CYAN;
     this.ctx.shadowBlur = 20;
-    this.ctx.shadowColor = '#00f0ff';
+    this.ctx.shadowColor = NEON_COLORS.CYAN;
 
     this.ctx.beginPath();
     this.ctx.moveTo(this.playerX, playerY - this.playerSize / 2);
@@ -600,25 +538,27 @@ export class PhotonVanguardGame {
     const panelY = this.height - panelHeight - 10;
 
     // 패널 배경
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    this.ctx.fillRect(10, panelY, this.width - 20, panelHeight);
-
-    this.ctx.strokeStyle = '#00f0ff';
-    this.ctx.lineWidth = 2;
-    this.ctx.strokeRect(10, panelY, this.width - 20, panelHeight);
-
-    this.ctx.fillStyle = '#00f0ff';
-    this.ctx.font = '14px "Press Start 2P", monospace';
+    this.drawRect(10, panelY, this.width - 20, panelHeight, 'rgba(0, 0, 0, 0.7)');
+    this.strokeRect(10, panelY, this.width - 20, panelHeight, NEON_COLORS.CYAN, 2);
 
     // 점수
-    this.ctx.fillText(`SCORE: ${this.stats.score}`, 20, panelY + 25);
+    this.drawText(`SCORE: ${this.stats.score}`, 20, panelY + 25, {
+      font: '14px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+    });
 
     // 레벨
-    this.ctx.fillText(`LEVEL: ${this.stats.level}`, 20, panelY + 50);
+    this.drawText(`LEVEL: ${this.stats.level}`, 20, panelY + 50, {
+      font: '14px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+    });
 
     // 파동 충전
     const chargePercent = (this.waveCharge / this.maxWaveCharge) * 100;
-    this.ctx.fillText(`WAVE: ${Math.floor(chargePercent)}%`, 250, panelY + 25);
+    this.drawText(`WAVE: ${Math.floor(chargePercent)}%`, 250, panelY + 25, {
+      font: '14px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+    });
 
     // 시간 왜곡 쿨다운
     const warpText = this.timeWarp.isActive
@@ -626,13 +566,22 @@ export class PhotonVanguardGame {
       : this.timeWarp.currentCooldown > 0
       ? `WARP: ${Math.ceil(this.timeWarp.currentCooldown / 1000)}s`
       : 'WARP: READY';
-    this.ctx.fillText(warpText, 250, panelY + 50);
+    this.drawText(warpText, 250, panelY + 50, {
+      font: '14px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+    });
 
     // 정확도
-    this.ctx.fillText(`ACC: ${this.stats.accuracy.toFixed(1)}%`, 500, panelY + 25);
+    this.drawText(`ACC: ${this.stats.accuracy.toFixed(1)}%`, 500, panelY + 25, {
+      font: '14px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+    });
 
     // 최고 점수
-    this.ctx.fillText(`HIGH: ${this.highScore}`, 500, panelY + 50);
+    this.drawText(`HIGH: ${this.highScore}`, 500, panelY + 50, {
+      font: '14px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+    });
   }
 
   private drawTimeWarpEffect(): void {
@@ -641,81 +590,54 @@ export class PhotonVanguardGame {
   }
 
   private drawReadyScreen(): void {
-    this.ctx.fillStyle = '#ff10f0';
-    this.ctx.font = '32px "Press Start 2P", monospace';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('PHOTON VANGUARD', this.width / 2, this.height / 2 - 40);
-
-    this.ctx.fillStyle = '#00f0ff';
-    this.ctx.font = '16px "Press Start 2P", monospace';
-    this.ctx.fillText('Press SPACE to Start', this.width / 2, this.height / 2 + 20);
-
-    this.ctx.textAlign = 'left';
-  }
-
-  private drawPausedScreen(): void {
-    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    this.ctx.fillRect(0, 0, this.width, this.height);
-
-    this.ctx.fillStyle = '#ffff00';
-    this.ctx.font = '32px "Press Start 2P", monospace';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('PAUSED', this.width / 2, this.height / 2);
-
-    this.ctx.fillStyle = '#00f0ff';
-    this.ctx.font = '16px "Press Start 2P", monospace';
-    this.ctx.fillText('Press ESC to Resume', this.width / 2, this.height / 2 + 40);
-
-    this.ctx.textAlign = 'left';
+    this.drawOverlay('PHOTON VANGUARD', NEON_COLORS.PINK, 'Press SPACE to Start');
   }
 
   private drawGameOverScreen(): void {
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
     this.ctx.fillRect(0, 0, this.width, this.height);
 
-    this.ctx.fillStyle = '#ff10f0';
-    this.ctx.font = '32px "Press Start 2P", monospace';
-    this.ctx.textAlign = 'center';
-    this.ctx.fillText('GAME OVER', this.width / 2, this.height / 2 - 60);
+    this.drawText('GAME OVER', this.width / 2, this.height / 2 - 60, {
+      font: '32px "Press Start 2P"',
+      color: NEON_COLORS.PINK,
+      align: 'center',
+      baseline: 'middle',
+    });
 
-    this.ctx.fillStyle = '#00f0ff';
-    this.ctx.font = '16px "Press Start 2P", monospace';
-    this.ctx.fillText(`Final Score: ${this.stats.score}`, this.width / 2, this.height / 2 - 10);
-    this.ctx.fillText(`Level: ${this.stats.level}`, this.width / 2, this.height / 2 + 20);
-    this.ctx.fillText(`Accuracy: ${this.stats.accuracy.toFixed(1)}%`, this.width / 2, this.height / 2 + 50);
+    this.drawText(`Final Score: ${this.stats.score}`, this.width / 2, this.height / 2 - 10, {
+      font: '16px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+      align: 'center',
+      baseline: 'middle',
+    });
 
-    this.ctx.fillStyle = '#ffff00';
-    this.ctx.fillText('Press ENTER to Restart', this.width / 2, this.height / 2 + 90);
+    this.drawText(`Level: ${this.stats.level}`, this.width / 2, this.height / 2 + 20, {
+      font: '16px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+      align: 'center',
+      baseline: 'middle',
+    });
 
-    this.ctx.textAlign = 'left';
+    this.drawText(`Accuracy: ${this.stats.accuracy.toFixed(1)}%`, this.width / 2, this.height / 2 + 50, {
+      font: '16px "Press Start 2P"',
+      color: NEON_COLORS.CYAN,
+      align: 'center',
+      baseline: 'middle',
+    });
+
+    this.drawText('Press ENTER to Restart', this.width / 2, this.height / 2 + 90, {
+      font: '16px "Press Start 2P"',
+      color: NEON_COLORS.YELLOW,
+      align: 'center',
+      baseline: 'middle',
+    });
   }
 
   private loadHighScore(): void {
-    try {
-      const saved = localStorage.getItem('photon-vanguard-high-score');
-      if (saved) {
-        this.highScore = parseInt(saved, 10);
-      }
-    } catch (e) {
-      console.error('Failed to load high score:', e);
-    }
+    this.highScore = this.storage.getHighScore(GAME_ID);
   }
 
   private saveHighScore(): void {
-    try {
-      localStorage.setItem('photon-vanguard-high-score', this.highScore.toString());
-    } catch (e) {
-      console.error('Failed to save high score:', e);
-    }
-  }
-
-  destroy(): void {
-    if (this.rafId !== null) {
-      cancelAnimationFrame(this.rafId);
-      this.rafId = null;
-    }
-
-    window.removeEventListener('keydown', this.handleKeyDown);
-    window.removeEventListener('keyup', this.handleKeyUp);
+    this.storage.setHighScore(GAME_ID, this.highScore);
   }
 }
