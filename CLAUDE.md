@@ -116,10 +116,10 @@ lib/
 │   │   ├── Physics.ts    # 물리 엔진
 │   │   ├── Collision.ts  # 충돌 감지
 │   │   └── Input.ts      # 입력 처리
-│   ├── snake/             # 스네이크 게임
-│   ├── tetris/            # 테트리스 게임
-│   ├── breakout/          # 벽돌깨기 게임
-│   └── pacman/            # 팩맨 게임
+│   ├── neon-serpent/      # 네온 서펀트 게임
+│   ├── cascade-blocks/    # 캐스케이드 블록 게임
+│   ├── prism-smash/       # 프리즘 스매시 게임
+│   └── spectral-pursuit/  # 스펙트럴 퍼슈트 게임
 ├── storage/                # 로컬 스토리지 관리
 │   ├── scores.ts          # 점수 저장/불러오기
 │   └── settings.ts        # 설정 저장/불러오기
@@ -229,10 +229,10 @@ class InputHandler {
 
 1. **게임 로직 구현** (`lib/games/[game-name]/`)
    ```typescript
-   // lib/games/snake/SnakeGame.ts
+   // lib/games/neon-serpent/NeonSerpentGame.ts
    import { GameEngine } from '../engine/GameLoop';
 
-   export class SnakeGame extends GameEngine {
+   export class NeonSerpentGame extends GameEngine {
      update(deltaTime: number) {
        // 게임 로직 업데이트
      }
@@ -247,12 +247,12 @@ class InputHandler {
    ```tsx
    'use client';
    import { GameCanvas } from '@/components/games/GameCanvas';
-   import { SnakeGame } from '@/lib/games/snake/SnakeGame';
+   import { NeonSerpentGame } from '@/lib/games/neon-serpent/NeonSerpentGame';
 
-   export default function SnakePage() {
+   export default function NeonSerpentPage() {
      return (
        <div className="arcade-container">
-         <GameCanvas game={SnakeGame} />
+         <GameCanvas game={NeonSerpentGame} />
        </div>
      );
    }
@@ -263,8 +263,8 @@ class InputHandler {
    import { Metadata } from 'next';
 
    export const metadata: Metadata = {
-     title: 'Snake Game - GameHub Arcade',
-     description: '클래식 스네이크 게임을 즐겨보세요',
+     title: 'Neon Serpent - GameHub Arcade',
+     description: '절차적으로 변화하는 네온 필드를 누비세요',
    };
    ```
 
@@ -272,8 +272,8 @@ class InputHandler {
    ```tsx
    const games = [
      {
-       id: 'snake',
-       name: 'Snake',
+       id: 'neon-serpent',
+       name: 'Neon Serpent',
        icon: '🐍',
        color: 'green',
        difficulty: 'easy',
