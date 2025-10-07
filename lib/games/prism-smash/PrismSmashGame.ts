@@ -83,6 +83,8 @@ export class PrismSmashGame extends BaseGame {
       case ' ': // Space - field swap
       case 'Shift':
       case 'Enter':
+      case 'r':
+      case 'R':
         handled = true;
         break;
       default:
@@ -137,6 +139,9 @@ export class PrismSmashGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.lives <= 0) {
+      if (this.keys.has('Enter') || this.keys.has('r') || this.keys.has('R')) {
+        this.resetMatch();
+      }
       return;
     }
 
@@ -184,7 +189,7 @@ export class PrismSmashGame extends BaseGame {
     this.drawHud();
 
     if (this.lives <= 0) {
-      this.drawOverlay('SYSTEM FAILURE', '#ff4f78', 'Enter 키로 재시작');
+      this.drawOverlay('SYSTEM FAILURE', '#ff4f78', 'Enter / R 키로 재시작');
     }
   }
 
@@ -340,6 +345,25 @@ export class PrismSmashGame extends BaseGame {
       this.messageText = '필드 붕괴!';
       this.messageTimer = 2000;
     }
+  }
+
+  private resetMatch(): void {
+    this.score = 0;
+    this.stage = 1;
+    this.lives = MAX_LIVES;
+    this.combo = 0;
+    this.comboTimer = 0;
+    this.messageText = '';
+    this.messageTimer = 0;
+    this.flashTimer = 0;
+    this.swapCooldown = 0;
+    this.swapPulse = 0;
+
+    this.layers = this.generateLayers();
+    this.activeLayer = 0;
+    this.ball.stuck = true;
+    this.ball.x = this.paddle.x + this.paddle.width / 2;
+    this.ball.y = this.paddle.y - this.ball.radius - 2;
   }
 
   private swapField(): void {
@@ -508,7 +532,7 @@ export class PrismSmashGame extends BaseGame {
       });
     }
 
-    const instructions = '←/→ 이동 · Space 필드 스왑 · Shift 가속 · Enter 시작/재시작';
+    const instructions = '←/→ 이동 · Space 필드 스왑 · Shift 가속 · Enter/R 시작·재시작';
     this.drawText(instructions, this.fieldLeft, this.height - 30, {
       color: '#7c86ff',
       font: '10px "Press Start 2P"',
