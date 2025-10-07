@@ -125,9 +125,10 @@ gamehub/
   - 득점 시 필드 패턴 재구성(듀얼 펄스/브레이크 라이너 등)
   - 난이도: ⭐
 
-- [ ] **Prism Smash (프리즘 스매시)** [#19](https://github.com/devlikebear/gamehub/issues/19): 모듈형 벽체 해체 게임
-  - 좌/우 키 + 필드 스왑 액션으로 패턴 변환
-  - 다각형 블록이 충돌 시 조각으로 분리되어 콤보 생성
+- [x] **Prism Smash (프리즘 스매시)** [#19](https://github.com/devlikebear/gamehub/issues/19): 모듈형 벽체 해체 게임
+  - 캔버스 프로토타입 구현 (필드 스왑, 프리즘 분열, 콤보 시스템)
+  - `/games/prism-smash` 페이지와 컨트롤 안내 추가
+  - 전경/후경 레이어 재구성과 속도 존 효과 반영
   - 난이도: ⭐⭐
 
 #### 우선순위 중간
@@ -339,7 +340,7 @@ npm test           # 테스트 실행
 |------|--------|--------|------|
 | Neon Serpent | ⭐ | 방향키 + 대시 | 플레이 가능 |
 | Pulse Paddles | ⭐ | ↑↓ + 커브샷 | 플레이 가능 |
-| Prism Smash | ⭐⭐ | ←→ + 필드 스왑 | 계획 |
+| Prism Smash | ⭐⭐ | ←→ + 필드 스왑 | 플레이 가능 |
 | Cascade Blocks | ⭐⭐⭐ | 방향키 + Space | 계획 |
 | Photon Vanguard | ⭐⭐⭐ | ←→ + 파동 | 계획 |
 | Spectral Pursuit | ⭐⭐⭐⭐ | 방향키 + 위장 | 계획 |
