@@ -14,9 +14,15 @@ interface GameCanvasProps {
   };
   width?: number;
   height?: number;
+  pauseOnSpace?: boolean;
 }
 
-export function GameCanvas({ GameClass, width = 800, height = 600 }: GameCanvasProps) {
+export function GameCanvas({
+  GameClass,
+  width = 800,
+  height = 600,
+  pauseOnSpace = true,
+}: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<ReturnType<typeof GameClass.prototype.constructor> | null>(null);
 
@@ -37,20 +43,24 @@ export function GameCanvas({ GameClass, width = 800, height = 600 }: GameCanvasP
 
     // 키보드 이벤트 (Space로 일시정지)
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === 'Space') {
+      if (pauseOnSpace && e.code === 'Space') {
         e.preventDefault();
         game.togglePause();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    if (pauseOnSpace) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
 
     // 클린업
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      if (pauseOnSpace) {
+        window.removeEventListener('keydown', handleKeyDown);
+      }
       game.stop();
     };
-  }, [GameClass, width, height]);
+  }, [GameClass, width, height, pauseOnSpace]);
 
   return (
     <div className="flex items-center justify-center">

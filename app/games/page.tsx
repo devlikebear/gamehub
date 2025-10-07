@@ -40,9 +40,10 @@ const games = [
     icon: '🔷',
     color: 'cyan',
     difficulty: '⭐⭐⭐',
-    description: '다각형 에너지 노드를 회전시켜 불규칙 필드를 채우세요',
-    controls: '방향키 회전/이동, Space 가속 낙하',
-    status: 'coming-soon',
+    description: '비정형 에너지 모듈로 네온 격자를 안정화하고 필드 게이지를 유지하세요',
+    controls: '방향키 이동/회전, Space 하드 드롭',
+    status: 'playable',
+    href: '/games/cascade-blocks',
   },
   {
     id: 'photon-vanguard',
