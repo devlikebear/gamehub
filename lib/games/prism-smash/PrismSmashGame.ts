@@ -1,4 +1,4 @@
-import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
+import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager, NEON_COLORS, BACKGROUND_COLORS } from '../engine';
 
 interface Paddle {
   x: number;
