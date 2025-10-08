@@ -8,10 +8,12 @@ import { generateNickname, sanitizeNickname } from '@/lib/leaderboard/nickname';
 import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
+import { useI18n } from '@/lib/i18n/provider';
 
 const GAME_ID = 'stellar-salvo';
 
 export default function StellarSalvoPage() {
+  const { t } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
@@ -47,14 +49,13 @@ export default function StellarSalvoPage() {
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
           <p className="pixel-text text-xs text-bright-cyan uppercase tracking-wider">
-            PHASE 4 · VOID DEFENSE
+            {t.games['stellar-salvo'].tagline}
           </p>
           <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text">
-            STELLAR SALVO
+            {t.games['stellar-salvo'].name}
           </h1>
-          <p className="text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
-            공명의 문을 방어하는 네온 방어선이 되어, 원형 궤도를 따라 드리프트하며 VOID WRAITH의 파도를 막아내세요.
-            Space로 플럭스 펄스를 방출하고 Shift로 회피 부스트를 발동해 에너지 게이트를 지켜내세요.
+          <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
+            {t.games['stellar-salvo'].intro}
           </p>
         </section>
 
@@ -93,33 +94,33 @@ export default function StellarSalvoPage() {
         {/* 게임 정보 */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div className="bg-black/40 border border-bright-yellow/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
-            <h2 className="pixel-text text-xs md:text-sm text-bright-yellow uppercase">Controls</h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>← → / A D : 궤도 방향 회전</li>
-              <li>↑ / W : 추진 · ↓ / S : 감속</li>
-              <li>Space : 플럭스 펄스</li>
-              <li>Shift : 드리프트 대시</li>
-              <li>Esc : 일시정지 · Enter / R : 재시작</li>
+            <h2 className="pixel-text text-xs md:text-sm text-bright-yellow uppercase">{t.games['stellar-salvo'].controls.title}</h2>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['stellar-salvo'].controls.move}</li>
+              <li>{t.games['stellar-salvo'].controls.accel}</li>
+              <li>{t.games['stellar-salvo'].controls.shoot}</li>
+              <li>{t.games['stellar-salvo'].controls.dash}</li>
+              <li>{t.games['stellar-salvo'].controls.pause}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-pink/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
-            <h2 className="pixel-text text-xs md:text-sm text-bright-pink uppercase">Objectives</h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>VOID WRAITH 무리를 제거해 점수와 배율 확보</li>
-              <li>플럭스 펄스로 근접 위협을 정리하고 에너지 회수</li>
-              <li>에너지 게이지가 0이 되기 전에 코어를 사수</li>
-              <li>웨이브가 진행될수록 위협 수치가 상승합니다</li>
+            <h2 className="pixel-text text-xs md:text-sm text-bright-pink uppercase">{t.games['stellar-salvo'].objectives.title}</h2>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['stellar-salvo'].objectives.item1}</li>
+              <li>{t.games['stellar-salvo'].objectives.item2}</li>
+              <li>{t.games['stellar-salvo'].objectives.item3}</li>
+              <li>{t.games['stellar-salvo'].objectives.item4}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-cyan/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
-            <h2 className="pixel-text text-xs md:text-sm text-bright-cyan uppercase">Field Notes</h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>오리지널 아트 & 메커닉</li>
-              <li>대시는 쿨다운이 있어 위기 상황에만 사용하세요</li>
-              <li>펄스는 짧지만 강력한 부채꼴 범위를 가집니다</li>
-              <li>멀티플라이어를 유지하면 보너스 점수가 급증합니다</li>
+            <h2 className="pixel-text text-xs md:text-sm text-bright-cyan uppercase">{t.games['stellar-salvo'].notes.title}</h2>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['stellar-salvo'].notes.item1}</li>
+              <li>{t.games['stellar-salvo'].notes.item2}</li>
+              <li>{t.games['stellar-salvo'].notes.item3}</li>
+              <li>{t.games['stellar-salvo'].notes.item4}</li>
             </ul>
           </div>
         </section>
@@ -130,7 +131,7 @@ export default function StellarSalvoPage() {
             href="/games"
             className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
           >
-            Back to Arcade List
+            {t.gameUI.backToArcade}
           </Link>
         </section>
       </div>
@@ -139,6 +140,8 @@ export default function StellarSalvoPage() {
 }
 
 function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[]; loading: boolean }) {
+  const { t } = useI18n();
+
   if (!loading && entries.length === 0) {
     return null;
   }
@@ -146,17 +149,17 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
   return (
     <section className="bg-black/50 border border-bright-cyan/60 rounded-xl p-6 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="pixel-text text-xs text-bright">TOP PILOTS (최근 5위)</h2>
+        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topPilots} ({t.gameUI.recentTop5})</h2>
         <Link href="/leaderboard" className="pixel-text text-xs text-bright-cyan hover:underline">
-          전체 랭킹 보기
+          {t.gameUI.viewFullRanking}
         </Link>
       </div>
       {loading ? (
-        <p className="text-bright text-sm">불러오는 중...</p>
+        <p className="pixel-text text-bright text-sm">{t.gameUI.loadingLeaderboard}</p>
       ) : (
         <ul className="space-y-2">
           {entries.map((entry, index) => (
-            <li key={entry.id} className="flex items-center justify-between text-bright text-xs">
+            <li key={entry.id} className="flex items-center justify-between pixel-text text-bright text-xs">
               <span>
                 #{index + 1} · {entry.nickname}
               </span>
@@ -182,6 +185,7 @@ function ScoreSubmissionModal({
   onClose: () => void;
   onSubmitted: (response: LeaderboardSubmissionResponse, leaderboard?: LeaderboardEntry[]) => void;
 }) {
+  const { t } = useI18n();
   const [nickname, setNickname] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -214,7 +218,7 @@ function ScoreSubmissionModal({
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);
-      setError('점수를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
+      setError(t.gameUI.saveError);
       setStatus('error');
     }
   };
@@ -223,17 +227,17 @@ function ScoreSubmissionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur">
       <div className="w-full max-w-md bg-black/80 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 space-y-4">
         <div className="space-y-2 text-center">
-          <p className="pixel-text text-xs text-bright-cyan uppercase">Submit Score</p>
-          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? 'GATE SECURED!' : 'CORE BREACHED'}</h2>
-          <p className="text-bright text-sm">이번 라운드 점수: {result.score.toLocaleString()} pts</p>
+          <p className="pixel-text text-xs text-bright-cyan uppercase">{t.gameUI.submitScore}</p>
+          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.victory : t.gameUI.defeat}</h2>
+          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} pts</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
-          <label className="block text-left text-bright text-xs">
-            Pilot Nickname
+          <label className="block text-left pixel-text text-bright text-xs">
+            {t.gameUI.pilotNickname}
             <input
               value={nickname}
               onChange={(event) => setNickname(sanitizeNickname(event.target.value))}
-              className="mt-1 w-full rounded border border-bright-cyan/50 bg-black/60 px-3 py-2 text-bright focus:outline-none focus:ring-2 focus:ring-bright-cyan"
+              className="mt-1 w-full rounded border border-bright-cyan/50 bg-black/60 px-3 py-2 pixel-text text-bright focus:outline-none focus:ring-2 focus:ring-bright-cyan"
               maxLength={18}
               required
             />
@@ -243,9 +247,9 @@ function ScoreSubmissionModal({
             className="pixel-text text-xs px-4 py-2 border border-bright-cyan text-bright rounded hover:bg-bright-cyan/20"
             onClick={() => setNickname(generateNickname())}
           >
-            새 랜덤 닉네임
+            {t.gameUI.newRandomNickname}
           </button>
-          {error && <p className="text-bright-pink text-xs">{error}</p>}
+          {error && <p className="pixel-text text-bright-pink text-xs">{error}</p>}
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
@@ -253,14 +257,14 @@ function ScoreSubmissionModal({
               onClick={onClose}
               disabled={status === 'submitting'}
             >
-              닫기
+              {t.gameUI.close}
             </button>
             <button
               type="submit"
               className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
               disabled={status === 'submitting'}
             >
-              {status === 'submitting' ? '저장 중...' : '점수 저장'}
+              {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}
             </button>
           </div>
         </form>
