@@ -7,6 +7,8 @@
     --neon-purple: #9d00ff;
     --neon-yellow: #ffff00;
     --neon-green: #00ff00;
+    --font-inter: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    --font-press-start: 'Press Start 2P', 'Courier New', Courier, monospace;
   }
 
   * {
@@ -22,6 +24,7 @@
   }
 
   body {
+    font-family: var(--font-inter);
     background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #001a33 100%);
     min-height: 100vh;
     position: relative;

@@ -56,9 +56,9 @@ This project is optimized for Cloudflare Pages:
 | Pulse Paddles | ⭐ | Playable (prototype) |
 | Prism Smash | ⭐⭐ | Playable (prototype) |
 | Color Match Cascade | ⭐⭐ | Playable (prototype) |
-| Photon Vanguard | ⭐⭐⭐ | Planned |
-| Spectral Pursuit | ⭐⭐⭐⭐ | Planned |
-| Starshard Drift | ⭐⭐⭐⭐ | Planned |
+| Photon Vanguard | ⭐⭐⭐ | Playable |
+| Spectral Pursuit | ⭐⭐⭐⭐ | Playable |
+| Stellar Salvo | ⭐⭐⭐ | Playable |
 
 ## 📁 Project Structure
 
@@ -66,6 +66,7 @@ This project is optimized for Cloudflare Pages:
 gamehub/
 ├── app/                    # Next.js App Router
 │   ├── games/             # Game pages
+│   ├── icon.svg           # Neon favicon for the arcade
 │   └── ...
 ├── components/            # React components
 │   ├── ui/arcade/        # Arcade-style UI components
