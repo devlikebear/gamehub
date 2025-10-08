@@ -12,6 +12,30 @@ class BGMPlayer {
   private audio: HTMLAudioElement | null = null;
   private currentTrack: BGMTrack | null = null;
   private currentGameId: string | null = null;
+  private pendingGameId: string | null = null;
+  private userInteracted = false;
+
+  constructor() {
+    // 사용자 인터랙션 감지
+    if (typeof window !== 'undefined') {
+      const handleInteraction = () => {
+        this.userInteracted = true;
+        // pending 상태의 BGM이 있으면 재생
+        if (this.pendingGameId) {
+          this.play(this.pendingGameId);
+          this.pendingGameId = null;
+        }
+        // 이벤트 리스너 제거
+        window.removeEventListener('click', handleInteraction);
+        window.removeEventListener('keydown', handleInteraction);
+        window.removeEventListener('touchstart', handleInteraction);
+      };
+
+      window.addEventListener('click', handleInteraction, { once: true });
+      window.addEventListener('keydown', handleInteraction, { once: true });
+      window.addEventListener('touchstart', handleInteraction, { once: true });
+    }
+  }
 
   /**
    * 게임의 BGM 재생
@@ -26,6 +50,13 @@ class BGMPlayer {
 
     // 이미 같은 게임의 BGM이 재생 중이면 스킵
     if (this.currentGameId === gameId && this.audio && !this.audio.paused) {
+      return;
+    }
+
+    // 사용자 인터랙션이 없으면 pending 상태로 대기
+    if (!this.userInteracted) {
+      this.pendingGameId = gameId;
+      console.log('[BGMPlayer] Waiting for user interaction to play BGM');
       return;
     }
 
