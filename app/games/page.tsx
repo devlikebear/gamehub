@@ -119,11 +119,11 @@ const textColorClasses = {
 } as const;
 
 const playButtonClasses = {
-  green: 'border-bright-green text-bright-green hover:bg-bright-green hover:text-black',
-  pink: 'border-bright-pink text-bright-pink hover:bg-bright-pink hover:text-black',
-  cyan: 'border-bright-cyan text-bright hover:bg-bright-cyan hover:text-black',
-  yellow: 'border-bright-yellow text-bright-yellow hover:bg-bright-yellow hover:text-black',
-  purple: 'border-bright-purple text-bright-purple hover:bg-bright-purple hover:text-black',
+  green: 'border-bright-green text-bright-green hover:bg-bright-green/20 hover:shadow-[0_0_15px_rgba(0,255,0,0.6)]',
+  pink: 'border-bright-pink text-bright-pink hover:bg-bright-pink/20 hover:shadow-[0_0_15px_rgba(255,16,240,0.6)]',
+  cyan: 'border-bright-cyan text-bright-cyan hover:bg-bright-cyan/20 hover:shadow-[0_0_15px_rgba(0,240,255,0.6)]',
+  yellow: 'border-bright-yellow text-bright-yellow hover:bg-bright-yellow/20 hover:shadow-[0_0_15px_rgba(255,255,0,0.6)]',
+  purple: 'border-bright-purple text-bright-purple hover:bg-bright-purple/20 hover:shadow-[0_0_15px_rgba(157,0,255,0.6)]',
 } as const;
 
 export default function GamesPage() {

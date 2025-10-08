@@ -175,7 +175,7 @@ export default function CascadeBlocksPage() {
         <section className="text-center pt-4">
           <Link
             href="/games"
-            className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
+            className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan/20 hover:shadow-[0_0_20px_rgba(0,240,255,0.8)] transition-all duration-300"
           >
             {t.gameUI.backToArcade}
           </Link>
@@ -304,7 +304,7 @@ function ScoreSubmissionModal({
             </button>
             <button
               type="submit"
-              className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
+              className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan/20 hover:shadow-[0_0_20px_rgba(0,240,255,0.8)] transition-all duration-300 disabled:opacity-60"
               disabled={status === 'submitting'}
             >
               {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}

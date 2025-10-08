@@ -168,7 +168,7 @@ export default function PrismSmashPage() {
         <section className="text-center">
           <Link
             href="/games"
-            className="inline-block px-6 py-3 border-2 border-bright-cyan text-bright-cyan pixel-text text-xs rounded hover:bg-bright-cyan hover:text-black transition-all"
+            className="inline-block px-6 py-3 border-2 border-bright-cyan text-bright-cyan pixel-text text-xs rounded hover:bg-bright-cyan/20 hover:shadow-[0_0_15px_rgba(0,240,255,0.6)] transition-all"
           >
             {t.gameUI.backToArcade}
           </Link>
@@ -301,7 +301,7 @@ function ScoreSubmissionModal({
             </button>
             <button
               type="submit"
-              className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
+              className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan/20 hover:shadow-[0_0_20px_rgba(0,240,255,0.8)] transition-all duration-300 disabled:opacity-60"
               disabled={status === 'submitting'}
             >
               {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}

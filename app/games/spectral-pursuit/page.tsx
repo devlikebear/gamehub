@@ -168,7 +168,7 @@ export default function SpectralPursuitPage() {
         <section className="text-center pt-4">
           <Link
             href="/games"
-            className="inline-block px-8 py-3 border-2 border-bright-purple text-bright-purple pixel-text text-xs rounded-lg hover:bg-bright-purple hover:text-black transition-all duration-300 shadow-neon-purple hover:shadow-none"
+            className="inline-block px-8 py-3 border-2 border-bright-purple text-bright-purple pixel-text text-xs rounded-lg hover:bg-bright-purple/20 hover:shadow-[0_0_20px_rgba(157,0,255,0.8)] transition-all duration-300"
           >
             {t.gameUI.backToArcade}
           </Link>
@@ -297,7 +297,7 @@ function ScoreSubmissionModal({
             </button>
             <button
               type="submit"
-              className="pixel-text text-xs px-4 py-2 border-2 border-bright-purple text-bright rounded hover:bg-bright-purple hover:text-black transition-all duration-300 shadow-neon-purple hover:shadow-none disabled:opacity-60"
+              className="pixel-text text-xs px-4 py-2 border-2 border-bright-purple text-bright rounded hover:bg-bright-purple/20 hover:shadow-[0_0_20px_rgba(157,0,255,0.8)] transition-all duration-300 disabled:opacity-60"
               disabled={status === 'submitting'}
             >
               {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}
