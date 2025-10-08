@@ -5,6 +5,7 @@ import { AchievementCard } from '@/components/achievements/AchievementCard';
 import { getAllAchievements, getGameAchievements } from '@/lib/achievements/definitions';
 import { loadProgress, getGlobalStats, getGameStats } from '@/lib/achievements/tracker';
 import type { AchievementTier, AchievementCategory } from '@/lib/achievements/types';
+import { useI18n } from '@/lib/i18n/provider';
 
 const GAMES = [
   { id: 'stellar-salvo', name: '스텔라 살보', nameEn: 'Stellar Salvo' },
@@ -47,7 +48,8 @@ const CATEGORY_NAMES = {
 };
 
 export default function AchievementsPage() {
-  const [language] = useState<'ko' | 'en'>('ko');
+  const { locale } = useI18n();
+  const language = locale as 'ko' | 'en';
   const [selectedGame, setSelectedGame] = useState<string>('all');
   const [selectedTier, setSelectedTier] = useState<AchievementTier | 'all'>('all');
   const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | 'all'>('all');
