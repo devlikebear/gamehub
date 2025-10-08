@@ -8,12 +8,14 @@ interface GameCanvasProps {
     canvas: HTMLCanvasElement;
     width?: number;
     height?: number;
+    gameId?: string;
     onGameComplete?: (payload: GameCompletionPayload) => void;
   }) => {
     start: () => void;
     stop: () => void;
     togglePause: () => void;
   };
+  gameId?: string;
   width?: number;
   height?: number;
   pauseOnSpace?: boolean;
@@ -22,6 +24,7 @@ interface GameCanvasProps {
 
 export function GameCanvas({
   GameClass,
+  gameId,
   width = 800,
   height = 600,
   pauseOnSpace = true,
@@ -38,10 +41,12 @@ export function GameCanvas({
       canvas: canvasRef.current,
       width,
       height,
+      gameId,
     } as {
       canvas: HTMLCanvasElement;
       width?: number;
       height?: number;
+      gameId?: string;
       onGameComplete?: (payload: GameCompletionPayload) => void;
     };
 
@@ -75,7 +80,7 @@ export function GameCanvas({
       }
       game.stop();
     };
-  }, [GameClass, width, height, pauseOnSpace, onGameComplete]);
+  }, [GameClass, gameId, width, height, pauseOnSpace, onGameComplete]);
 
   return (
     <div className="flex items-center justify-center">

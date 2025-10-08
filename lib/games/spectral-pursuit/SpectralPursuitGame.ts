@@ -60,7 +60,6 @@ const SHARD_TARGET = 5;
 const DECOY_COOLDOWN_MS = 5400;
 
 export class SpectralPursuitGame extends BaseGame {
-  private readonly gameId = 'spectral-pursuit';
   private readonly input: InputHandler;
   private labyrinth: LabyrinthState;
   private hunters: HunterState[] = [];

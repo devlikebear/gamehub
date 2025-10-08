@@ -1,6 +1,7 @@
 import { GameLoop } from './GameLoop';
 import { FONTS, NEON_COLORS, OVERLAY } from './constants';
 import type { GameCompletionPayload } from './types';
+import { startPlaySession, endPlaySession, type PlaySession } from '../../storage/statistics';
 
 /**
  * BaseGame - 모든 게임의 기본 클래스
@@ -12,6 +13,7 @@ export interface GameConfig {
   canvas: HTMLCanvasElement;
   width?: number;
   height?: number;
+  gameId?: string; // 통계 추적을 위한 게임 ID
   onGameComplete?: (payload: GameCompletionPayload) => void;
 }
 
@@ -28,10 +30,16 @@ export abstract class BaseGame extends GameLoop {
   private offscreenCanvas?: HTMLCanvasElement;
   private offscreenCtx?: CanvasRenderingContext2D;
 
+  // Statistics tracking
+  protected gameId?: string;
+  private playSession?: PlaySession;
+  private statisticsEnabled = true;
+
   constructor(config: GameConfig) {
     super();
 
     this.canvas = config.canvas;
+    this.gameId = config.gameId;
     this.onGameComplete = config.onGameComplete;
     const ctx = this.canvas.getContext('2d');
 
@@ -47,6 +55,11 @@ export abstract class BaseGame extends GameLoop {
 
     this.setupCanvas();
     this.setupOffscreenCanvas();
+
+    // 통계 추적 시작
+    if (this.gameId && this.statisticsEnabled) {
+      this.playSession = startPlaySession(this.gameId);
+    }
   }
 
   /**
@@ -126,11 +139,36 @@ export abstract class BaseGame extends GameLoop {
   protected notifyGameComplete(payload: GameCompletionPayload): void {
     if (this.completionEmitted) return;
     this.completionEmitted = true;
+
+    // 통계 업데이트 (게임 종료 시)
+    if (this.gameId && this.statisticsEnabled && this.playSession) {
+      endPlaySession(this.gameId, payload.score);
+    }
+
     this.onGameComplete?.(payload);
   }
 
   protected resetGameCompletion(): void {
     this.completionEmitted = false;
+
+    // 새 게임 시작 시 통계 세션 재시작
+    if (this.gameId && this.statisticsEnabled) {
+      this.playSession = startPlaySession(this.gameId);
+    }
+  }
+
+  /**
+   * 통계 추적 활성화/비활성화
+   */
+  public setStatisticsEnabled(enabled: boolean): void {
+    this.statisticsEnabled = enabled;
+  }
+
+  /**
+   * 현재 플레이 세션 정보 조회
+   */
+  public getPlaySession(): PlaySession | undefined {
+    return this.playSession;
   }
 
   /**

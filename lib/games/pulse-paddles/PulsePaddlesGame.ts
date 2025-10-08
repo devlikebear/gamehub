@@ -8,7 +8,6 @@ const FIELD_MARGIN_Y = 80;
 const SCORE_TO_WIN = 7;
 
 export class PulsePaddlesGame extends BaseGame {
-  private readonly gameId = 'pulse-paddles';
   private leftPaddle: Paddle;
   private rightPaddle: Paddle;
   private ball: Ball;
