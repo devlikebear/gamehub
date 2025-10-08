@@ -101,7 +101,7 @@ export default function AchievementsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-bright-cyan">
-              {globalStats.unlockedCount}/{globalStats.totalCount}
+              {globalStats.unlockedAchievements}/{globalStats.totalAchievements}
             </div>
             <div className="text-xs text-gray-400 mt-1">
               {language === 'ko' ? '해금된 업적' : 'Unlocked'}
@@ -109,15 +109,15 @@ export default function AchievementsPage() {
           </div>
 
           <div className="text-center">
-            <div className="text-2xl font-bold text-bright-yellow">{globalStats.totalPoints}</div>
+            <div className="text-2xl font-bold text-bright-yellow">{globalStats.earnedPoints}</div>
             <div className="text-xs text-gray-400 mt-1">
-              {language === 'ko' ? '획득 포인트' : 'Total Points'}
+              {language === 'ko' ? '획득 포인트' : 'Earned Points'}
             </div>
           </div>
 
           <div className="text-center">
             <div className="text-2xl font-bold text-bright-green">
-              {Math.round(globalStats.completionPercentage)}%
+              {Math.round(globalStats.completionRate)}%
             </div>
             <div className="text-xs text-gray-400 mt-1">
               {language === 'ko' ? '완료율' : 'Completion'}
@@ -126,10 +126,10 @@ export default function AchievementsPage() {
 
           <div className="text-center">
             <div className="text-2xl font-bold text-bright-purple">
-              {globalStats.hiddenUnlocked}
+              {globalStats.totalPoints}
             </div>
             <div className="text-xs text-gray-400 mt-1">
-              {language === 'ko' ? '숨겨진 업적' : 'Hidden'}
+              {language === 'ko' ? '총 포인트' : 'Total Points'}
             </div>
           </div>
         </div>
@@ -246,7 +246,7 @@ export default function AchievementsPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-xl font-bold text-bright-cyan">
-                {gameStats.unlockedCount}/{gameStats.totalCount}
+                {gameStats.unlockedAchievements}/{gameStats.totalAchievements}
               </div>
               <div className="text-xs text-gray-400 mt-1">
                 {language === 'ko' ? '해금' : 'Unlocked'}
@@ -254,7 +254,7 @@ export default function AchievementsPage() {
             </div>
 
             <div className="text-center">
-              <div className="text-xl font-bold text-bright-yellow">{gameStats.totalPoints}</div>
+              <div className="text-xl font-bold text-bright-yellow">{gameStats.earnedPoints}</div>
               <div className="text-xs text-gray-400 mt-1">
                 {language === 'ko' ? '포인트' : 'Points'}
               </div>
@@ -262,7 +262,7 @@ export default function AchievementsPage() {
 
             <div className="text-center">
               <div className="text-xl font-bold text-bright-green">
-                {Math.round(gameStats.completionPercentage)}%
+                {Math.round(gameStats.completionRate)}%
               </div>
               <div className="text-xs text-gray-400 mt-1">
                 {language === 'ko' ? '완료' : 'Complete'}
