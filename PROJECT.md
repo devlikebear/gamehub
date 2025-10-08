@@ -180,7 +180,13 @@ gamehub/
 
 ### Phase 7: 추가 기능
 
-- [ ] 업적 시스템 (뱃지/트로피) [#28](https://github.com/devlikebear/gamehub/issues/28)
+- [x] **업적 시스템 (뱃지/트로피)** [#28](https://github.com/devlikebear/gamehub/issues/28)
+  - 업적 데이터 구조 및 타입 정의 (5단계 티어, 7개 카테고리)
+  - 업적 해금 로직 시스템 (LocalStorage 기반 진행도 추적)
+  - 업적 카드 UI 컴포넌트 (티어별 그라디언트 & 글로우 효과)
+  - 업적 알림 시스템 (해금 시 실시간 토스트 알림)
+  - 업적 페이지 (`/achievements`) - 필터링, 통계, 진행도 표시
+  - 게임 통합 유틸리티 (integration helper, React hook)
 - [ ] 게임 통계 (플레이 시간, 플레이 횟수)
 - [ ] 키보드 단축키 가이드
 - [ ] 난이도 선택 (쉬움/보통/어려움)

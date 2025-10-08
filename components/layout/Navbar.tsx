@@ -33,6 +33,12 @@ export default function Navbar() {
               {t.common.leaderboard}
             </Link>
             <Link
+              href="/achievements"
+              className="pixel-text text-xs text-bright hover:text-bright-green transition-colors duration-300"
+            >
+              {t.common.achievements || '업적'}
+            </Link>
+            <Link
               href="/about"
               className="pixel-text text-xs text-bright hover:text-bright-purple transition-colors duration-300"
             >
