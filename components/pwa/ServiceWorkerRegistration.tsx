@@ -2,12 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
+// BeforeInstallPromptEvent 타입 정의
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 /**
  * Service Worker 등록 및 PWA 설치 프롬프트 관리
  */
 export default function ServiceWorkerRegistration() {
-  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
-  const [installPrompt, setInstallPrompt] = useState<Event | null>(null);
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
 
   // Service Worker 등록
@@ -22,7 +27,7 @@ export default function ServiceWorkerRegistration() {
     const handleBeforeInstallPrompt = (e: Event) => {
       // 브라우저의 기본 설치 프롬프트 방지
       e.preventDefault();
-      setInstallPrompt(e);
+      setInstallPrompt(e as BeforeInstallPromptEvent);
       setShowInstallButton(true);
       console.log('[PWA] Install prompt ready');
     };
@@ -58,8 +63,6 @@ export default function ServiceWorkerRegistration() {
         scope: '/',
       });
 
-      setRegistration(reg);
-
       // 업데이트 확인
       reg.addEventListener('updatefound', () => {
         const newWorker = reg.installing;
@@ -86,10 +89,10 @@ export default function ServiceWorkerRegistration() {
     if (!installPrompt) return;
 
     // 설치 프롬프트 표시
-    (installPrompt as any).prompt();
+    await installPrompt.prompt();
 
     // 사용자 선택 대기
-    const { outcome } = await (installPrompt as any).userChoice;
+    const { outcome } = await installPrompt.userChoice;
 
     console.log('[PWA] Install choice:', outcome);
 

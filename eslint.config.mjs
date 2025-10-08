@@ -19,6 +19,8 @@ const eslintConfig = [
       "*.config.js",
       "*.config.mjs",
       "next-env.d.ts",
+      "scripts/**",
+      "supabase/functions/submit-score 2/**",
     ],
   },
   {
