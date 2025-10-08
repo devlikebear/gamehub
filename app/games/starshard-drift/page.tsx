@@ -8,6 +8,7 @@ import { generateNickname, sanitizeNickname } from '@/lib/leaderboard/nickname';
 import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
+import { loadAllSounds } from '@/lib/audio/sounds';
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'starshard-drift';
@@ -22,6 +23,11 @@ export default function StarshardDriftPage() {
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
     setModalOpen(true);
+  }, []);
+
+  // 오디오 시스템 초기화
+  useEffect(() => {
+    loadAllSounds();
   }, []);
 
   useEffect(() => {

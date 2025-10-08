@@ -6,6 +6,7 @@ import {
   InputHandler,
   NEON_COLORS,
 } from '../engine';
+import { playSound, SOUNDS } from '@/lib/audio/sounds';
 import {
   DriftPhysicsState,
   applyBoostPulse,
@@ -110,6 +111,7 @@ export class StarshardDriftGame extends BaseGame {
 
     if (this.input.justPressed('Shift')) {
       this.physics = applyBoostPulse(this.physics, { boostScale: 1.45, durationMs: BOOST_DURATION });
+      playSound(SOUNDS.POWER_UP); // 부스트 활성화
     }
 
     if (this.input.justPressed('Space') && this.physics.cooldowns.pulse <= 0) {
@@ -160,13 +162,16 @@ export class StarshardDriftGame extends BaseGame {
       if (distance < 2.2 && shard.state === 'overload') {
         if (this.pulses.some((pulse) => pulse.active)) {
           fragments.push(applyResonanceCollision(this.resonance, { shardId: shard.id }));
+          playSound(SOUNDS.EXPLOSION); // 과부하 파편 충돌
         } else {
           this.gameOver = true;
+          playSound(SOUNDS.GAME_OVER); // 게임 오버
         }
       } else if (distance < 1.6 && shard.state !== 'overload') {
         const result = applyResonanceCollision(this.resonance, { shardId: shard.id });
         fragments.push(result);
         this.mission.score += 120;
+        playSound(SOUNDS.COIN); // 파편 수집
       }
     });
 
@@ -200,16 +205,19 @@ export class StarshardDriftGame extends BaseGame {
       this.missionComplete = true;
       this.mission.completed = true;
       this.mission.score += 500;
+      playSound(SOUNDS.VICTORY); // 미션 완료
     }
 
     if (this.resonance.objective.currentTime >= this.resonance.objective.timeLimitMs) {
       this.gameOver = true;
+      playSound(SOUNDS.GAME_OVER); // 시간 초과
     }
   }
 
   private triggerPulse(): void {
     if (this.physics.cooldowns.pulse > 0) return;
 
+    playSound(SOUNDS.LASER); // 펄스 발사
     this.pulses.push({
       cooldown: PULSE_COOLDOWN,
       active: true,
