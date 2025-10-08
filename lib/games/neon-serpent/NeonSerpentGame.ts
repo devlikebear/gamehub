@@ -1,6 +1,7 @@
 import { BaseGame, GameConfig, InputHandler, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 import { createInitialSerpent, SerpentSegment, updateSegmentAges } from './segments';
 import { generateHazardField, HazardField, spawnEnergyOrb, toKey } from './energyField';
+import { playSound, SOUNDS } from '@/lib/audio/sounds';
 
 interface Vector2 {
   x: number;
@@ -217,6 +218,7 @@ export class NeonSerpentGame extends BaseGame {
 
     if (this.collidesWithSerpent(newHead)) {
       this.gameOver = true;
+      playSound(SOUNDS.GAME_OVER);
       return;
     }
 
@@ -256,6 +258,13 @@ export class NeonSerpentGame extends BaseGame {
     const comboBonus = this.combo > 1 ? this.combo * 2 : 0;
     this.score += 15 + comboBonus;
     this.energyGauge = Math.min(MAX_ENERGY, this.energyGauge + 18);
+
+    // 사운드: 콤보가 있으면 파워업, 아니면 코인 사운드
+    if (this.combo > 3) {
+      playSound(SOUNDS.POWER_UP);
+    } else {
+      playSound(SOUNDS.COIN);
+    }
 
     if (this.energyGauge >= OVERLOAD_THRESHOLD && this.overloadTimer === 0) {
       this.overloadTimer = OVERLOAD_DURATION;
