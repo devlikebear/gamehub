@@ -30,11 +30,22 @@
     overflow-x: hidden;
   }
 
+  /* Default body font (Inter for readability) */
   body {
     font-family: var(--font-inter), 'Segoe UI', system-ui, sans-serif;
     background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #001a33 100%);
     min-height: 100vh;
     position: relative;
+  }
+
+  /* Apply pixel font to all Korean text */
+  html[lang="ko"] body {
+    font-family: var(--font-galmuri), monospace;
+  }
+
+  /* Apply pixel font to all English text */
+  html[lang="en"] body {
+    font-family: var(--font-press-start), monospace;
   }
 
   /* CRT Scanline Effect */
