@@ -9,9 +9,11 @@ import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 
+import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'neon-serpent';
 
 export default function NeonSerpentPage() {
+  const { t } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
@@ -46,11 +48,10 @@ export default function NeonSerpentPage() {
       <div className="container mx-auto max-w-6xl space-y-8 md:space-y-12">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
-          <p className="pixel-text text-xs text-bright-pink uppercase tracking-wider">NEON ARCADE ORIGINAL</p>
-          <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text">NEON SERPENT</h1>
-          <p className="text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
-            절차적으로 재구성되는 에너지 필드에서 네온 서펀트를 조종하세요. 에너지 오브를 모아 게이지를 충전하고,
-            Shift 대시로 추적자보다 빠르게 움직이며 EMP 위험 구역을 피해 콤보를 이어가세요.
+          <p className="pixel-text text-xs text-bright-pink uppercase tracking-wider">{t.games['neon-serpent'].tagline}</p>
+          <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text">{t.games['neon-serpent'].name}</h1>
+          <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
+            {t.games['neon-serpent'].intro}
           </p>
         </section>
 
@@ -88,32 +89,32 @@ export default function NeonSerpentPage() {
         {/* 게임 정보 */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div className="bg-black/40 border border-bright-green/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
-            <h2 className="pixel-text text-xs md:text-sm text-bright-green uppercase">Controls</h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>← → ↑ ↓ : 이동</li>
-              <li>Shift : 에너지 대시</li>
-              <li>Space : 일시정지</li>
-              <li>R : 시스템 재부팅</li>
+            <h2 className="pixel-text text-xs md:text-sm text-bright-green uppercase">{t.games['neon-serpent'].controls.title}</h2>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['neon-serpent'].controls.move}</li>
+              <li>{t.games['neon-serpent'].controls.dash}</li>
+              <li>{t.games['neon-serpent'].controls.pause}</li>
+              <li>{t.games['neon-serpent'].controls.restart}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-pink/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
-            <h2 className="pixel-text text-xs md:text-sm text-bright-pink uppercase">Objectives</h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>에너지 오브 수집으로 네온 게이지 충전</li>
-              <li>콤보를 유지해 점수 배수를 확보</li>
-              <li>EMP 위험 구역은 속도 저하 및 꼬리 손실</li>
-              <li>게이지가 가득 차면 과부하를 관리</li>
+            <h2 className="pixel-text text-xs md:text-sm text-bright-pink uppercase">{t.games['neon-serpent'].objectives.title}</h2>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['neon-serpent'].objectives.item1}</li>
+              <li>{t.games['neon-serpent'].objectives.item2}</li>
+              <li>{t.games['neon-serpent'].objectives.item3}</li>
+              <li>{t.games['neon-serpent'].objectives.item4}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-yellow/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
-            <h2 className="pixel-text text-xs md:text-sm text-bright-yellow uppercase">Field Notes</h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>필드 레이아웃은 주기적으로 재구성됩니다.</li>
-              <li>대시는 에너지를 소모하지만 속도를 증가시킵니다.</li>
-              <li>과부하 상태에서는 속도가 느려지니 주의하세요.</li>
-              <li>60 FPS 캔버스 엔진 기반으로 동작합니다.</li>
+            <h2 className="pixel-text text-xs md:text-sm text-bright-yellow uppercase">{t.games['neon-serpent'].notes.title}</h2>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['neon-serpent'].notes.item1}</li>
+              <li>{t.games['neon-serpent'].notes.item2}</li>
+              <li>{t.games['neon-serpent'].notes.item3}</li>
+              <li>{t.games['neon-serpent'].notes.item4}</li>
             </ul>
           </div>
         </section>
@@ -124,7 +125,7 @@ export default function NeonSerpentPage() {
             href="/games"
             className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
           >
-            Back to Arcade List
+            {t.gameUI.backToArcade}
           </Link>
         </section>
       </div>
@@ -133,6 +134,8 @@ export default function NeonSerpentPage() {
 }
 
 function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[]; loading: boolean }) {
+  const { t } = useI18n();
+
   if (!loading && entries.length === 0) {
     return null;
   }
@@ -140,21 +143,21 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
   return (
     <section className="bg-black/50 border border-bright-cyan/60 rounded-xl p-6 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="pixel-text text-xs text-bright">TOP PILOTS (최근 5위)</h2>
+        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topPilots} ({t.gameUI.recentTop5})</h2>
         <Link href="/leaderboard" className="pixel-text text-xs text-bright-cyan hover:underline">
-          전체 랭킹 보기
+          {t.gameUI.viewAllRankings}
         </Link>
       </div>
       {loading ? (
-        <p className="text-bright text-sm">불러오는 중...</p>
+        <p className="pixel-text text-bright text-sm">{t.gameUI.loading}</p>
       ) : (
         <ul className="space-y-2">
           {entries.map((entry, index) => (
-            <li key={entry.id} className="flex items-center justify-between text-bright text-xs">
+            <li key={entry.id} className="flex items-center justify-between pixel-text text-bright text-xs">
               <span>
                 #{index + 1} · {entry.nickname}
               </span>
-              <span>{entry.score.toLocaleString()} pts</span>
+              <span>{entry.score.toLocaleString()} {t.gameUI.points}</span>
             </li>
           ))}
         </ul>
@@ -176,6 +179,7 @@ function ScoreSubmissionModal({
   onClose: () => void;
   onSubmitted: (response: LeaderboardSubmissionResponse, leaderboard?: LeaderboardEntry[]) => void;
 }) {
+  const { t } = useI18n();
   const [nickname, setNickname] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -208,7 +212,7 @@ function ScoreSubmissionModal({
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);
-      setError('점수를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
+      setError(t.gameUI.scoreSubmitError);
       setStatus('error');
     }
   };
@@ -217,13 +221,13 @@ function ScoreSubmissionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur">
       <div className="w-full max-w-md bg-black/80 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 space-y-4">
         <div className="space-y-2 text-center">
-          <p className="pixel-text text-xs text-bright-cyan uppercase">Submit Score</p>
-          <h2 className="pixel-text text-2xl text-bright">GAME OVER</h2>
-          <p className="text-bright text-sm">이번 라운드 점수: {result.score.toLocaleString()} pts</p>
+          <p className="pixel-text text-xs text-bright-cyan uppercase">{t.gameUI.submitScore}</p>
+          <h2 className="pixel-text text-2xl text-bright">{t.gameUI.gameOver}</h2>
+          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} {t.gameUI.points}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
-          <label className="block text-left text-bright text-xs">
-            Pilot Nickname
+          <label className="block text-left pixel-text text-bright text-xs">
+            {t.gameUI.pilotNickname}
             <input
               value={nickname}
               onChange={(event) => setNickname(sanitizeNickname(event.target.value))}
@@ -237,9 +241,9 @@ function ScoreSubmissionModal({
             className="pixel-text text-xs px-4 py-2 border border-bright-cyan text-bright rounded hover:bg-bright-cyan/20"
             onClick={() => setNickname(generateNickname())}
           >
-            새 랜덤 닉네임
+            {t.gameUI.newRandomNickname}
           </button>
-          {error && <p className="text-bright-pink text-xs">{error}</p>}
+          {error && <p className="pixel-text text-bright-pink text-xs">{error}</p>}
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
@@ -247,14 +251,14 @@ function ScoreSubmissionModal({
               onClick={onClose}
               disabled={status === 'submitting'}
             >
-              닫기
+              {t.gameUI.close}
             </button>
             <button
               type="submit"
               className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
               disabled={status === 'submitting'}
             >
-              {status === 'submitting' ? '저장 중...' : '점수 저장'}
+              {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}
             </button>
           </div>
         </form>

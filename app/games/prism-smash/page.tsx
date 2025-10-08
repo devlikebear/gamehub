@@ -9,9 +9,11 @@ import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 
+import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'prism-smash';
 
 export default function PrismSmashPage() {
+  const { t } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
@@ -45,11 +47,10 @@ export default function PrismSmashPage() {
     <main className="min-h-screen py-20 px-4">
       <div className="container mx-auto max-w-5xl space-y-12">
         <section className="text-center space-y-4">
-          <p className="pixel-text text-xs text-bright-cyan">NEON ARC-LABS · FIELD DECONSTRUCTION</p>
-          <h1 className="pixel-text text-5xl md:text-6xl text-bright neon-text">PRISM SMASH</h1>
-          <p className="text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
-            모듈형 프리즘 벽체를 해체하며 네온 에너지를 회수하세요. Space 키로 전경/후경 필드를 즉시
-            전환해 숨겨진 라우트를 드러내고, 커브샷과 스왑 타이밍을 조합해 콤보를 이어가며 고득점을 노리세요.
+          <p className="pixel-text text-xs text-bright-cyan">{t.games['prism-smash'].tagline}</p>
+          <h1 className="pixel-text text-5xl md:text-6xl text-bright neon-text">{t.games['prism-smash'].name}</h1>
+          <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+            {t.games['prism-smash'].intro}
           </p>
         </section>
 
@@ -85,32 +86,32 @@ export default function PrismSmashPage() {
 
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-black/40 border border-bright-green/60 rounded-lg p-5 space-y-3">
-            <h2 className="pixel-text text-sm text-bright-green">CONTROLS</h2>
-            <ul className="text-sm text-bright space-y-2">
-              <li>←/→ : 패들 이동</li>
-              <li>Shift : 이동 가속</li>
-              <li>Space : 전경/후경 필드 스왑</li>
-              <li>Enter : 라운드 시작/재시작</li>
+            <h2 className="pixel-text text-sm text-bright-green">{t.games['prism-smash'].controls.title}</h2>
+            <ul className="pixel-text text-sm text-bright space-y-2">
+              <li>{t.games['prism-smash'].controls.move}</li>
+              <li>{t.games['prism-smash'].controls.boost}</li>
+              <li>{t.games['prism-smash'].controls.swap}</li>
+              <li>{t.games['prism-smash'].controls.start}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-pink/60 rounded-lg p-5 space-y-3">
-            <h2 className="pixel-text text-sm text-bright-pink">OBJECTIVES</h2>
-            <ul className="text-sm text-bright space-y-2">
-              <li>프리즘 블록을 파괴해 에너지 점수를 획득하세요.</li>
-              <li>스왑 타이밍으로 숨겨진 구간을 열고 콤보를 유지하세요.</li>
-              <li>프리즘 블록은 조각으로 분열되어 추가 콤보 기회를 제공합니다.</li>
-              <li>모든 레이어를 정리하면 다음 스테이지로 진입합니다.</li>
+            <h2 className="pixel-text text-sm text-bright-pink">{t.games['prism-smash'].objectives.title}</h2>
+            <ul className="pixel-text text-sm text-bright space-y-2">
+              <li>{t.games['prism-smash'].objectives.item1}</li>
+              <li>{t.games['prism-smash'].objectives.item2}</li>
+              <li>{t.games['prism-smash'].objectives.item3}</li>
+              <li>{t.games['prism-smash'].objectives.item4}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-yellow/60 rounded-lg p-5 space-y-3">
-            <h2 className="pixel-text text-sm text-bright-yellow">FIELD NOTES</h2>
-            <ul className="text-sm text-bright space-y-2">
-              <li>네온 필드의 속도 존은 공의 궤도를 증폭하거나 완화합니다.</li>
-              <li>콤보가 높을수록 점수 배율이 상승하며 HUD에 표시됩니다.</li>
-              <li>필드 스왑은 쿨다운이 있으니 타이밍을 계산하세요.</li>
-              <li>라이프가 모두 소진되면 시스템이 리셋됩니다.</li>
+            <h2 className="pixel-text text-sm text-bright-yellow">{t.games['prism-smash'].notes.title}</h2>
+            <ul className="pixel-text text-sm text-bright space-y-2">
+              <li>{t.games['prism-smash'].notes.item1}</li>
+              <li>{t.games['prism-smash'].notes.item2}</li>
+              <li>{t.games['prism-smash'].notes.item3}</li>
+              <li>{t.games['prism-smash'].notes.item4}</li>
             </ul>
           </div>
         </section>
@@ -120,7 +121,7 @@ export default function PrismSmashPage() {
             href="/games"
             className="inline-block px-6 py-3 border-2 border-bright-cyan text-bright-cyan pixel-text text-xs rounded hover:bg-bright-cyan hover:text-black transition-all"
           >
-            BACK TO ARCADE LIST
+            {t.gameUI.backToArcade}
           </Link>
         </section>
       </div>
@@ -129,6 +130,8 @@ export default function PrismSmashPage() {
 }
 
 function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[]; loading: boolean }) {
+  const { t } = useI18n();
+
   if (!loading && entries.length === 0) {
     return null;
   }
@@ -136,21 +139,21 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
   return (
     <section className="bg-black/50 border border-bright-cyan/60 rounded-xl p-6 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="pixel-text text-xs text-bright">TOP DECONSTRUCTORS (최근 5위)</h2>
+        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topDeconstructors} ({t.gameUI.recentTop5})</h2>
         <Link href="/leaderboard" className="pixel-text text-xs text-bright-cyan hover:underline">
-          전체 랭킹 보기
+          {t.gameUI.viewAllRankings}
         </Link>
       </div>
       {loading ? (
-        <p className="text-bright text-sm">불러오는 중...</p>
+        <p className="pixel-text text-bright text-sm">{t.gameUI.loading}</p>
       ) : (
         <ul className="space-y-2">
           {entries.map((entry, index) => (
-            <li key={entry.id} className="flex items-center justify-between text-bright text-xs">
+            <li key={entry.id} className="flex items-center justify-between pixel-text text-bright text-xs">
               <span>
                 #{index + 1} · {entry.nickname}
               </span>
-              <span>{entry.score.toLocaleString()} pts</span>
+              <span>{entry.score.toLocaleString()} {t.gameUI.points}</span>
             </li>
           ))}
         </ul>
@@ -172,6 +175,7 @@ function ScoreSubmissionModal({
   onClose: () => void;
   onSubmitted: (response: LeaderboardSubmissionResponse, leaderboard?: LeaderboardEntry[]) => void;
 }) {
+  const { t } = useI18n();
   const [nickname, setNickname] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -204,7 +208,7 @@ function ScoreSubmissionModal({
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);
-      setError('점수를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
+      setError(t.gameUI.scoreSubmitError);
       setStatus('error');
     }
   };
@@ -213,13 +217,13 @@ function ScoreSubmissionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur">
       <div className="w-full max-w-md bg-black/80 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 space-y-4">
         <div className="space-y-2 text-center">
-          <p className="pixel-text text-xs text-bright-cyan uppercase">Submit Score</p>
-          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? 'FIELD CLEARED!' : 'SYSTEM RESET'}</h2>
-          <p className="text-bright text-sm">이번 라운드 점수: {result.score.toLocaleString()} pts</p>
+          <p className="pixel-text text-xs text-bright-cyan uppercase">{t.gameUI.submitScore}</p>
+          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.fieldCleared : t.gameUI.systemReset}</h2>
+          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} {t.gameUI.points}</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
-          <label className="block text-left text-bright text-xs">
-            Operator Nickname
+          <label className="block text-left pixel-text text-bright text-xs">
+            {t.gameUI.operatorNickname}
             <input
               value={nickname}
               onChange={(event) => setNickname(sanitizeNickname(event.target.value))}
@@ -233,9 +237,9 @@ function ScoreSubmissionModal({
             className="pixel-text text-xs px-4 py-2 border border-bright-cyan text-bright rounded hover:bg-bright-cyan/20"
             onClick={() => setNickname(generateNickname())}
           >
-            새 랜덤 닉네임
+            {t.gameUI.newRandomNickname}
           </button>
-          {error && <p className="text-bright-pink text-xs">{error}</p>}
+          {error && <p className="pixel-text text-bright-pink text-xs">{error}</p>}
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
@@ -243,14 +247,14 @@ function ScoreSubmissionModal({
               onClick={onClose}
               disabled={status === 'submitting'}
             >
-              닫기
+              {t.gameUI.close}
             </button>
             <button
               type="submit"
               className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
               disabled={status === 'submitting'}
             >
-              {status === 'submitting' ? '저장 중...' : '점수 저장'}
+              {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}
             </button>
           </div>
         </form>
