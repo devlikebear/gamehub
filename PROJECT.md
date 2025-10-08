@@ -200,8 +200,12 @@ gamehub/
   - 플랫폼별 수정자 키 표시 (Mac ⌘/⇧ vs Windows Ctrl/Shift)
   - 네비게이션 단축키 (? 키, Shift+H/G/L/A/I)
   - Input/textarea 필드에서 단축키 비활성화
-- [ ] 난이도 선택 (쉬움/보통/어려움)
-- [ ] 방문자 통계 (Cloudflare Analytics)
+- [x] **난이도 선택 (쉬움/보통/어려움)** [#66](https://github.com/devlikebear/gamehub/issues/66)
+  - 난이도 타입 및 데이터 정의 (DifficultyLevel, DifficultyConfig)
+  - 3가지 난이도 설정 (Easy/Normal/Hard, 속도/AI/밀도/점수 배율)
+  - DifficultySelector UI 컴포넌트 (네온 스타일, 티어별 색상)
+  - LocalStorage 저장/로드 기능 (게임별 난이도 영속성)
+  - BaseGame에 난이도 통합 (배율 필드, setDifficulty 메서드)
 - [ ] 게임 튜토리얼/설명
 
 ## 🎨 디자인 시스템
