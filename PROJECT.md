@@ -166,7 +166,7 @@ gamehub/
 - [x] 로컬 최고 점수 기록 (게임별)
 - [x] 점수 공유 기능 (SNS) [#55](https://github.com/devlikebear/gamehub/issues/55)
 
-### Phase 6: 개선 & 최적화
+### Phase 6: 개선 & 최적화 ✅
 
 - [x] SEO 최적화 (메타 태그, sitemap) [#25](https://github.com/devlikebear/gamehub/issues/25)
 - [x] 게임 효과음 & BGM [#26](https://github.com/devlikebear/gamehub/issues/26)
@@ -174,9 +174,9 @@ gamehub/
 - [x] Open Graph 이미지 (게임별) [#57](https://github.com/devlikebear/gamehub/issues/57)
 - [x] 다국어 지원 (한국어/영어)
 - [x] 애니메이션 효과 (CRT 스캔라인, 글로우) [#59](https://github.com/devlikebear/gamehub/issues/59)
-- [ ] 성능 최적화 (Canvas, 코드 스플리팅)
+- [x] 성능 최적화 (Canvas, 코드 스플리팅) [#61](https://github.com/devlikebear/gamehub/issues/61)
 
-### Phase 7: 추가 기능
+### Phase 7: 추가 기능 🚧
 
 - [x] **업적 시스템 (뱃지/트로피)** [#28](https://github.com/devlikebear/gamehub/issues/28)
   - 업적 데이터 구조 및 타입 정의 (5단계 티어, 7개 카테고리)
@@ -185,7 +185,13 @@ gamehub/
   - 업적 알림 시스템 (해금 시 실시간 토스트 알림)
   - 업적 페이지 (`/achievements`) - 필터링, 통계, 진행도 표시
   - 게임 통합 유틸리티 (integration helper, React hook)
-- [ ] 게임 통계 (플레이 시간, 플레이 횟수)
+- [x] **게임 통계 (플레이 시간, 플레이 횟수)** [#63](https://github.com/devlikebear/gamehub/issues/63)
+  - GameStatistics 데이터 구조 및 타입 정의
+  - LocalStorage 기반 통계 저장 및 세션 관리
+  - React hooks (useGameStatistics, useAllStatistics, useStatisticsSummary)
+  - BaseGame 통합 (자동 세션 추적)
+  - StatisticsCard 및 StatisticsPanel UI 컴포넌트
+  - 리더보드 페이지에 통계 패널 표시
 - [ ] 키보드 단축키 가이드
 - [ ] 난이도 선택 (쉬움/보통/어려움)
 - [ ] 방문자 통계 (Cloudflare Analytics)
