@@ -3,6 +3,7 @@ export const ko = {
   common: {
     games: '게임',
     leaderboard: '리더보드',
+    achievements: '업적',
     about: '소개',
     contact: '연락',
     playNow: '지금 플레이',

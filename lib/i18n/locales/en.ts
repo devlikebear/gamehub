@@ -5,6 +5,7 @@ export const en: Translations = {
   common: {
     games: 'Games',
     leaderboard: 'Leaderboard',
+    achievements: 'Achievements',
     about: 'About',
     contact: 'Contact',
     playNow: 'Play Now',
