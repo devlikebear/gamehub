@@ -9,7 +9,7 @@ import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 import { loadAllSounds } from '@/lib/audio/sounds';
-import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
+import { playGameBGM, stopGameBGM } from '@/lib/audio/bgmPlayer';
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'neon-serpent';
@@ -34,18 +34,8 @@ export default function NeonSerpentPage() {
     // BGM 재생 (랜덤 선택)
     playGameBGM(GAME_ID);
 
-    // BGM 토글 이벤트 리스너
-    const handleBgmToggle = (event: CustomEvent) => {
-      if (event.detail.enabled) {
-        resumeGameBGM();
-      }
-    };
-
-    window.addEventListener('bgm-toggle', handleBgmToggle as EventListener);
-
     return () => {
       stopGameBGM(); // 페이지 떠날 때 BGM 정지
-      window.removeEventListener('bgm-toggle', handleBgmToggle as EventListener);
     };
   }, []);
 

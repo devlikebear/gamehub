@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { audioManager } from '@/lib/audio/AudioManager';
 import { loadAudioSettings, saveAudioSettings } from '@/lib/storage/audioSettings';
 import type { AudioSettings as AudioSettingsType } from '@/lib/audio/AudioManager';
+import { bgmPlayer } from '@/lib/audio/bgmPlayer';
 import { useI18n } from '@/lib/i18n/provider';
 
 interface AudioSettingsProps {
@@ -31,6 +32,11 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
     setSettings(newSettings);
     audioManager.updateSettings(newSettings);
     saveAudioSettings(newSettings);
+
+    // BGM 볼륨도 업데이트
+    if (key === 'masterVolume' || key === 'bgmVolume') {
+      bgmPlayer.updateVolume(newSettings.masterVolume, newSettings.bgmVolume);
+    }
   };
 
   // 볼륨 슬라이더 변경 핸들러
@@ -43,10 +49,15 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
     const newValue = !settings[key];
     updateSetting(key, newValue);
 
-    // BGM을 다시 켤 때 현재 재생 중이던 BGM이 있으면 재시작
-    if (key === 'bgmEnabled' && newValue) {
-      // BGM 재시작을 위해 이벤트 발생
-      window.dispatchEvent(new CustomEvent('bgm-toggle', { detail: { enabled: true } }));
+    // BGM 토글 처리
+    if (key === 'bgmEnabled') {
+      if (newValue) {
+        // BGM 재개
+        bgmPlayer.resume();
+      } else {
+        // BGM 일시정지
+        bgmPlayer.pause();
+      }
     }
   };
 
