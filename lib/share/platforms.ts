@@ -11,6 +11,8 @@ export interface ShareUrlParams {
   title: string;
   text: string;
   hashtags?: string[];
+  gameId?: string;
+  score?: number;
 }
 
 /**
@@ -54,13 +56,17 @@ export function shareToKakao(params: ShareUrlParams): void {
   }
 
   const { url, title, text } = params;
+  // TODO: gameId, score를 활용한 커스텀 OG 이미지 생성 예정
+
+  // 아이콘 이미지 사용 (임시)
+  const ogImageUrl = `${window.location.origin}/icon.svg`;
 
   window.Kakao.Share.sendDefault({
     objectType: 'feed',
     content: {
       title,
       description: text,
-      imageUrl: `${window.location.origin}/og-image.png`, // Open Graph 이미지
+      imageUrl: ogImageUrl,
       link: {
         mobileWebUrl: url,
         webUrl: url,
