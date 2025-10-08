@@ -40,7 +40,14 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
 
   // 토글 핸들러
   const handleToggle = (key: 'bgmEnabled' | 'sfxEnabled') => {
-    updateSetting(key, !settings[key]);
+    const newValue = !settings[key];
+    updateSetting(key, newValue);
+
+    // BGM을 다시 켤 때 현재 재생 중이던 BGM이 있으면 재시작
+    if (key === 'bgmEnabled' && newValue) {
+      // BGM 재시작을 위해 이벤트 발생
+      window.dispatchEvent(new CustomEvent('bgm-toggle', { detail: { enabled: true } }));
+    }
   };
 
   return (
@@ -58,7 +65,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-80 bg-black/95 border-2 border-bright-cyan rounded-lg p-4 shadow-[0_0_20px_rgba(0,240,255,0.6)]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="pixel-text text-sm text-bright-cyan">{t.audio.settings}</h3>
+            <h3 className="pixel-text text-sm text-bright uppercase">{t.audio.settings}</h3>
             <button
               onClick={() => {
                 setIsOpen(false);

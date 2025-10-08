@@ -31,8 +31,17 @@ export default function SpectralPursuitPage() {
       playBGM(SOUNDS.BGM_GAME);
     });
 
+    const handleBgmToggle = (event: CustomEvent) => {
+      if (event.detail.enabled) {
+        playBGM(SOUNDS.BGM_GAME);
+      }
+    };
+
+    window.addEventListener('bgm-toggle', handleBgmToggle as EventListener);
+
     return () => {
-      stopBGM(); // 페이지 떠날 때 BGM 정지
+      stopBGM();
+      window.removeEventListener('bgm-toggle', handleBgmToggle as EventListener);
     };
   }, []);
 

@@ -31,8 +31,18 @@ export default function NeonSerpentPage() {
       playBGM(SOUNDS.BGM_GAME);
     });
 
+    // BGM 토글 이벤트 리스너
+    const handleBgmToggle = (event: CustomEvent) => {
+      if (event.detail.enabled) {
+        playBGM(SOUNDS.BGM_GAME);
+      }
+    };
+
+    window.addEventListener('bgm-toggle', handleBgmToggle as EventListener);
+
     return () => {
       stopBGM(); // 페이지 떠날 때 BGM 정지
+      window.removeEventListener('bgm-toggle', handleBgmToggle as EventListener);
     };
   }, []);
 
