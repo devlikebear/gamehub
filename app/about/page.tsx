@@ -10,7 +10,7 @@ export default function AboutPage() {
       <div className="container mx-auto max-w-4xl">
         {/* Hero Section */}
         <section className="text-center mb-16">
-          <h1 className="pixel-text text-4xl md:text-6xl mb-6 neon-text animate-neon-pulse" style={{ color: '#00f0ff' }}>
+          <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl mb-6 neon-text animate-neon-pulse" style={{ color: '#00f0ff' }}>
             {t.about.title}
           </h1>
           <p className="pixel-text text-base md:text-lg" style={{ color: '#00f0ff' }}>

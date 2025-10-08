@@ -143,7 +143,7 @@ export default function GamesPage() {
     <main className="min-h-screen py-20 px-4">
       <div className="container mx-auto">
         <section className="text-center mb-12 md:mb-16 space-y-3">
-          <h1 className="pixel-text text-4xl md:text-6xl neon-text animate-neon-pulse" style={{ color: '#00f0ff' }}>
+          <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl neon-text animate-neon-pulse" style={{ color: '#00f0ff' }}>
             {t.gamesPage.title}
           </h1>
           <p className="text-bright-pink pixel-text text-sm tracking-wide">{t.gamesPage.subtitle}</p>

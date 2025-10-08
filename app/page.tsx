@@ -53,7 +53,7 @@ export default function Home() {
         {/* Hero */}
         <section className="text-center md:text-left flex flex-col md:flex-row items-center md:items-start gap-10">
           <div className="flex-1 space-y-5">
-            <h1 className="pixel-text text-5xl md:text-6xl lg:text-7xl text-bright neon-text animate-neon-pulse">
+            <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text animate-neon-pulse">
               {t.home.title}
             </h1>
             <p className="pixel-text text-sm md:text-base text-bright-pink tracking-[0.3em] uppercase">

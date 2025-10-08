@@ -84,7 +84,7 @@ export default function AchievementsPage() {
     <div className="container mx-auto px-4 py-8 min-h-screen">
       {/* 헤더 */}
       <div className="text-center mb-8">
-        <h1 className="pixel-text text-3xl md:text-4xl mb-4 text-bright-cyan neon-text animate-neon-pulse">
+        <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl mb-4 text-bright-cyan neon-text animate-neon-pulse">
           {language === 'ko' ? '🏆 업적' : '🏆 Achievements'}
         </h1>
         <p className="text-gray-400 text-sm">
