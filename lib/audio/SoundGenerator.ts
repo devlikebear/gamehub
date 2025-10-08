@@ -256,43 +256,51 @@ export class SoundGenerator {
     const dataL = buffer.getChannelData(0);
     const dataR = buffer.getChannelData(1);
 
-    // 아르페지오 패턴 (Am-F-C-G 코드 진행, 16분음표)
-    const arpeggio = [
-      // Am (0-4박)
-      220, 277.18, 329.63, 440,  220, 277.18, 329.63, 440,
-      220, 277.18, 329.63, 440,  220, 277.18, 329.63, 440,
-      // F (4-8박)
-      174.61, 220, 261.63, 349.23,  174.61, 220, 261.63, 349.23,
-      174.61, 220, 261.63, 349.23,  174.61, 220, 261.63, 349.23,
-      // C (8-12박)
-      130.81, 164.81, 196, 261.63,  130.81, 164.81, 196, 261.63,
-      130.81, 164.81, 196, 261.63,  130.81, 164.81, 196, 261.63,
-      // G (12-16박)
-      196, 246.94, 293.66, 392,  196, 246.94, 293.66, 392,
-      196, 246.94, 293.66, 392,  196, 246.94, 293.66, 392,
+    // SF 느낌의 신스 멜로디 (옥타브 점프, 8분음표)
+    const melody = [
+      { freq: 440, start: 0, duration: beatDuration },           // A4
+      { freq: 880, start: beatDuration, duration: beatDuration },     // A5
+      { freq: 659.25, start: beatDuration * 2, duration: beatDuration }, // E5
+      { freq: 1318.5, start: beatDuration * 3, duration: beatDuration }, // E6
+      { freq: 523.25, start: beatDuration * 4, duration: beatDuration }, // C5
+      { freq: 1046.5, start: beatDuration * 5, duration: beatDuration }, // C6
+      { freq: 587.33, start: beatDuration * 6, duration: beatDuration }, // D5
+      { freq: 1174.7, start: beatDuration * 7, duration: beatDuration }, // D6
+      { freq: 440, start: beatDuration * 8, duration: beatDuration },     // A4
+      { freq: 880, start: beatDuration * 9, duration: beatDuration },     // A5
+      { freq: 739.99, start: beatDuration * 10, duration: beatDuration }, // F#5
+      { freq: 1480, start: beatDuration * 11, duration: beatDuration },   // F#6
+      { freq: 493.88, start: beatDuration * 12, duration: beatDuration }, // B4
+      { freq: 987.77, start: beatDuration * 13, duration: beatDuration }, // B5
+      { freq: 659.25, start: beatDuration * 14, duration: beatDuration }, // E5
+      { freq: 1318.5, start: beatDuration * 15, duration: beatDuration }, // E6
     ];
 
     // 베이스 라인 (2박마다)
     const bassline = [
       { freq: 110, start: 0, duration: beatDuration * 4 },       // A2
-      { freq: 87.31, start: beatDuration * 4, duration: beatDuration * 4 }, // F2
-      { freq: 65.41, start: beatDuration * 8, duration: beatDuration * 4 }, // C2
-      { freq: 98, start: beatDuration * 12, duration: beatDuration * 4 },   // G2
+      { freq: 130.81, start: beatDuration * 4, duration: beatDuration * 4 }, // C3
+      { freq: 110, start: beatDuration * 8, duration: beatDuration * 4 },    // A2
+      { freq: 123.47, start: beatDuration * 12, duration: beatDuration * 4 }, // B2
     ];
 
-    // 아르페지오 생성 (우측 채널)
-    const noteLength = beatDuration / 4; // 16분음표
-    for (let i = 0; i < arpeggio.length; i++) {
-      const startTime = i * noteLength;
-      const startSample = Math.floor(startTime * sampleRate);
-      const noteDuration = noteLength * 0.8; // 약간 짧게
-      const endSample = Math.floor((startTime + noteDuration) * sampleRate);
+    // SF 신스 멜로디 생성 (우측 채널 - 톱니파 + 비브라토)
+    for (const note of melody) {
+      const startSample = Math.floor(note.start * sampleRate);
+      const endSample = Math.floor((note.start + note.duration) * sampleRate);
 
-      for (let j = startSample; j < endSample && j < length; j++) {
-        const t = (j - startSample) / sampleRate;
-        const envelope = Math.exp(-t * 12); // 빠른 감쇠
-        const wave = Math.sin(2 * Math.PI * arpeggio[i] * t);
-        dataR[j] += wave * envelope * 0.12;
+      for (let i = startSample; i < endSample && i < length; i++) {
+        const t = (i - startSample) / sampleRate;
+        const envelope = t < 0.02 ? t / 0.02 : Math.max(0, 1 - (t - 0.02) / (note.duration - 0.02));
+
+        // 비브라토 효과 (SF 느낌)
+        const vibrato = 1 + Math.sin(2 * Math.PI * 5 * t) * 0.003;
+
+        // 톱니파 (sawtooth) - 더 밝고 SF적인 소리
+        const phase = (2 * Math.PI * note.freq * vibrato * t) % (2 * Math.PI);
+        const sawtooth = (phase / Math.PI - 1) * 0.08;
+
+        dataR[i] += sawtooth * envelope;
       }
     }
 
