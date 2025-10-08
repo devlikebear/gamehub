@@ -10,16 +10,22 @@ import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 import { loadAllSounds } from '@/lib/audio/sounds';
 import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'starshard-drift';
 
 export default function StarshardDriftPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const tutorialContent = getTutorialContent(GAME_ID);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
@@ -34,6 +40,10 @@ export default function StarshardDriftPage() {
     // BGM 재생 (랜덤 선택)
     playGameBGM(GAME_ID);
 
+    // 첫 플레이 시 튜토리얼 자동 표시
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
 
     const handleBgmToggle = (event: CustomEvent) => {
       if (event.detail.enabled) {
@@ -70,6 +80,15 @@ export default function StarshardDriftPage() {
 
   return (
     <main className="min-h-screen py-16 px-4 md:py-20">
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
       <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
