@@ -6,6 +6,7 @@ import { GameCanvas } from '@/components/games/GameCanvas';
 import { SpectralPursuitGame } from '@/lib/games/spectral-pursuit/SpectralPursuitGame';
 import { generateNickname, sanitizeNickname } from '@/lib/leaderboard/nickname';
 import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
+import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 
 const GAME_ID = 'spectral-pursuit';
@@ -26,10 +27,8 @@ export default function SpectralPursuitPage() {
     async function fetchPreview() {
       setLoadingPreview(true);
       try {
-        const response = await fetch(`/api/leaderboard?gameId=${GAME_ID}&limit=5`);
-        if (!response.ok) return;
-        const data = (await response.json()) as { entries: LeaderboardEntry[] };
-        if (active) setRecentEntries(data.entries?.slice(0, 5) ?? []);
+        const data = await fetchLeaderboard(GAME_ID, 5);
+        if (active) setRecentEntries(data.slice(0, 5));
       } catch (error) {
         console.error('Failed to load leaderboard preview', error);
       } finally {
@@ -204,23 +203,14 @@ function ScoreSubmissionModal({
     setStatus('submitting');
     setError(null);
     try {
-      const response = await fetch('/api/leaderboard', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          gameId,
-          nickname,
-          score: result.score,
-        }),
+      const response = await submitScore({
+        gameId,
+        nickname,
+        score: result.score,
       });
-      if (!response.ok) {
-        throw new Error('Failed to submit score');
-      }
-      const data = (await response.json()) as {
-        result: LeaderboardSubmissionResponse;
-        leaderboard?: LeaderboardEntry[];
-      };
-      onSubmitted(data.result, data.leaderboard);
+      // Fetch updated leaderboard
+      const leaderboard = await fetchLeaderboard(gameId, 100);
+      onSubmitted(response, leaderboard);
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);

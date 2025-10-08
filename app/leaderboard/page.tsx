@@ -5,6 +5,7 @@ import Link from 'next/link';
 import type { LeaderboardEntry } from '@/lib/leaderboard/types';
 import { loadLocalRank } from '@/lib/leaderboard/storage';
 import { generateNickname } from '@/lib/leaderboard/nickname';
+import { fetchLeaderboard } from '@/lib/leaderboard/supabase';
 
 const GAME_OPTIONS = [
   { id: 'stellar-salvo', name: 'Stellar Salvo', color: 'text-bright' },
@@ -30,13 +31,9 @@ export default function LeaderboardPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/leaderboard?gameId=${encodeURIComponent(selectedGame)}`);
-        if (!response.ok) {
-          throw new Error('Failed to load leaderboard');
-        }
-        const data = (await response.json()) as { entries: LeaderboardEntry[] };
+        const data = await fetchLeaderboard(selectedGame);
         if (isActive) {
-          setEntries(data.entries ?? []);
+          setEntries(data ?? []);
         }
       } catch (err) {
         console.error(err);
