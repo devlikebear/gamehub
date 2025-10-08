@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import type { LeaderboardEntry } from '@/lib/leaderboard/types';
 import { loadLocalRank } from '@/lib/leaderboard/storage';
-import { generateNickname } from '@/lib/leaderboard/nickname';
 import { fetchLeaderboard } from '@/lib/leaderboard/supabase';
 import { useI18n } from '@/lib/i18n/provider';
 
@@ -52,7 +51,7 @@ export default function LeaderboardPage() {
     return () => {
       isActive = false;
     };
-  }, [selectedGame]);
+  }, [selectedGame, t.leaderboard.error]);
 
   return (
     <main className="min-h-screen py-20 px-4">

@@ -239,7 +239,8 @@ function ScoreSubmissionModal({
         gameId,
         nickname,
         score: result.score,
-  
+      });
+
       // Fetch updated leaderboard
       const leaderboard = await fetchLeaderboard(gameId, 100);
       onSubmitted(response, leaderboard);
