@@ -5,6 +5,7 @@ import { AchievementCard } from '@/components/achievements/AchievementCard';
 import { getAllAchievements, getGameAchievements } from '@/lib/achievements/definitions';
 import { loadProgress, getGlobalStats, getGameStats } from '@/lib/achievements/tracker';
 import type { AchievementTier, AchievementCategory } from '@/lib/achievements/types';
+import { useI18n } from '@/lib/i18n/provider';
 
 const GAMES = [
   { id: 'stellar-salvo', name: '스텔라 살보', nameEn: 'Stellar Salvo' },
@@ -47,7 +48,8 @@ const CATEGORY_NAMES = {
 };
 
 export default function AchievementsPage() {
-  const [language] = useState<'ko' | 'en'>('ko');
+  const { locale } = useI18n();
+  const language = locale as 'ko' | 'en';
   const [selectedGame, setSelectedGame] = useState<string>('all');
   const [selectedTier, setSelectedTier] = useState<AchievementTier | 'all'>('all');
   const [selectedCategory, setSelectedCategory] = useState<AchievementCategory | 'all'>('all');
@@ -101,7 +103,7 @@ export default function AchievementsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="text-center">
             <div className="text-2xl font-bold text-bright-cyan">
-              {globalStats.unlockedCount}/{globalStats.totalCount}
+              {globalStats.unlockedAchievements}/{globalStats.totalAchievements}
             </div>
             <div className="text-xs text-gray-400 mt-1">
               {language === 'ko' ? '해금된 업적' : 'Unlocked'}
@@ -109,15 +111,15 @@ export default function AchievementsPage() {
           </div>
 
           <div className="text-center">
-            <div className="text-2xl font-bold text-bright-yellow">{globalStats.totalPoints}</div>
+            <div className="text-2xl font-bold text-bright-yellow">{globalStats.earnedPoints}</div>
             <div className="text-xs text-gray-400 mt-1">
-              {language === 'ko' ? '획득 포인트' : 'Total Points'}
+              {language === 'ko' ? '획득 포인트' : 'Earned Points'}
             </div>
           </div>
 
           <div className="text-center">
             <div className="text-2xl font-bold text-bright-green">
-              {Math.round(globalStats.completionPercentage)}%
+              {Math.round(globalStats.completionRate)}%
             </div>
             <div className="text-xs text-gray-400 mt-1">
               {language === 'ko' ? '완료율' : 'Completion'}
@@ -126,10 +128,10 @@ export default function AchievementsPage() {
 
           <div className="text-center">
             <div className="text-2xl font-bold text-bright-purple">
-              {globalStats.hiddenUnlocked}
+              {globalStats.totalPoints}
             </div>
             <div className="text-xs text-gray-400 mt-1">
-              {language === 'ko' ? '숨겨진 업적' : 'Hidden'}
+              {language === 'ko' ? '총 포인트' : 'Total Points'}
             </div>
           </div>
         </div>
@@ -148,7 +150,7 @@ export default function AchievementsPage() {
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedGame === 'all'
                   ? 'bg-bright-cyan text-black'
-                  : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                  : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
               {language === 'ko' ? '전체' : 'All'}
@@ -160,7 +162,7 @@ export default function AchievementsPage() {
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedGame === game.id
                     ? 'bg-bright-cyan text-black'
-                    : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                    : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
                 {language === 'ko' ? game.name : game.nameEn}
@@ -180,7 +182,7 @@ export default function AchievementsPage() {
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedTier === 'all'
                   ? 'bg-bright-cyan text-black'
-                  : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                  : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
               {language === 'ko' ? '전체' : 'All'}
@@ -192,7 +194,7 @@ export default function AchievementsPage() {
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedTier === tier
                     ? 'bg-bright-cyan text-black'
-                    : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                    : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
                 {language === 'ko' ? TIER_NAMES[tier].ko : TIER_NAMES[tier].en}
@@ -212,7 +214,7 @@ export default function AchievementsPage() {
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedCategory === 'all'
                   ? 'bg-bright-cyan text-black'
-                  : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                  : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
               {language === 'ko' ? '전체' : 'All'}
@@ -224,7 +226,7 @@ export default function AchievementsPage() {
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedCategory === category
                     ? 'bg-bright-cyan text-black'
-                    : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                    : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
                 {language === 'ko' ? CATEGORY_NAMES[category].ko : CATEGORY_NAMES[category].en}
@@ -246,7 +248,7 @@ export default function AchievementsPage() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div className="text-center">
               <div className="text-xl font-bold text-bright-cyan">
-                {gameStats.unlockedCount}/{gameStats.totalCount}
+                {gameStats.unlockedAchievements}/{gameStats.totalAchievements}
               </div>
               <div className="text-xs text-gray-400 mt-1">
                 {language === 'ko' ? '해금' : 'Unlocked'}
@@ -254,7 +256,7 @@ export default function AchievementsPage() {
             </div>
 
             <div className="text-center">
-              <div className="text-xl font-bold text-bright-yellow">{gameStats.totalPoints}</div>
+              <div className="text-xl font-bold text-bright-yellow">{gameStats.earnedPoints}</div>
               <div className="text-xs text-gray-400 mt-1">
                 {language === 'ko' ? '포인트' : 'Points'}
               </div>
@@ -262,7 +264,7 @@ export default function AchievementsPage() {
 
             <div className="text-center">
               <div className="text-xl font-bold text-bright-green">
-                {Math.round(gameStats.completionPercentage)}%
+                {Math.round(gameStats.completionRate)}%
               </div>
               <div className="text-xs text-gray-400 mt-1">
                 {language === 'ko' ? '완료' : 'Complete'}
