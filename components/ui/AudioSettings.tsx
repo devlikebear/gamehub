@@ -65,7 +65,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 w-80 bg-black/95 border-2 border-bright-cyan rounded-lg p-4 shadow-[0_0_20px_rgba(0,240,255,0.6)]">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="pixel-text text-sm text-bright uppercase">{t.audio.settings}</h3>
+            <h3 className="pixel-text text-sm text-white uppercase">{t.audio.settings}</h3>
             <button
               onClick={() => {
                 setIsOpen(false);
