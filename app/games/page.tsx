@@ -75,7 +75,8 @@ const games = [
     difficulty: '⭐⭐⭐⭐',
     description: '중력 파동을 이용해 크리스털 파편을 분해하고 에너지를 회수하세요',
     controls: '방향키 회전/추진, Space 펄스',
-    status: 'coming-soon',
+    status: 'playable',
+    href: '/games/starshard-drift',
   },
 ];
 
