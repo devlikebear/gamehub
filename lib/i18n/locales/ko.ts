@@ -108,7 +108,30 @@ export const ko = {
     },
     'photon-vanguard': {
       name: 'PHOTON VANGUARD',
+      tagline: 'PHASE 4 · RADIANT DEFENSE',
       description: '시간 왜곡과 파동 방어로 포톤 군단을 막아내는 궤도 수비',
+      intro: '방사형 궤도로 진입하는 포톤 군단을 제압하세요. ←→으로 수호대를 회전시키고, Shift 시간 왜곡으로 적의 돌진을 늦춘 뒤 Space 파동을 방출해 궤도를 정리하세요. 잔상 장벽을 활용하면 추격자를 늦출 수 있습니다.',
+      controls: {
+        title: 'Controls',
+        move: '← → / A D : 수호대 회전',
+        shoot: 'Space : 파동 방출',
+        dash: 'Shift : 시간 왜곡',
+        pause: 'Esc : 일시정지 · Enter / R : 재시작',
+      },
+      objectives: {
+        title: 'Objectives',
+        item1: '방사형 궤도로 진입하는 포톤 군단을 막아내세요',
+        item2: '시간 왜곡으로 적의 돌진 속도를 늦추세요',
+        item3: 'Space로 파동을 방출해 근접한 적을 처리하세요',
+        item4: '잔상 장벽을 활용해 추격자를 늦추세요',
+      },
+      notes: {
+        title: 'Field Notes',
+        item1: '오리지널 아트 & 메커닉',
+        item2: '시간 왜곡은 쿨다운이 있어 신중하게 사용하세요',
+        item3: '파동은 원형 범위 공격입니다',
+        item4: '궤도 위치를 잘 조정하면 여러 적을 동시에 처리할 수 있습니다',
+      },
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',

@@ -110,7 +110,30 @@ export const en: Translations = {
     },
     'photon-vanguard': {
       name: 'PHOTON VANGUARD',
+      tagline: 'PHASE 4 · RADIANT DEFENSE',
       description: 'Radial wave defense against incoming barrage threats',
+      intro: 'Suppress the photon legion entering radial orbits. Rotate your vanguard with ←→, slow enemy charges with Shift time warp, then release Space waves to clear orbits. Use afterimage barriers to delay pursuers.',
+      controls: {
+        title: 'Controls',
+        move: '← → / A D : Rotate vanguard',
+        shoot: 'Space : Release wave',
+        dash: 'Shift : Time warp',
+        pause: 'Esc : Pause · Enter / R : Restart',
+      },
+      objectives: {
+        title: 'Objectives',
+        item1: 'Block photon legion entering radial orbits',
+        item2: 'Slow enemy charges with time warp',
+        item3: 'Clear nearby enemies with Space wave release',
+        item4: 'Use afterimage barriers to delay pursuers',
+      },
+      notes: {
+        title: 'Field Notes',
+        item1: 'Original art & mechanics',
+        item2: 'Time warp has cooldown - use wisely',
+        item3: 'Wave is a circular area attack',
+        item4: 'Proper orbit positioning lets you hit multiple enemies',
+      },
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',
