@@ -58,7 +58,9 @@ export default function LeaderboardPage() {
       <div className="container mx-auto max-w-5xl space-y-10">
         <section className="text-center space-y-4">
           <p className="pixel-text text-sm text-bright-cyan uppercase tracking-wider">{t.leaderboard.subtitle}</p>
-          <h1 className="pixel-text text-4xl md:text-5xl text-bright">{t.leaderboard.title}</h1>
+          <h1 className="pixel-text text-4xl md:text-5xl text-bright animate-neon-pulse">
+            {t.leaderboard.title}
+          </h1>
           <p className="pixel-text text-bright text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
             {t.leaderboard.description}
           </p>

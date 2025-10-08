@@ -202,15 +202,15 @@
     }
   }
 
-  /* Neon Glow Pulse Animation */
+  /* Neon Glow Pulse Animation - Subtle */
   @keyframes neon-pulse {
     0%, 100% {
-      filter: drop-shadow(0 0 5px currentColor) drop-shadow(0 0 10px currentColor);
+      filter: drop-shadow(0 0 3px currentColor) drop-shadow(0 0 6px currentColor);
       opacity: 1;
     }
     50% {
-      filter: drop-shadow(0 0 10px currentColor) drop-shadow(0 0 20px currentColor) drop-shadow(0 0 30px currentColor);
-      opacity: 0.9;
+      filter: drop-shadow(0 0 5px currentColor) drop-shadow(0 0 10px currentColor);
+      opacity: 0.95;
     }
   }
 

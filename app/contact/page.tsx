@@ -4,7 +4,7 @@ export default function ContactPage() {
       <div className="container mx-auto max-w-3xl">
         {/* Header */}
         <section className="text-center mb-16">
-          <h1 className="pixel-text text-4xl md:text-6xl text-bright mb-6 neon-text">
+          <h1 className="pixel-text text-4xl md:text-6xl text-bright mb-6 neon-text animate-neon-pulse">
             CONTACT
           </h1>
           <p className="text-bright text-lg">
