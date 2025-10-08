@@ -192,7 +192,14 @@ gamehub/
   - BaseGame 통합 (자동 세션 추적)
   - StatisticsCard 및 StatisticsPanel UI 컴포넌트
   - 리더보드 페이지에 통계 패널 표시
-- [ ] 키보드 단축키 가이드
+- [x] **키보드 단축키 가이드** [#64](https://github.com/devlikebear/gamehub/issues/64)
+  - 단축키 데이터 구조 및 타입 정의 (ShortcutCategory, ModifierKey)
+  - KeyboardShortcutsHelp 모달 컴포넌트 (네온 스타일, 3개 카테고리)
+  - ShortcutsProvider 글로벌 키보드 핸들러
+  - Navbar 단축키 버튼 (⌨️) 통합
+  - 플랫폼별 수정자 키 표시 (Mac ⌘/⇧ vs Windows Ctrl/Shift)
+  - 네비게이션 단축키 (? 키, Shift+H/G/L/A/I)
+  - Input/textarea 필드에서 단축키 비활성화
 - [ ] 난이도 선택 (쉬움/보통/어려움)
 - [ ] 방문자 통계 (Cloudflare Analytics)
 - [ ] 게임 튜토리얼/설명
