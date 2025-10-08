@@ -15,6 +15,7 @@ export const ko = {
     connect: 'Connect',
     openSource: 'Open Source Project',
     close: '닫기',
+    keyboardShortcuts: '키보드 단축키',
   },
 
   // Audio Settings

@@ -7,6 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { I18nProvider } from "@/lib/i18n/provider";
 import { StructuredData } from "./structured-data";
 import ServiceWorkerRegistration from "@/components/pwa/ServiceWorkerRegistration";
+import { ShortcutsProvider } from "@/components/shortcuts/ShortcutsProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -115,12 +116,14 @@ export default function RootLayout({
       </head>
       <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
         <I18nProvider>
-          <Navbar />
-          <div className="flex-1 pt-16">
-            {children}
-          </div>
-          <Footer />
-          <ServiceWorkerRegistration />
+          <ShortcutsProvider>
+            <Navbar />
+            <div className="flex-1 pt-16">
+              {children}
+            </div>
+            <Footer />
+            <ServiceWorkerRegistration />
+          </ShortcutsProvider>
         </I18nProvider>
       </body>
     </html>

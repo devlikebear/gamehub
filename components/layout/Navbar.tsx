@@ -7,6 +7,13 @@ import { useI18n } from '@/lib/i18n/provider';
 
 export default function Navbar() {
   const { t } = useI18n();
+
+  const handleShortcutsClick = () => {
+    // Trigger '?' key event to open shortcuts modal
+    const event = new KeyboardEvent('keydown', { key: '?' });
+    window.dispatchEvent(event);
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-sm border-b border-neon-cyan/30">
       <div className="container mx-auto px-4">
@@ -45,6 +52,16 @@ export default function Navbar() {
               {t.common.about}
             </Link>
 
+            {/* Keyboard Shortcuts */}
+            <button
+              onClick={handleShortcutsClick}
+              className="text-bright hover:text-bright-cyan transition-colors duration-300"
+              title={t.common.keyboardShortcuts || '키보드 단축키'}
+              aria-label={t.common.keyboardShortcuts || '키보드 단축키'}
+            >
+              <span className="text-lg">⌨️</span>
+            </button>
+
             {/* Audio Settings */}
             <AudioSettings />
 
@@ -52,8 +69,16 @@ export default function Navbar() {
             <LanguageSwitcher />
           </div>
 
-          {/* Mobile: Audio Settings + Language Switcher + Menu Button */}
+          {/* Mobile: Keyboard Shortcuts + Audio Settings + Language Switcher + Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
+            <button
+              onClick={handleShortcutsClick}
+              className="text-bright hover:text-bright-cyan transition-colors duration-300"
+              title={t.common.keyboardShortcuts || '키보드 단축키'}
+              aria-label={t.common.keyboardShortcuts || '키보드 단축키'}
+            >
+              <span className="text-lg">⌨️</span>
+            </button>
             <AudioSettings />
             <LanguageSwitcher />
             <button className="text-neon-cyan hover:text-neon-pink transition-colors">

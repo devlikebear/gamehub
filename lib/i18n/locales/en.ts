@@ -17,6 +17,7 @@ export const en: Translations = {
     connect: 'Connect',
     openSource: 'Open Source Project',
     close: 'Close',
+    keyboardShortcuts: 'Keyboard Shortcuts',
   },
 
   // Audio Settings
