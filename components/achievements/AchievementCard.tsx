@@ -42,12 +42,12 @@ export function AchievementCard({ achievement, progress, language = 'ko' }: Prop
       </div>
 
       {/* 이름 */}
-      <h3 className="pixel-text text-sm text-center mb-2">
+      <h3 className={`pixel-text text-sm text-center mb-2 ${isUnlocked ? 'text-white' : 'text-gray-300'}`}>
         {isHidden ? '???' : language === 'ko' ? achievement.name : achievement.nameEn}
       </h3>
 
       {/* 설명 */}
-      <p className="text-xs text-center mb-3 leading-relaxed">
+      <p className={`text-xs text-center mb-3 leading-relaxed ${isUnlocked ? 'text-white/90' : 'text-gray-400'}`}>
         {isHidden
           ? '숨겨진 업적'
           : language === 'ko'
@@ -71,15 +71,15 @@ export function AchievementCard({ achievement, progress, language = 'ko' }: Prop
       )}
 
       {/* 등급 및 포인트 */}
-      <div className="flex items-center justify-between text-xs">
+      <div className={`flex items-center justify-between text-xs ${isUnlocked ? 'text-white' : 'text-gray-400'}`}>
         <span className="uppercase opacity-75">{achievement.tier}</span>
-        <span className="text-yellow-400">{achievement.reward?.points || 0}P</span>
+        <span className="text-yellow-400 font-bold">{achievement.reward?.points || 0}P</span>
       </div>
 
       {/* 해금 뱃지 */}
       {isUnlocked && (
         <div className="absolute top-2 right-2">
-          <span className="text-2xl">✓</span>
+          <span className="text-2xl text-green-400">✓</span>
         </div>
       )}
     </div>
