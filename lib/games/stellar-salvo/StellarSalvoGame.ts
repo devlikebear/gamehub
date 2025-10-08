@@ -248,8 +248,9 @@ export class StellarSalvoGame extends BaseGame {
   private reportGameResult(outcome: 'victory' | 'defeat'): void {
     const special: Record<string, number> = {};
 
-    // Perfect Defense 업적 체크: 웨이브 10을 90% 이상 에너지로 클리어
-    if (this.waves.waveNumber >= 10 && this.energy >= 0.9) {
+    // Perfect Defense 업적 체크: 5분 이상 생존하고 90% 이상 에너지 유지
+    const minutesPlayed = this.timeElapsed / 60000;
+    if (minutesPlayed >= 5 && this.energy >= 0.9) {
       special['perfect-defense-wave10'] = 1;
     }
 
@@ -261,7 +262,6 @@ export class StellarSalvoGame extends BaseGame {
       stats: {
         timeElapsed: this.timeElapsed,
         killCount: this.killCount,
-        wave: this.waves.waveNumber,
         energy: this.energy,
         special,
       },
