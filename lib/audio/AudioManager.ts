@@ -54,7 +54,7 @@ class AudioManager {
 
     try {
       // AudioContext 생성 (Safari 호환성 고려)
-      const AudioContextClass = window.AudioContext || (window as typeof AudioContext & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContextClass) {
         throw new Error('AudioContext not supported');
       }
