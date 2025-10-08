@@ -150,7 +150,7 @@ export default function AchievementsPage() {
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedGame === 'all'
                   ? 'bg-bright-cyan text-black'
-                  : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                  : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
               {language === 'ko' ? '전체' : 'All'}
@@ -162,7 +162,7 @@ export default function AchievementsPage() {
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedGame === game.id
                     ? 'bg-bright-cyan text-black'
-                    : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                    : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
                 {language === 'ko' ? game.name : game.nameEn}
@@ -182,7 +182,7 @@ export default function AchievementsPage() {
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedTier === 'all'
                   ? 'bg-bright-cyan text-black'
-                  : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                  : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
               {language === 'ko' ? '전체' : 'All'}
@@ -194,7 +194,7 @@ export default function AchievementsPage() {
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedTier === tier
                     ? 'bg-bright-cyan text-black'
-                    : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                    : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
                 {language === 'ko' ? TIER_NAMES[tier].ko : TIER_NAMES[tier].en}
@@ -214,7 +214,7 @@ export default function AchievementsPage() {
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedCategory === 'all'
                   ? 'bg-bright-cyan text-black'
-                  : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                  : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
               {language === 'ko' ? '전체' : 'All'}
@@ -226,7 +226,7 @@ export default function AchievementsPage() {
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedCategory === category
                     ? 'bg-bright-cyan text-black'
-                    : 'bg-black/50 border border-gray-700 hover:border-bright-cyan'
+                    : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
                 {language === 'ko' ? CATEGORY_NAMES[category].ko : CATEGORY_NAMES[category].en}
