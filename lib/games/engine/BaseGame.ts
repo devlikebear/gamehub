@@ -23,6 +23,11 @@ export abstract class BaseGame extends GameLoop {
   protected readonly onGameComplete?: (payload: GameCompletionPayload) => void;
   private completionEmitted = false;
 
+  // Performance optimizations
+  protected isDirty = true; // Dirty flag for rendering optimization
+  private offscreenCanvas?: HTMLCanvasElement;
+  private offscreenCtx?: CanvasRenderingContext2D;
+
   constructor(config: GameConfig) {
     super();
 
@@ -41,6 +46,7 @@ export abstract class BaseGame extends GameLoop {
     this.height = config.height || this.canvas.clientHeight;
 
     this.setupCanvas();
+    this.setupOffscreenCanvas();
   }
 
   /**
@@ -63,12 +69,58 @@ export abstract class BaseGame extends GameLoop {
   }
 
   /**
+   * 오프스크린 캔버스 설정 (더블 버퍼링용)
+   */
+  private setupOffscreenCanvas(): void {
+    if (typeof document === 'undefined') return;
+
+    this.offscreenCanvas = document.createElement('canvas');
+    this.offscreenCanvas.width = this.width;
+    this.offscreenCanvas.height = this.height;
+
+    const ctx = this.offscreenCanvas.getContext('2d', {
+      alpha: false, // 투명도 불필요 시 성능 향상
+      desynchronized: true, // 렌더링 지연 감소
+    });
+
+    if (ctx) {
+      this.offscreenCtx = ctx;
+      this.offscreenCtx.imageSmoothingEnabled = false;
+    }
+  }
+
+  /**
+   * 오프스크린 캔버스로 전환 (더블 버퍼링)
+   * 복잡한 렌더링 시 사용
+   */
+  protected useOffscreenRendering(): CanvasRenderingContext2D | null {
+    return this.offscreenCtx || null;
+  }
+
+  /**
+   * 오프스크린 캔버스를 메인 캔버스로 복사
+   */
+  protected commitOffscreenRender(): void {
+    if (!this.offscreenCanvas) return;
+    this.ctx.drawImage(this.offscreenCanvas, 0, 0);
+  }
+
+  /**
+   * Dirty flag 설정 (재렌더링 필요)
+   */
+  protected markDirty(): void {
+    this.isDirty = true;
+  }
+
+  /**
    * Canvas 크기 조정
    */
   public resize(width: number, height: number): void {
     this.width = width;
     this.height = height;
     this.setupCanvas();
+    this.setupOffscreenCanvas();
+    this.markDirty();
   }
 
   protected notifyGameComplete(payload: GameCompletionPayload): void {
