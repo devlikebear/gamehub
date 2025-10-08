@@ -10,6 +10,10 @@ import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 import { loadAllSounds } from '@/lib/audio/sounds';
 import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
 import { useI18n } from '@/lib/i18n/provider';
 import { useAchievements } from '@/hooks/useAchievements';
 import { AchievementNotificationQueue } from '@/components/achievements/AchievementNotification';
@@ -18,11 +22,13 @@ import { ShareButton } from '@/components/share/ShareButton';
 const GAME_ID = 'stellar-salvo';
 
 export default function StellarSalvoPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const tutorialContent = getTutorialContent(GAME_ID);
   const { unlockedAchievements, checkAchievements, clearUnlocked } = useAchievements();
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
@@ -45,6 +51,11 @@ export default function StellarSalvoPage() {
 
     // BGM 재생 (랜덤 선택)
     playGameBGM(GAME_ID);
+
+    // 첫 플레이 시 튜토리얼 자동 표시
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
 
     // BGM 토글 이벤트 리스너
     const handleBgmToggle = (event: CustomEvent) => {
@@ -82,6 +93,15 @@ export default function StellarSalvoPage() {
 
   return (
     <main className="min-h-screen py-16 px-4 md:py-20">
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
       {/* 업적 해금 알림 */}
       {unlockedAchievements.length > 0 && (
         <AchievementNotificationQueue
