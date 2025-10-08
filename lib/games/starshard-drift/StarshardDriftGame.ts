@@ -46,6 +46,7 @@ const PULSE_COOLDOWN = 3600;
 const PULSE_LIFETIME = 620;
 
 export class StarshardDriftGame extends BaseGame {
+  private readonly gameId = 'starshard-drift';
   private readonly input: InputHandler;
   private physics: DriftPhysicsState;
   private resonance: ResonanceFieldState;
@@ -80,6 +81,12 @@ export class StarshardDriftGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.gameOver || this.missionComplete) {
+      this.notifyGameComplete({
+        gameId: this.gameId,
+        outcome: this.missionComplete ? 'victory' : 'defeat',
+        score: this.mission.score,
+        timestamp: new Date().toISOString(),
+      });
       if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.reset();
       }
@@ -432,6 +439,7 @@ export class StarshardDriftGame extends BaseGame {
     this.timeElapsed = 0;
     this.pulses = [];
     this.trails = [];
+    this.resetGameCompletion();
   }
 
   private constrainShipToField(state: DriftPhysicsState): DriftPhysicsState {

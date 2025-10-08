@@ -60,6 +60,12 @@ This project is optimized for Cloudflare Pages:
 | Spectral Pursuit | ⭐⭐⭐⭐ | Playable |
 | Stellar Salvo | ⭐⭐⭐ | Playable |
 
+## 🏆 Leaderboard
+
+- Global leaderboard powered by Supabase (top 100 per game)
+- Local browser storage keeps your personal rank snapshot
+- API endpoint: `POST /api/leaderboard` (see `app/api/leaderboard/route.ts`)
+
 ## 📁 Project Structure
 
 ```

@@ -48,6 +48,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export class PrismSmashGame extends BaseGame {
+  private readonly gameId = 'prism-smash';
   private paddle: Paddle;
   private ball: Ball;
 
@@ -109,6 +110,12 @@ export class PrismSmashGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.lives <= 0) {
+      this.notifyGameComplete({
+        gameId: this.gameId,
+        outcome: 'defeat',
+        score: this.scoreManager.getScore(),
+        timestamp: new Date().toISOString(),
+      });
       if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.resetMatch();
       }
@@ -326,6 +333,7 @@ export class PrismSmashGame extends BaseGame {
     this.flashTimer = 0;
     this.swapCooldown = 0;
     this.swapPulse = 0;
+    this.resetGameCompletion();
 
     this.layers = this.generateLayers();
     this.activeLayer = 0;

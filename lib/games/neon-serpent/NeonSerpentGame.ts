@@ -25,6 +25,7 @@ const OVERLOAD_THRESHOLD = 100;
 const MIN_SEGMENTS_AFTER_HAZARD = 3;
 
 export class NeonSerpentGame extends BaseGame {
+  private readonly gameId = 'neon-serpent';
   private serpent: SerpentSegment[] = [];
   private direction: Vector2 = { x: 1, y: 0 };
   private nextDirection: Vector2 = { x: 1, y: 0 };
@@ -87,6 +88,7 @@ export class NeonSerpentGame extends BaseGame {
     this.dashCooldown = 0;
     this.gameOver = false;
     this.pulseTimer = 0;
+    this.resetGameCompletion();
 
     this.rebuildHazards();
     this.ensureOrbCount();
@@ -126,6 +128,12 @@ export class NeonSerpentGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.gameOver) {
+      this.notifyGameComplete({
+        gameId: this.gameId,
+        outcome: 'defeat',
+        score: this.score,
+        timestamp: new Date().toISOString(),
+      });
       if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.restart();
       }

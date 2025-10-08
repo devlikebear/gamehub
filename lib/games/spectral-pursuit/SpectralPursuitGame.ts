@@ -59,6 +59,7 @@ const SHARD_TARGET = 5;
 const DECOY_COOLDOWN_MS = 5400;
 
 export class SpectralPursuitGame extends BaseGame {
+  private readonly gameId = 'spectral-pursuit';
   private readonly input: InputHandler;
   private labyrinth: LabyrinthState;
   private hunters: HunterState[] = [];
@@ -106,6 +107,12 @@ export class SpectralPursuitGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.gameOver || this.missionComplete) {
+      this.notifyGameComplete({
+        gameId: this.gameId,
+        outcome: this.missionComplete ? 'victory' : 'defeat',
+        score: this.player.shards * 1000 + Math.floor(this.timeSinceStart / 10),
+        timestamp: new Date().toISOString(),
+      });
       if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.reset();
       }
@@ -610,6 +617,7 @@ export class SpectralPursuitGame extends BaseGame {
     this.timeSinceStart = 0;
     this.gameOver = false;
     this.missionComplete = false;
+    this.resetGameCompletion();
     this.spawnHunters();
     this.spawnShards();
   }
