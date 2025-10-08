@@ -53,7 +53,13 @@ export function ShareModal({ shareData, isOpen, onClose }: ShareModalProps) {
   };
 
   const handleKakaoShare = () => {
-    shareToKakao({ url: shareData.url, title, text: message });
+    shareToKakao({
+      url: shareData.url,
+      title,
+      text: message,
+      gameId: shareData.gameId,
+      score: shareData.score,
+    });
   };
 
   const handleWebShare = async () => {
