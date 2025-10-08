@@ -100,7 +100,7 @@ export default function StarshardDriftPage() {
               <li>{t.games['starshard-drift'].controls.thrust}</li>
               <li>{t.games['starshard-drift'].controls.pulse}</li>
               <li>{t.games['starshard-drift'].controls.boost}</li>
-              <li>{t.games['starshard-drift'].controls.pauseRestart}</li>
+              <li>{t.games['starshard-drift'].controls.pause}</li>
             </ul>
           </div>
 
@@ -149,9 +149,9 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
   return (
     <section className="bg-black/50 border border-bright-cyan/60 rounded-xl p-6 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topDrifters} ({t.gameUI.recentTop5})</h2>
+        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topPilots} ({t.gameUI.recentTop5})</h2>
         <Link href="/leaderboard" className="pixel-text text-xs text-bright-cyan hover:underline">
-          {t.gameUI.viewAllRankings}
+          {t.gameUI.viewFullRanking}
         </Link>
       </div>
       {loading ? (
@@ -163,7 +163,7 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
               <span>
                 #{index + 1} · {entry.nickname}
               </span>
-              <span>{entry.score.toLocaleString()} {t.gameUI.points}</span>
+              <span>{entry.score.toLocaleString()} pts</span>
             </li>
           ))}
         </ul>
@@ -218,7 +218,7 @@ function ScoreSubmissionModal({
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);
-      setError(t.gameUI.scoreSubmitError);
+      setError(t.gameUI.saveError);
       setStatus('error');
     }
   };
@@ -228,12 +228,12 @@ function ScoreSubmissionModal({
       <div className="w-full max-w-md bg-black/80 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 space-y-4">
         <div className="space-y-2 text-center">
           <p className="pixel-text text-xs text-bright-cyan uppercase">{t.gameUI.submitScore}</p>
-          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.coresSecured : t.gameUI.hullCollapsed}</h2>
-          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} {t.gameUI.points}</p>
+          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.victory : t.gameUI.defeat}</h2>
+          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} pts</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
           <label className="block text-left pixel-text text-bright text-xs">
-            {t.gameUI.drifterNickname}
+            {t.gameUI.pilotNickname}
             <input
               value={nickname}
               onChange={(event) => setNickname(sanitizeNickname(event.target.value))}

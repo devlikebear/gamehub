@@ -80,30 +80,6 @@ export const en: Translations = {
 
   // Game specific
   games: {
-    'neon-serpent': {
-      name: 'NEON SERPENT',
-      controlsSummary: 'Arrow keys to move, Shift to dash',
-    },
-    'pulse-paddles': {
-      name: 'PULSE PADDLES',
-      controlsSummary: '↑↓ paddle control, Space curve shot',
-    },
-    'prism-smash': {
-      name: 'PRISM SMASH',
-      controlsSummary: '←→ paddle move, Space field swap',
-    },
-    'cascade-blocks': {
-      name: 'COLOR MATCH CASCADE',
-      controlsSummary: 'Arrow keys move/rotate, Space hard drop',
-    },
-    'photon-vanguard': {
-      name: 'PHOTON VANGUARD',
-      controlsSummary: '←→ move, Space shoot wave',
-    },
-    'spectral-pursuit': {
-      name: 'SPECTRAL PURSUIT',
-      controlsSummary: 'Arrow keys move, Space stealth',
-    },
     'stellar-salvo': {
       name: 'STELLAR SALVO',
       controlsSummary: 'Arrow keys rotate·thrust, Space pulse, Shift dash',
@@ -135,6 +111,7 @@ export const en: Translations = {
     },
     'photon-vanguard': {
       name: 'PHOTON VANGUARD',
+      controlsSummary: '←→ Rotate, Space Release wave, Shift Time warp',
       tagline: 'PHASE 4 · RADIANT DEFENSE',
       description: 'Radial wave defense against incoming barrage threats',
       intro: 'Suppress the photon legion entering radial orbits. Rotate your vanguard with ←→, slow enemy charges with Shift time warp, then release Space waves to clear orbits. Use afterimage barriers to delay pursuers.',
@@ -162,6 +139,7 @@ export const en: Translations = {
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',
+      controlsSummary: 'Arrow keys move, Space stealth',
       tagline: 'PHASE 4 · STEALTH PURSUIT',
       description: 'Maintain stealth while outmaneuvering Revenants',
       intro: 'Collect light fragments while evading trackers in a multi-layered labyrinth. Maintain stealth with Space, use Shift to deploy decoys lowering threat, and find escape routes before portal relocation.',
@@ -190,6 +168,7 @@ export const en: Translations = {
     },
     'cascade-blocks': {
       name: 'COLOR MATCH CASCADE',
+      controlsSummary: '←→ Move, ↑ Rotate, Space Hard drop',
       tagline: 'COLOR MATCH PUZZLE',
       description: 'Match cascading color sequences',
       intro: 'Connect neon color blocks to match 3 or more! Create combos with chain reactions and earn explosive scores. Speed increases as levels rise.',
@@ -219,6 +198,7 @@ export const en: Translations = {
     },
     'starshard-drift': {
       name: 'STARSHARD DRIFT',
+      controlsSummary: '←→ Rotate, ↑↓ Thrust/Brake, Space Pulse',
       tagline: 'PHASE 4 · GRAVITY DRIFT',
       description: 'Collect starshards using gravity mechanics',
       intro: 'Recover starshards in gravity wave space. Stabilize resonating fragments with gravity pulse, overcome gravity waves with drift boost, and secure target cores within time limit.',

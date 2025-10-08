@@ -78,30 +78,6 @@ export const ko = {
 
   // Game specific
   games: {
-    'neon-serpent': {
-      name: 'NEON SERPENT',
-      controlsSummary: '방향키로 이동, Shift 대시',
-    },
-    'pulse-paddles': {
-      name: 'PULSE PADDLES',
-      controlsSummary: '↑↓ 패들 제어, Space 커브샷',
-    },
-    'prism-smash': {
-      name: 'PRISM SMASH',
-      controlsSummary: '←→ 패들 이동, Space 필드 스왑',
-    },
-    'cascade-blocks': {
-      name: 'COLOR MATCH CASCADE',
-      controlsSummary: '방향키 이동/회전, Space 하드 드롭',
-    },
-    'photon-vanguard': {
-      name: 'PHOTON VANGUARD',
-      controlsSummary: '←→ 이동, Space 파동 발사',
-    },
-    'spectral-pursuit': {
-      name: 'SPECTRAL PURSUIT',
-      controlsSummary: '방향키 이동, Space 위장',
-    },
     'stellar-salvo': {
       name: 'STELLAR SALVO',
       controlsSummary: '방향키 회전·추진, Space 펄스, Shift 대시',
@@ -133,6 +109,7 @@ export const ko = {
     },
     'photon-vanguard': {
       name: 'PHOTON VANGUARD',
+      controlsSummary: '←→ 이동, Space 파동 발사, Shift 시간 왜곡',
       tagline: 'PHASE 4 · RADIANT DEFENSE',
       description: '시간 왜곡과 파동 방어로 포톤 군단을 막아내는 궤도 수비',
       intro: '방사형 궤도로 진입하는 포톤 군단을 제압하세요. ←→으로 수호대를 회전시키고, Shift 시간 왜곡으로 적의 돌진을 늦춘 뒤 Space 파동을 방출해 궤도를 정리하세요. 잔상 장벽을 활용하면 추격자를 늦출 수 있습니다.',
@@ -160,6 +137,7 @@ export const ko = {
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',
+      controlsSummary: '방향키 이동, Space 위장',
       tagline: 'PHASE 4 · STEALTH PURSUIT',
       description: '위장을 유지하며 라비린스를 벗어나는 네온 스텔스 추격전',
       intro: '다층 라비린스에서 추적자들을 피해 빛의 파편을 모으세요. Space로 위장을 유지하고, Shift로 미끼를 사용해 위협도를 낮추며 포탈이 재배치되기 전에 탈출 경로를 찾으세요.',
@@ -188,6 +166,7 @@ export const ko = {
     },
     'cascade-blocks': {
       name: 'COLOR MATCH CASCADE',
+      controlsSummary: '←→ 이동, ↑ 회전, Space 하드 드롭',
       tagline: 'COLOR MATCH PUZZLE',
       description: '컬러 공명을 이어가는 네온 퍼즐',
       intro: '네온 컬러 블록을 연결해 3개 이상 매칭하세요! 연쇄 반응으로 콤보를 만들고 폭발적인 점수를 획득하세요. 레벨이 올라갈수록 속도가 빨라집니다.',
@@ -217,6 +196,7 @@ export const ko = {
     },
     'starshard-drift': {
       name: 'STARSHARD DRIFT',
+      controlsSummary: '←→ 회전, ↑↓ 추진·감속, Space 펄스',
       tagline: 'PHASE 4 · GRAVITY DRIFT',
       description: '중력을 활용한 스타샤드 수집 게임',
       intro: '중력 파동이 흐르는 공간에서 스타샤드를 회수하세요. 중력 펄스로 공명 파편을 안정화하고, 드리프트 부스트로 중력 파동을 극복하며 제한 시간 내 목표 코어를 확보하세요.',

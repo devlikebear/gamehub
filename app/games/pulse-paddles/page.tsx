@@ -93,8 +93,8 @@ export default function PulsePaddlesPage() {
             <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
               <li>{t.games['pulse-paddles'].controls.move}</li>
               <li>{t.games['pulse-paddles'].controls.curve}</li>
-              <li>{t.games['pulse-paddles'].controls.player2}</li>
-              <li>{t.games['pulse-paddles'].controls.modes}</li>
+              <li>{t.games['pulse-paddles'].controls.p2}</li>
+              <li>{t.games['pulse-paddles'].controls.mode}</li>
             </ul>
           </div>
 
@@ -143,9 +143,9 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
   return (
     <section className="bg-black/50 border border-bright-pink/60 rounded-xl p-6 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topDuelists} ({t.gameUI.recentTop5})</h2>
+        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topPilots} ({t.gameUI.recentTop5})</h2>
         <Link href="/leaderboard" className="pixel-text text-xs text-bright-pink hover:underline">
-          {t.gameUI.viewAllRankings}
+          {t.gameUI.viewFullRanking}
         </Link>
       </div>
       {loading ? (
@@ -157,7 +157,7 @@ function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[];
               <span>
                 #{index + 1} · {entry.nickname}
               </span>
-              <span>{entry.score.toLocaleString()} {t.gameUI.points}</span>
+              <span>{entry.score.toLocaleString()} pts</span>
             </li>
           ))}
         </ul>
@@ -212,7 +212,7 @@ function ScoreSubmissionModal({
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);
-      setError(t.gameUI.scoreSubmitError);
+      setError(t.gameUI.saveError);
       setStatus('error');
     }
   };
@@ -222,12 +222,12 @@ function ScoreSubmissionModal({
       <div className="w-full max-w-md bg-black/80 border border-bright-pink/60 rounded-xl shadow-neon-pink p-6 space-y-4">
         <div className="space-y-2 text-center">
           <p className="pixel-text text-xs text-bright-pink uppercase">{t.gameUI.submitScore}</p>
-          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.matchWon : t.gameUI.matchLost}</h2>
-          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} {t.gameUI.points}</p>
+          <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.victory : t.gameUI.defeat}</h2>
+          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} pts</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
           <label className="block text-left pixel-text text-bright text-xs">
-            {t.gameUI.duelistNickname}
+            {t.gameUI.pilotNickname}
             <input
               value={nickname}
               onChange={(event) => setNickname(sanitizeNickname(event.target.value))}
