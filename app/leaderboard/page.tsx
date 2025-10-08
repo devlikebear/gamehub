@@ -60,7 +60,7 @@ export default function LeaderboardPage() {
         <section className="text-center space-y-4">
           <p className="pixel-text text-sm text-bright-cyan uppercase tracking-wider">{t.leaderboard.subtitle}</p>
           <h1 className="pixel-text text-4xl md:text-5xl text-bright">{t.leaderboard.title}</h1>
-          <p className="text-bright text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="pixel-text text-bright text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
             {t.leaderboard.description}
           </p>
         </section>
@@ -85,10 +85,10 @@ export default function LeaderboardPage() {
         {localRank && (
           <section className="bg-black/60 border border-bright-green/60 rounded-xl shadow-neon-green p-6 text-center">
             <p className="pixel-text text-xs text-bright-green mb-2">{t.leaderboard.myBestRank}</p>
-            <p className="text-bright text-base md:text-lg">
+            <p className="pixel-text text-bright text-base md:text-lg">
               #{localRank.rank} · {localRank.nickname} · {localRank.score.toLocaleString()} pts
             </p>
-            <p className="text-bright text-xs mt-2 opacity-70">{t.leaderboard.recorded}: {new Date(localRank.updatedAt).toLocaleString()}</p>
+            <p className="pixel-text text-bright text-xs mt-2 opacity-70">{t.leaderboard.recorded}: {new Date(localRank.updatedAt).toLocaleString()}</p>
           </section>
         )}
 
@@ -102,7 +102,7 @@ export default function LeaderboardPage() {
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
-                <tr className="text-bright text-xs">
+                <tr className="pixel-text text-bright text-xs">
                   <th className="px-4 py-2">{t.leaderboard.rank}</th>
                   <th className="px-4 py-2">{t.leaderboard.pilot}</th>
                   <th className="px-4 py-2">{t.leaderboard.score}</th>
@@ -112,21 +112,21 @@ export default function LeaderboardPage() {
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-bright">
+                    <td colSpan={4} className="px-4 py-6 text-center pixel-text text-bright">
                       {t.leaderboard.loading}
                     </td>
                   </tr>
                 )}
                 {!loading && error && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-bright-pink">
+                    <td colSpan={4} className="px-4 py-6 text-center pixel-text text-bright-pink">
                       {error}
                     </td>
                   </tr>
                 )}
                 {!loading && !error && entries.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="px-4 py-6 text-center text-bright">
+                    <td colSpan={4} className="px-4 py-6 text-center pixel-text text-bright">
                       {t.leaderboard.noEntries}
                     </td>
                   </tr>
@@ -134,10 +134,10 @@ export default function LeaderboardPage() {
                 {!loading && !error &&
                   entries.map((entry, index) => (
                     <tr key={entry.id} className={index % 2 === 0 ? 'bg-black/20' : 'bg-black/10'}>
-                      <td className="px-4 py-2 text-bright">#{index + 1}</td>
-                      <td className="px-4 py-2 text-bright">{entry.nickname}</td>
-                      <td className="px-4 py-2 text-bright">{entry.score.toLocaleString()}</td>
-                      <td className="px-4 py-2 text-bright text-xs">
+                      <td className="px-4 py-2 pixel-text text-bright">#{index + 1}</td>
+                      <td className="px-4 py-2 pixel-text text-bright">{entry.nickname}</td>
+                      <td className="px-4 py-2 pixel-text text-bright">{entry.score.toLocaleString()}</td>
+                      <td className="px-4 py-2 pixel-text text-bright text-xs">
                         {new Date(entry.createdAt).toLocaleString()}
                       </td>
                     </tr>
@@ -147,7 +147,7 @@ export default function LeaderboardPage() {
           </div>
         </section>
 
-        <section className="text-center text-bright text-xs opacity-70">
+        <section className="text-center pixel-text text-bright text-xs opacity-70">
           <p>
             {t.leaderboard.nicknameNote}
           </p>
