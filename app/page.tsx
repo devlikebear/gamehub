@@ -53,7 +53,9 @@ export default function Home() {
         {/* Hero */}
         <section className="text-center md:text-left flex flex-col md:flex-row items-center md:items-start gap-10">
           <div className="flex-1 space-y-5">
-            <h1 className="pixel-text text-5xl md:text-6xl lg:text-7xl text-bright neon-text">{t.home.title}</h1>
+            <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text animate-neon-pulse">
+              {t.home.title}
+            </h1>
             <p className="pixel-text text-sm md:text-base text-bright-pink tracking-[0.3em] uppercase">
               {t.home.subtitle}
             </p>
@@ -63,15 +65,15 @@ export default function Home() {
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">
               <Link
                 href="/games"
-                className="px-6 py-2 border-2 border-[#00f0ff] pixel-text text-xs rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(0,240,255,0.5)]"
+                className="px-6 py-2 border-2 border-[#00f0ff] pixel-text text-xs rounded-lg transition-all duration-300 shadow-[0_0_15px_rgba(0,240,255,0.5)] hover-glow animate-fade-in"
                 style={{ color: '#00f0ff' }}
               >
                 {t.common.enterTheArcade}
               </Link>
               <Link
                 href="https://github.com/devlikebear/gamehub"
-                className="px-6 py-2 border-2 border-[#00f0ff] pixel-text text-xs rounded-lg hover:bg-[#00f0ff]/10 transition-all duration-300"
-                style={{ color: '#00f0ff' }}
+                className="px-6 py-2 border-2 border-[#00f0ff] pixel-text text-xs rounded-lg hover:bg-[#00f0ff]/10 transition-all duration-300 hover-glow animate-fade-in"
+                style={{ color: '#00f0ff', animationDelay: '0.1s' }}
               >
                 {t.common.viewOnGithub}
               </Link>

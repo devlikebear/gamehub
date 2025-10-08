@@ -143,7 +143,9 @@ export default function GamesPage() {
     <main className="min-h-screen py-20 px-4">
       <div className="container mx-auto">
         <section className="text-center mb-12 md:mb-16 space-y-3">
-          <h1 className="pixel-text text-4xl md:text-6xl neon-text" style={{ color: '#00f0ff' }}>{t.gamesPage.title}</h1>
+          <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl neon-text animate-neon-pulse" style={{ color: '#00f0ff' }}>
+            {t.gamesPage.title}
+          </h1>
           <p className="text-bright-pink pixel-text text-sm tracking-wide">{t.gamesPage.subtitle}</p>
           <p className="pixel-text text-sm md:text-base max-w-3xl mx-auto leading-relaxed" style={{ color: '#00f0ff' }}>
             {t.gamesPage.description}
@@ -200,7 +202,7 @@ export default function GamesPage() {
         </section>
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
-          {games.map((game) => {
+          {games.map((game, index) => {
             const isSelected = selectedGameId === game.id;
             return (
               <button
@@ -209,11 +211,12 @@ export default function GamesPage() {
                 onClick={() => setSelectedGameId(game.id)}
                 className={`group relative p-6 text-left bg-black/50 border-2 ${
                   colorClasses[game.color]
-                } rounded-lg transition-all duration-300 ${
+                } rounded-lg transition-all duration-300 animate-fade-in hover-glow ${
                   game.status === 'coming-soon'
                     ? 'cursor-not-allowed opacity-70 hover:opacity-90'
                     : 'cursor-pointer hover:scale-105'
                 } ${isSelected ? 'ring-4 ring-bright-cyan/60' : ''}`}
+                style={{ animationDelay: `${index * 0.05}s` }}
               >
                 <div className="text-6xl mb-4 text-center">{game.icon}</div>
                 <h2 className={`pixel-text text-sm text-center mb-2 ${textColorClasses[game.color]}`}>
