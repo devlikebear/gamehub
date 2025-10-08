@@ -15,6 +15,18 @@ export const en: Translations = {
     links: 'Links',
     connect: 'Connect',
     openSource: 'Open Source Project',
+    close: 'Close',
+  },
+
+  // Audio Settings
+  audio: {
+    settings: 'Audio Settings',
+    masterVolume: 'Master Volume',
+    bgm: 'BGM (Music)',
+    sfx: 'SFX (Sound Effects)',
+    on: 'ON',
+    off: 'OFF',
+    note: 'Settings are saved automatically to your browser',
   },
 
   // Home Page
