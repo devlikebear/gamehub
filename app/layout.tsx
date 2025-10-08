@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { I18nProvider } from "@/lib/i18n/provider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -42,11 +43,13 @@ export default function RootLayout({
   return (
     <html lang="ko" className={`${inter.variable} ${pressStart2P.variable} ${galmuri.variable}`}>
       <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
-        <Navbar />
-        <div className="flex-1 pt-16">
-          {children}
-        </div>
-        <Footer />
+        <I18nProvider>
+          <Navbar />
+          <div className="flex-1 pt-16">
+            {children}
+          </div>
+          <Footer />
+        </I18nProvider>
       </body>
     </html>
   );

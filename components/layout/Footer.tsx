@@ -1,42 +1,41 @@
+'use client';
+
 import Link from 'next/link';
+import { useI18n } from '@/lib/i18n/provider';
 
 export default function Footer() {
+  const { t } = useI18n();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative z-10 bg-black/80 backdrop-blur-sm border-t border-neon-purple/30 mt-auto">
+    <footer className="relative z-10 bg-black/80 backdrop-blur-sm border-t border-[#9d00ff]/30 mt-auto">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
-            <h3 className="pixel-text text-sm text-bright mb-4">GAMEHUB</h3>
-            <p className="text-bright text-sm">
-              추억의 고전 아케이드 게임을 브라우저에서 즐겨보세요
+            <h3 className="pixel-text text-sm mb-4" style={{ color: '#00f0ff' }}>GAMEHUB</h3>
+            <p className="pixel-text text-xs" style={{ color: '#00f0ff' }}>
+              {t.common.footerDescription}
             </p>
           </div>
 
           {/* Links */}
           <div>
-            <h4 className="text-bright-pink font-bold mb-4">Links</h4>
+            <h4 className="pixel-text text-xs mb-4" style={{ color: '#ff10f0' }}>{t.common.links}</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/games" className="text-bright hover:text-bright-pink transition-colors text-sm">
-                  Games
+                <Link href="/games" className="pixel-text text-xs hover:text-bright-pink transition-colors" style={{ color: '#00f0ff' }}>
+                  {t.common.games}
                 </Link>
               </li>
               <li>
-                <Link href="/leaderboard" className="text-bright hover:text-bright-yellow transition-colors text-sm">
-                  Leaderboard
+                <Link href="/leaderboard" className="pixel-text text-xs hover:text-bright-yellow transition-colors" style={{ color: '#00f0ff' }}>
+                  {t.common.leaderboard}
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-bright hover:text-bright-purple transition-colors text-sm">
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="text-bright hover:text-bright-green transition-colors text-sm">
-                  Contact
+                <Link href="/about" className="pixel-text text-xs hover:text-bright-purple transition-colors" style={{ color: '#00f0ff' }}>
+                  {t.common.about}
                 </Link>
               </li>
             </ul>
@@ -44,13 +43,14 @@ export default function Footer() {
 
           {/* Social */}
           <div>
-            <h4 className="text-bright-pink font-bold mb-4">Connect</h4>
+            <h4 className="pixel-text text-xs mb-4" style={{ color: '#ff10f0' }}>{t.common.connect}</h4>
             <div className="flex space-x-4">
               <a
                 href="https://github.com/devlikebear/gamehub"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-400 hover:text-neon-cyan transition-colors"
+                className="transition-colors"
+                style={{ color: '#00f0ff' }}
                 aria-label="GitHub"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -62,9 +62,9 @@ export default function Footer() {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-8 border-t border-neon-purple/30 text-center">
-          <p className="text-bright-purple text-sm">
-            © {currentYear} GameHub. Open Source Project.
+        <div className="mt-8 pt-8 border-t border-[#9d00ff]/30 text-center">
+          <p className="pixel-text text-xs" style={{ color: '#9d00ff' }}>
+            © {currentYear} GameHub. {t.common.openSource}
           </p>
         </div>
       </div>

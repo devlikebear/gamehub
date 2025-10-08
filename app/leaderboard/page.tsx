@@ -6,18 +6,20 @@ import type { LeaderboardEntry } from '@/lib/leaderboard/types';
 import { loadLocalRank } from '@/lib/leaderboard/storage';
 import { generateNickname } from '@/lib/leaderboard/nickname';
 import { fetchLeaderboard } from '@/lib/leaderboard/supabase';
-
-const GAME_OPTIONS = [
-  { id: 'stellar-salvo', name: 'Stellar Salvo', color: 'text-bright' },
-  { id: 'photon-vanguard', name: 'Photon Vanguard', color: 'text-bright-yellow' },
-  { id: 'spectral-pursuit', name: 'Spectral Pursuit', color: 'text-bright-pink' },
-  { id: 'neon-serpent', name: 'Neon Serpent', color: 'text-bright-green' },
-  { id: 'pulse-paddles', name: 'Pulse Paddles', color: 'text-bright' },
-  { id: 'prism-smash', name: 'Prism Smash', color: 'text-bright' },
-  { id: 'cascade-blocks', name: 'Color Match Cascade', color: 'text-bright' },
-];
+import { useI18n } from '@/lib/i18n/provider';
 
 export default function LeaderboardPage() {
+  const { t } = useI18n();
+
+  const GAME_OPTIONS = [
+    { id: 'stellar-salvo', name: t.games['stellar-salvo'].name, color: 'text-bright' },
+    { id: 'photon-vanguard', name: t.games['photon-vanguard'].name, color: 'text-bright-yellow' },
+    { id: 'spectral-pursuit', name: t.games['spectral-pursuit'].name, color: 'text-bright-pink' },
+    { id: 'neon-serpent', name: t.games['neon-serpent'].name, color: 'text-bright-green' },
+    { id: 'pulse-paddles', name: t.games['pulse-paddles'].name, color: 'text-bright' },
+    { id: 'prism-smash', name: t.games['prism-smash'].name, color: 'text-bright' },
+    { id: 'cascade-blocks', name: t.games['cascade-blocks'].name, color: 'text-bright' },
+  ];
   const [selectedGame, setSelectedGame] = useState(GAME_OPTIONS[0]?.id ?? 'stellar-salvo');
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -38,7 +40,7 @@ export default function LeaderboardPage() {
       } catch (err) {
         console.error(err);
         if (isActive) {
-          setError('리더보드를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+          setError(t.leaderboard.error);
         }
       } finally {
         if (isActive) {
@@ -56,10 +58,10 @@ export default function LeaderboardPage() {
     <main className="min-h-screen py-20 px-4">
       <div className="container mx-auto max-w-5xl space-y-10">
         <section className="text-center space-y-4">
-          <p className="pixel-text text-sm text-bright-cyan uppercase tracking-wider">Global Leaderboards</p>
-          <h1 className="pixel-text text-4xl md:text-5xl text-bright">NEON HALL OF FAME</h1>
+          <p className="pixel-text text-sm text-bright-cyan uppercase tracking-wider">{t.leaderboard.subtitle}</p>
+          <h1 className="pixel-text text-4xl md:text-5xl text-bright">{t.leaderboard.title}</h1>
           <p className="text-bright text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
-            각 게임에서 기록한 최고 점수는 상위 100위까지 클라우드에 저장됩니다. 하위 점수와 개인 기록은 브라우저에 안전하게 보관돼요.
+            {t.leaderboard.description}
           </p>
         </section>
 
@@ -82,36 +84,36 @@ export default function LeaderboardPage() {
 
         {localRank && (
           <section className="bg-black/60 border border-bright-green/60 rounded-xl shadow-neon-green p-6 text-center">
-            <p className="pixel-text text-xs text-bright-green mb-2">MY BEST RANK</p>
+            <p className="pixel-text text-xs text-bright-green mb-2">{t.leaderboard.myBestRank}</p>
             <p className="text-bright text-base md:text-lg">
               #{localRank.rank} · {localRank.nickname} · {localRank.score.toLocaleString()} pts
             </p>
-            <p className="text-bright text-xs mt-2 opacity-70">최근 기록: {new Date(localRank.updatedAt).toLocaleString()}</p>
+            <p className="text-bright text-xs mt-2 opacity-70">{t.leaderboard.recorded}: {new Date(localRank.updatedAt).toLocaleString()}</p>
           </section>
         )}
 
         <section className="bg-black/50 border border-bright-cyan/40 rounded-xl overflow-hidden">
           <header className="px-6 py-4 flex items-center justify-between border-b border-bright-cyan/30">
-            <h2 className="pixel-text text-sm text-bright">TOP 100</h2>
+            <h2 className="pixel-text text-sm text-bright">{t.leaderboard.top100}</h2>
             <Link href="/games" className="pixel-text text-xs text-bright-cyan hover:underline">
-              Back to Game List
+              {t.leaderboard.backToGameList}
             </Link>
           </header>
           <div className="overflow-x-auto">
             <table className="min-w-full text-left">
               <thead>
                 <tr className="text-bright text-xs">
-                  <th className="px-4 py-2">Rank</th>
-                  <th className="px-4 py-2">Pilot</th>
-                  <th className="px-4 py-2">Score</th>
-                  <th className="px-4 py-2">Recorded</th>
+                  <th className="px-4 py-2">{t.leaderboard.rank}</th>
+                  <th className="px-4 py-2">{t.leaderboard.pilot}</th>
+                  <th className="px-4 py-2">{t.leaderboard.score}</th>
+                  <th className="px-4 py-2">{t.leaderboard.recorded}</th>
                 </tr>
               </thead>
               <tbody>
                 {loading && (
                   <tr>
                     <td colSpan={4} className="px-4 py-6 text-center text-bright">
-                      Loading leaderboard...
+                      {t.leaderboard.loading}
                     </td>
                   </tr>
                 )}
@@ -125,7 +127,7 @@ export default function LeaderboardPage() {
                 {!loading && !error && entries.length === 0 && (
                   <tr>
                     <td colSpan={4} className="px-4 py-6 text-center text-bright">
-                      아직 등록된 기록이 없습니다. 가장 먼저 랭킹을 올려보세요!
+                      {t.leaderboard.noEntries}
                     </td>
                   </tr>
                 )}
@@ -147,8 +149,7 @@ export default function LeaderboardPage() {
 
         <section className="text-center text-bright text-xs opacity-70">
           <p>
-            닉네임이 마음에 들지 않으면 게임 내에서 새 점수를 등록할 때마다 자동으로 생성된 다른 이름을 선택할 수 있어요.
-            예시: <span className="text-bright-cyan font-semibold">{generateNickname()}</span>
+            {t.leaderboard.nicknameNote}
           </p>
         </section>
       </div>
