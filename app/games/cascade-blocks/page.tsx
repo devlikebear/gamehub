@@ -9,9 +9,11 @@ import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 
+import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'cascade-blocks';
 
 export default function CascadeBlocksPage() {
+  const { t } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
@@ -47,14 +49,13 @@ export default function CascadeBlocksPage() {
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
           <p className="pixel-text text-xs text-bright-cyan uppercase tracking-wider">
-            COLOR MATCH PUZZLE
+            {t.games['cascade-blocks'].tagline}
           </p>
           <h1 className="pixel-text text-4xl md:text-5xl lg:text-6xl text-bright neon-text">
-            COLOR MATCH CASCADE
+            {t.games['cascade-blocks'].name}
           </h1>
-          <p className="text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
-            네온 컬러 블록을 연결해 3개 이상 매칭하세요! 연쇄 반응으로 콤보를 만들고
-            폭발적인 점수를 획득하세요. 레벨이 올라갈수록 속도가 빨라집니다.
+          <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
+            {t.games['cascade-blocks'].intro}
           </p>
         </section>
 
@@ -94,39 +95,39 @@ export default function CascadeBlocksPage() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           <div className="bg-black/40 border border-bright-green/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
             <h2 className="pixel-text text-xs md:text-sm text-bright-green uppercase">
-              Controls
+              {t.games['cascade-blocks'].controls.title}
             </h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>← → : 좌우 이동</li>
-              <li>↑ : 회전 (가로 ↔ 세로)</li>
-              <li>↓ : 빠른 낙하</li>
-              <li>Space : 즉시 낙하</li>
-              <li>Esc / P : 일시정지</li>
-              <li>Enter / R : 재시작</li>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['cascade-blocks'].controls.move}</li>
+              <li>{t.games['cascade-blocks'].controls.rotate}</li>
+              <li>{t.games['cascade-blocks'].controls.softDrop}</li>
+              <li>{t.games['cascade-blocks'].controls.hardDrop}</li>
+              <li>{t.games['cascade-blocks'].controls.pause}</li>
+              <li>{t.games['cascade-blocks'].controls.restart}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-pink/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
             <h2 className="pixel-text text-xs md:text-sm text-bright-pink uppercase">
-              How to Play
+              {t.games['cascade-blocks'].objectives.title}
             </h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>2개의 컬러 블록이 위에서 떨어집니다</li>
-              <li>같은 색 3개 이상 연결하면 제거됩니다</li>
-              <li>블록 제거 후 중력이 작용합니다</li>
-              <li>연쇄 반응으로 콤보를 만들어 고득점!</li>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['cascade-blocks'].objectives.item1}</li>
+              <li>{t.games['cascade-blocks'].objectives.item2}</li>
+              <li>{t.games['cascade-blocks'].objectives.item3}</li>
+              <li>{t.games['cascade-blocks'].objectives.item4}</li>
             </ul>
           </div>
 
           <div className="bg-black/40 border border-bright-yellow/60 rounded-lg p-4 md:p-5 space-y-3 hover:bg-black/50 transition-colors">
             <h2 className="pixel-text text-xs md:text-sm text-bright-yellow uppercase">
-              Scoring
+              {t.games['cascade-blocks'].notes.title}
             </h2>
-            <ul className="text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
-              <li>점수 = 제거 블록 × 100 × 콤보</li>
-              <li>연쇄 반응마다 콤보 배수 증가</li>
-              <li>30블록 제거마다 레벨업</li>
-              <li>레벨업 시 낙하 속도 증가</li>
+            <ul className="pixel-text text-xs md:text-sm text-bright space-y-1.5 md:space-y-2">
+              <li>{t.games['cascade-blocks'].notes.item1}</li>
+              <li>{t.games['cascade-blocks'].notes.item2}</li>
+              <li>{t.games['cascade-blocks'].notes.item3}</li>
+              <li>{t.games['cascade-blocks'].notes.item4}</li>
             </ul>
           </div>
         </section>
@@ -137,7 +138,7 @@ export default function CascadeBlocksPage() {
             href="/games"
             className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
           >
-            Back to Arcade List
+            {t.gameUI.backToArcade}
           </Link>
         </section>
       </div>
@@ -146,27 +147,25 @@ export default function CascadeBlocksPage() {
 }
 
 function LeaderboardPreview({ entries, loading }: { entries: LeaderboardEntry[]; loading: boolean }) {
-  if (!loading && entries.length === 0) {
-    return null;
-  }
+  const { t } = useI18n();
+
+  if (!loading && entries.length === 0) return null;
 
   return (
     <section className="bg-black/50 border border-bright-cyan/60 rounded-xl p-6 space-y-3">
       <div className="flex items-center justify-between">
-        <h2 className="pixel-text text-xs text-bright">TOP CASCADERS (최근 5위)</h2>
+        <h2 className="pixel-text text-xs text-bright">{t.gameUI.topPilots} ({t.gameUI.recentTop5})</h2>
         <Link href="/leaderboard" className="pixel-text text-xs text-bright-cyan hover:underline">
-          전체 랭킹 보기
+          {t.gameUI.viewFullRanking}
         </Link>
       </div>
       {loading ? (
-        <p className="text-bright text-sm">불러오는 중...</p>
+        <p className="pixel-text text-bright text-sm">{t.gameUI.loadingLeaderboard}</p>
       ) : (
         <ul className="space-y-2">
           {entries.map((entry, index) => (
-            <li key={entry.id} className="flex items-center justify-between text-bright text-xs">
-              <span>
-                #{index + 1} · {entry.nickname}
-              </span>
+            <li key={entry.id} className="flex items-center justify-between pixel-text text-bright text-xs">
+              <span>#{index + 1} · {entry.nickname}</span>
               <span>{entry.score.toLocaleString()} pts</span>
             </li>
           ))}
@@ -189,6 +188,7 @@ function ScoreSubmissionModal({
   onClose: () => void;
   onSubmitted: (response: LeaderboardSubmissionResponse, leaderboard?: LeaderboardEntry[]) => void;
 }) {
+  const { t } = useI18n();
   const [nickname, setNickname] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
@@ -221,7 +221,7 @@ function ScoreSubmissionModal({
       setStatus('success');
     } catch (submissionError) {
       console.error(submissionError);
-      setError('점수를 저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
+      setError(t.gameUI.saveError);
       setStatus('error');
     }
   };
@@ -230,17 +230,17 @@ function ScoreSubmissionModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur">
       <div className="w-full max-w-md bg-black/80 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 space-y-4">
         <div className="space-y-2 text-center">
-          <p className="pixel-text text-xs text-bright-cyan uppercase">Submit Score</p>
-          <h2 className="pixel-text text-2xl text-bright">GAME OVER</h2>
-          <p className="text-bright text-sm">이번 라운드 점수: {result.score.toLocaleString()} pts</p>
+          <p className="pixel-text text-xs text-bright-cyan uppercase">{t.gameUI.submitScore}</p>
+          <h2 className="pixel-text text-2xl text-bright">{t.gameUI.gameOver}</h2>
+          <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} pts</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
-          <label className="block text-left text-bright text-xs">
-            Player Nickname
+          <label className="block text-left pixel-text text-bright text-xs">
+            {t.gameUI.pilotNickname}
             <input
               value={nickname}
               onChange={(event) => setNickname(sanitizeNickname(event.target.value))}
-              className="mt-1 w-full rounded border border-bright-cyan/50 bg-black/60 px-3 py-2 text-bright focus:outline-none focus:ring-2 focus:ring-bright-cyan"
+              className="mt-1 w-full rounded border border-bright-cyan/50 bg-black/60 px-3 py-2 pixel-text text-bright focus:outline-none focus:ring-2 focus:ring-bright-cyan"
               maxLength={18}
               required
             />
@@ -250,9 +250,9 @@ function ScoreSubmissionModal({
             className="pixel-text text-xs px-4 py-2 border border-bright-cyan text-bright rounded hover:bg-bright-cyan/20"
             onClick={() => setNickname(generateNickname())}
           >
-            새 랜덤 닉네임
+            {t.gameUI.newRandomNickname}
           </button>
-          {error && <p className="text-bright-pink text-xs">{error}</p>}
+          {error && <p className="pixel-text text-bright-pink text-xs">{error}</p>}
           <div className="flex items-center justify-end gap-3 pt-2">
             <button
               type="button"
@@ -260,14 +260,14 @@ function ScoreSubmissionModal({
               onClick={onClose}
               disabled={status === 'submitting'}
             >
-              닫기
+              {t.gameUI.close}
             </button>
             <button
               type="submit"
               className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
               disabled={status === 'submitting'}
             >
-              {status === 'submitting' ? '저장 중...' : '점수 저장'}
+              {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}
             </button>
           </div>
         </form>
