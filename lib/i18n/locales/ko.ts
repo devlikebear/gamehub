@@ -78,8 +78,33 @@ export const ko = {
 
   // Game specific
   games: {
+    'neon-serpent': {
+      name: 'NEON SERPENT',
+      controlsSummary: '방향키로 이동, Shift 대시',
+    },
+    'pulse-paddles': {
+      name: 'PULSE PADDLES',
+      controlsSummary: '↑↓ 패들 제어, Space 커브샷',
+    },
+    'prism-smash': {
+      name: 'PRISM SMASH',
+      controlsSummary: '←→ 패들 이동, Space 필드 스왑',
+    },
+    'cascade-blocks': {
+      name: 'COLOR MATCH CASCADE',
+      controlsSummary: '방향키 이동/회전, Space 하드 드롭',
+    },
+    'photon-vanguard': {
+      name: 'PHOTON VANGUARD',
+      controlsSummary: '←→ 이동, Space 파동 발사',
+    },
+    'spectral-pursuit': {
+      name: 'SPECTRAL PURSUIT',
+      controlsSummary: '방향키 이동, Space 위장',
+    },
     'stellar-salvo': {
       name: 'STELLAR SALVO',
+      controlsSummary: '방향키 회전·추진, Space 펄스, Shift 대시',
       tagline: 'PHASE 4 · VOID DEFENSE',
       description: '원형 궤도를 따라 VOID WRAITH를 견제하는 네온 디펜스 슈팅',
       intro: '공명의 문을 방어하는 네온 방어선이 되어, 원형 궤도를 따라 드리프트하며 VOID WRAITH의 파도를 막아내세요. Space로 플럭스 펄스를 방출하고 Shift로 회피 부스트를 발동해 에너지 게이트를 지켜내세요.',

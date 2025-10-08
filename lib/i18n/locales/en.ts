@@ -80,8 +80,33 @@ export const en: Translations = {
 
   // Game specific
   games: {
+    'neon-serpent': {
+      name: 'NEON SERPENT',
+      controlsSummary: 'Arrow keys to move, Shift to dash',
+    },
+    'pulse-paddles': {
+      name: 'PULSE PADDLES',
+      controlsSummary: '↑↓ paddle control, Space curve shot',
+    },
+    'prism-smash': {
+      name: 'PRISM SMASH',
+      controlsSummary: '←→ paddle move, Space field swap',
+    },
+    'cascade-blocks': {
+      name: 'COLOR MATCH CASCADE',
+      controlsSummary: 'Arrow keys move/rotate, Space hard drop',
+    },
+    'photon-vanguard': {
+      name: 'PHOTON VANGUARD',
+      controlsSummary: '←→ move, Space shoot wave',
+    },
+    'spectral-pursuit': {
+      name: 'SPECTRAL PURSUIT',
+      controlsSummary: 'Arrow keys move, Space stealth',
+    },
     'stellar-salvo': {
       name: 'STELLAR SALVO',
+      controlsSummary: 'Arrow keys rotate·thrust, Space pulse, Shift dash',
       tagline: 'PHASE 4 · VOID DEFENSE',
       description: 'Track VOID WRAITH patterns across shifting defense tiles',
       intro: 'Become a neon defender guarding the Resonance Gate, drifting along circular orbits to hold back waves of VOID WRAITH. Release flux pulses with Space and activate evasive boost with Shift to protect the energy gate.',

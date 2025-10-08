@@ -26,8 +26,8 @@ const games: GameInfo[] = [
     icon: '🐍',
     color: 'green',
     difficulty: '⭐',
-    description: '모듈형 네온 필드를 누비며 에너지 오브를 수집하세요',
-    controls: '방향키로 이동, Shift 대시',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/neon-serpent',
   },
@@ -37,8 +37,8 @@ const games: GameInfo[] = [
     icon: '🏓',
     color: 'pink',
     difficulty: '⭐',
-    description: '곡선 궤적의 에너지 볼을 반사해 네온 골을 기록하세요',
-    controls: '↑↓ 패들 제어, Space 커브샷',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/pulse-paddles',
   },
@@ -48,8 +48,8 @@ const games: GameInfo[] = [
     icon: '🧊',
     color: 'cyan',
     difficulty: '⭐⭐',
-    description: '가변 패턴의 프리즘 블록을 해체하며 모듈을 수집하세요',
-    controls: '←→ 패들 이동, Space 필드 스왑',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/prism-smash',
   },
@@ -59,8 +59,8 @@ const games: GameInfo[] = [
     icon: '🔷',
     color: 'purple',
     difficulty: '⭐⭐',
-    description: '같은 색 블록 3개 이상 연결해 제거하고 연쇄 콤보로 고득점 획득',
-    controls: '방향키 이동/회전, Space 하드 드롭',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/cascade-blocks',
   },
@@ -70,8 +70,8 @@ const games: GameInfo[] = [
     icon: '🛡️',
     color: 'yellow',
     difficulty: '⭐⭐⭐',
-    description: '방사형 궤도로 진입하는 포톤 군단을 시간 왜곡으로 제압하세요',
-    controls: '←→ 이동, Space 파동 발사',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/photon-vanguard',
   },
@@ -81,8 +81,8 @@ const games: GameInfo[] = [
     icon: '🔮',
     color: 'yellow',
     difficulty: '⭐⭐⭐⭐',
-    description: '개방형 라비린스에서 추적자를 교란하며 빛의 파편을 모으세요',
-    controls: '방향키 이동, Space 위장',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/spectral-pursuit',
   },
@@ -92,8 +92,8 @@ const games: GameInfo[] = [
     icon: '🛡️',
     color: 'cyan',
     difficulty: '⭐⭐⭐',
-    description: 'VOID WRAITH를 방어하며 공명의 관문을 지키는 네온 디펜스 슈팅',
-    controls: '방향키 회전·추진, Space 펄스, Shift 대시',
+    description: '',
+    controls: '',
     status: 'playable',
     href: '/games/stellar-salvo',
   },
@@ -152,7 +152,7 @@ export default function GamesPage() {
                 {t.gamesPage.difficulty} {selectedGame.difficulty}
               </span>
               <span className="px-3 py-1 border border-bright-purple text-bright-purple pixel-text text-[10px] rounded-md">
-                {selectedGame.controls}
+                {t.games[selectedGame.id as keyof typeof t.games]?.controlsSummary || selectedGame.controls}
               </span>
               <span className="px-3 py-1 border border-bright-green text-bright-green pixel-text text-[10px] rounded-md">
                 {selectedGame.status === 'playable' ? t.gamesPage.playable : t.gamesPage.comingSoon}
@@ -214,7 +214,7 @@ export default function GamesPage() {
                 </div>
                 <p className="pixel-text text-xs text-center mb-3 leading-relaxed" style={{ color: '#00f0ff' }}>{t.games[game.id as keyof typeof t.games]?.description || game.description}</p>
                 <div className="text-center mb-4">
-                  <p className="text-bright-purple text-xs">{game.controls}</p>
+                  <p className="pixel-text text-bright-purple text-xs">{t.games[game.id as keyof typeof t.games]?.controlsSummary || game.controls}</p>
                 </div>
                 {game.status === 'coming-soon' && (
                   <div className="absolute top-4 right-4">
