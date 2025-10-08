@@ -1,5 +1,6 @@
 import { GameLoop } from './GameLoop';
 import { FONTS, NEON_COLORS, OVERLAY } from './constants';
+import type { GameCompletionPayload } from './types';
 
 /**
  * BaseGame - 모든 게임의 기본 클래스
@@ -11,6 +12,7 @@ export interface GameConfig {
   canvas: HTMLCanvasElement;
   width?: number;
   height?: number;
+  onGameComplete?: (payload: GameCompletionPayload) => void;
 }
 
 export abstract class BaseGame extends GameLoop {
@@ -18,11 +20,14 @@ export abstract class BaseGame extends GameLoop {
   protected ctx: CanvasRenderingContext2D;
   protected width: number;
   protected height: number;
+  protected readonly onGameComplete?: (payload: GameCompletionPayload) => void;
+  private completionEmitted = false;
 
   constructor(config: GameConfig) {
     super();
 
     this.canvas = config.canvas;
+    this.onGameComplete = config.onGameComplete;
     const ctx = this.canvas.getContext('2d');
 
     if (!ctx) {
@@ -64,6 +69,16 @@ export abstract class BaseGame extends GameLoop {
     this.width = width;
     this.height = height;
     this.setupCanvas();
+  }
+
+  protected notifyGameComplete(payload: GameCompletionPayload): void {
+    if (this.completionEmitted) return;
+    this.completionEmitted = true;
+    this.onGameComplete?.(payload);
+  }
+
+  protected resetGameCompletion(): void {
+    this.completionEmitted = false;
   }
 
   /**

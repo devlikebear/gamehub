@@ -335,6 +335,44 @@ npm test           # 테스트 실행
 - 환경 변수 관리 (.env.local)
 - 의존성 보안 업데이트 (Dependabot)
 
+## ☁️ 리더보드 백엔드 (Supabase)
+
+- Supabase 프로젝트를 생성하고 아래 SQL로 리더보드 테이블을 준비합니다.
+
+```sql
+create table if not exists public.leaderboard_entries (
+  id uuid primary key default gen_random_uuid(),
+  game_id text not null,
+  nickname text not null,
+  score integer not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists leaderboard_game_score_idx
+  on public.leaderboard_entries (game_id, score desc, created_at asc);
+```
+
+- Row Level Security 활성화 후 익명 키는 읽기 전용, 서비스 키는 서버 API에서만 사용합니다.
+
+```sql
+alter table public.leaderboard_entries enable row level security;
+
+create policy "leaderboard-public-read"
+  on public.leaderboard_entries
+  for select
+  using ( true );
+```
+
+- `.env.local`에 다음 환경 변수를 설정합니다 (`.env.example` 참고).
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+```
+
+- 게임이 점수를 제출하면 서비스 키로 서버에서 기록하고, 상위 100위만 남기도록 자동 정리됩니다. 브라우저에는 플레이어의 최근 순위만 저장됩니다.
+
 ## 🎮 게임 목록 (계획)
 
 | 게임 | 난이도 | 컨트롤 | 상태 |

@@ -27,6 +27,7 @@ const MATCH_ANIMATION_DURATION = 400;
 const GRAVITY_ANIMATION_DURATION = 300;
 
 export class CascadeBlocksGame extends BaseGame {
+  private readonly gameId = 'cascade-blocks';
   private board!: GameBoard;
   private currentBlock: FallingBlock | null = null;
   private nextBlock: FallingBlock | null = null;
@@ -109,6 +110,7 @@ export class CascadeBlocksGame extends BaseGame {
     this.spawnNewBlock();
     this.nextBlock = createRandomBlock();
     this.isGameOver = false;
+    this.resetGameCompletion();
   }
 
   private spawnNewBlock(): void {
@@ -611,6 +613,12 @@ export class CascadeBlocksGame extends BaseGame {
 
   private gameOver(): void {
     this.isGameOver = true;
+    this.notifyGameComplete({
+      gameId: this.gameId,
+      outcome: 'defeat',
+      score: this.stats.score,
+      timestamp: new Date().toISOString(),
+    });
     const highScore = this.storageManager.getHighScore('global');
     if (this.stats.score > highScore) {
       this.storageManager.setHighScore('global', this.stats.score);

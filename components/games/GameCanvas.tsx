@@ -1,12 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import type { GameCompletionPayload } from '@/lib/games/engine/types';
 
 interface GameCanvasProps {
   GameClass: new (config: {
     canvas: HTMLCanvasElement;
     width?: number;
     height?: number;
+    onGameComplete?: (payload: GameCompletionPayload) => void;
   }) => {
     start: () => void;
     stop: () => void;
@@ -15,6 +17,7 @@ interface GameCanvasProps {
   width?: number;
   height?: number;
   pauseOnSpace?: boolean;
+  onGameComplete?: (payload: GameCompletionPayload) => void;
 }
 
 export function GameCanvas({
@@ -22,6 +25,7 @@ export function GameCanvas({
   width = 800,
   height = 600,
   pauseOnSpace = true,
+  onGameComplete,
 }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameRef = useRef<ReturnType<typeof GameClass.prototype.constructor> | null>(null);
@@ -30,11 +34,22 @@ export function GameCanvas({
     if (!canvasRef.current) return;
 
     // 게임 인스턴스 생성
-    const game = new GameClass({
+    const config = {
       canvas: canvasRef.current,
       width,
       height,
-    });
+    } as {
+      canvas: HTMLCanvasElement;
+      width?: number;
+      height?: number;
+      onGameComplete?: (payload: GameCompletionPayload) => void;
+    };
+
+    if (onGameComplete) {
+      config.onGameComplete = onGameComplete;
+    }
+
+    const game = new GameClass(config);
 
     gameRef.current = game;
 
@@ -60,7 +75,7 @@ export function GameCanvas({
       }
       game.stop();
     };
-  }, [GameClass, width, height, pauseOnSpace]);
+  }, [GameClass, width, height, pauseOnSpace, onGameComplete]);
 
   return (
     <div className="flex items-center justify-center">

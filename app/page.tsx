@@ -56,7 +56,7 @@ export default function Home() {
               Neon Arcade Universe
             </p>
             <p className="text-bright text-lg md:text-xl leading-relaxed max-w-2xl">
-              갤러그 같은 고전 감성을 오리지널 메커닉으로 재해석했습니다. 새롭게 공개된{' '}
+              고전 아케이드 오락실의 스페이스 슈터 감성을 오리지널 메커닉으로 재해석했습니다. 새롭게 공개된{' '}
               <span className="text-bright-cyan font-semibold">Stellar Salvo</span>를 포함해 모든 타이틀이 정식 플레이 가능!
             </p>
             <div className="flex flex-wrap gap-4 justify-center md:justify-start pt-2">

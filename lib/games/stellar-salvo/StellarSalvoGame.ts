@@ -51,6 +51,7 @@ export class StellarSalvoGame extends BaseGame {
   private timeElapsed = 0;
   private gameOver = false;
   private victory = false;
+  private readonly gameId = 'stellar-salvo';
 
   constructor(config: GameConfig) {
     super(config);
@@ -101,6 +102,12 @@ export class StellarSalvoGame extends BaseGame {
     this.resolveCollisions(deltaTime);
     this.updateScore(deltaTime);
     this.drainEnergy(deltaTime);
+
+    if (this.gameOver) {
+      this.reportGameResult('defeat');
+    } else if (this.victory) {
+      this.reportGameResult('victory');
+    }
 
     if (this.input.justPressed('Escape')) {
       this.togglePause();
@@ -234,6 +241,15 @@ export class StellarSalvoGame extends BaseGame {
     if (this.energy <= 0) {
       this.gameOver = true;
     }
+  }
+
+  private reportGameResult(outcome: 'victory' | 'defeat'): void {
+    this.notifyGameComplete({
+      gameId: this.gameId,
+      outcome,
+      score: this.score.value,
+      timestamp: new Date().toISOString(),
+    });
   }
 
   private drawBackdrop(): void {
@@ -392,6 +408,7 @@ export class StellarSalvoGame extends BaseGame {
     this.victory = false;
     this.timeElapsed = 0;
     WAVE_OPTIONS.difficultyScale = 1;
+    this.resetGameCompletion();
   }
 }
 

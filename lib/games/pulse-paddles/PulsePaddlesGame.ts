@@ -7,6 +7,7 @@ const FIELD_MARGIN_Y = 80;
 const SCORE_TO_WIN = 7;
 
 export class PulsePaddlesGame extends BaseGame {
+  private readonly gameId = 'pulse-paddles';
   private leftPaddle: Paddle;
   private rightPaddle: Paddle;
   private ball: Ball;
@@ -342,6 +343,12 @@ export class PulsePaddlesGame extends BaseGame {
 
     if (this.scoreLeft >= SCORE_TO_WIN || this.scoreRight >= SCORE_TO_WIN) {
       this.matchOver = true;
+      this.notifyGameComplete({
+        gameId: this.gameId,
+        outcome: this.scoreLeft >= SCORE_TO_WIN ? 'victory' : 'defeat',
+        score: this.scoreLeft,
+        timestamp: new Date().toISOString(),
+      });
       this.isBallActive = false;
       this.ball.x = this.fieldLeft + this.fieldWidth / 2;
       this.ball.y = this.fieldTop + this.fieldHeight / 2;
@@ -359,6 +366,7 @@ export class PulsePaddlesGame extends BaseGame {
     this.comboGlow = 0;
     this.matchOver = false;
     this.isTwoPlayer = false;
+    this.resetGameCompletion();
     this.scheduleServe('left');
   }
 

@@ -55,6 +55,7 @@ interface AfterimageBarrier {
 }
 
 export class PhotonVanguardGame extends BaseGame {
+  private readonly gameId = 'photon-vanguard';
   private readonly input: InputHandler;
   private orbitState: OrbitState;
   private enemies: EnemyInstance[] = [];
@@ -103,6 +104,12 @@ export class PhotonVanguardGame extends BaseGame {
 
   protected update(deltaTime: number): void {
     if (this.gameOver) {
+      this.notifyGameComplete({
+        gameId: this.gameId,
+        outcome: 'defeat',
+        score: this.score,
+        timestamp: new Date().toISOString(),
+      });
       if (this.input.justPressed('Enter') || this.input.justPressed('r') || this.input.justPressed('R')) {
         this.resetGame();
       }
@@ -181,6 +188,7 @@ export class PhotonVanguardGame extends BaseGame {
     this.coreIntegrity = CORE_INTEGRITY_MAX;
     this.score = 0;
     this.gameOver = false;
+    this.resetGameCompletion();
     this.roundFlashTimer = 1000;
   }
 
