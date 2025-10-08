@@ -135,7 +135,31 @@ export const ko = {
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',
+      tagline: 'PHASE 4 · STEALTH PURSUIT',
       description: '위장을 유지하며 라비린스를 벗어나는 네온 스텔스 추격전',
+      intro: '다층 라비린스에서 추적자들을 피해 빛의 파편을 모으세요. Space로 위장을 유지하고, Shift로 미끼를 사용해 위협도를 낮추며 포탈이 재배치되기 전에 탈출 경로를 찾으세요.',
+      controls: {
+        title: 'Controls',
+        move: '← → ↑ ↓ / WASD : 이동',
+        stealth: 'Space : 위장 유지',
+        decoy: 'Shift : 미끼 투척',
+        pause: 'Esc : 일시정지',
+        restart: 'Enter / R : 재시작',
+      },
+      objectives: {
+        title: 'Objectives',
+        item1: '빛의 파편을 모아 탈출 포탈을 활성화',
+        item2: '위협도 게이지를 관리하며 추적자 감지 회피',
+        item3: '포탈 재배치 이전에 새로운 경로 확보',
+        item4: '미끼로 헌터의 인식도를 초기화',
+      },
+      notes: {
+        title: 'Field Notes',
+        item1: '라비린스 포탈은 주기적으로 재배치됩니다.',
+        item2: '위장 상태에서는 이동 속도가 감소하지만 위협이 감소합니다.',
+        item3: '위협 게이지가 높아지면 헌터 경계가 상승합니다.',
+        item4: '헌터가 완전히 인식하면 즉시 추격이 시작됩니다.',
+      },
     },
     'cascade-blocks': {
       name: 'CASCADE BLOCKS',

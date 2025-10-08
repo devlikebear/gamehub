@@ -137,7 +137,31 @@ export const en: Translations = {
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',
+      tagline: 'PHASE 4 · STEALTH PURSUIT',
       description: 'Maintain stealth while outmaneuvering Revenants',
+      intro: 'Collect light fragments while evading trackers in a multi-layered labyrinth. Maintain stealth with Space, use Shift to deploy decoys lowering threat, and find escape routes before portal relocation.',
+      controls: {
+        title: 'Controls',
+        move: '← → ↑ ↓ / WASD : Move',
+        stealth: 'Space : Maintain stealth',
+        decoy: 'Shift : Deploy decoy',
+        pause: 'Esc : Pause',
+        restart: 'Enter / R : Restart',
+      },
+      objectives: {
+        title: 'Objectives',
+        item1: 'Collect light fragments to activate escape portal',
+        item2: 'Manage threat gauge while evading tracker detection',
+        item3: 'Secure new routes before portal relocation',
+        item4: 'Reset hunter awareness with decoys',
+      },
+      notes: {
+        title: 'Field Notes',
+        item1: 'Labyrinth portals periodically relocate.',
+        item2: 'Stealth mode reduces speed but lowers threat.',
+        item3: 'High threat gauge increases hunter alertness.',
+        item4: 'Full hunter awareness triggers immediate pursuit.',
+      },
     },
     'cascade-blocks': {
       name: 'CASCADE BLOCKS',
