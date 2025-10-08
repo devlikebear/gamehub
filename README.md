@@ -12,6 +12,8 @@
 - ⚡ **Fast & Lightweight**: Built with Next.js 15 and Tailwind CSS 4
 - 🔒 **Privacy First**: All games run in your browser, no data sent to servers
 - 🆓 **Free & Open Source**: No ads, completely free to play
+- 📲 **PWA Support**: Install as an app, play offline
+- 🎵 **Retro BGM**: 8-bit style background music with volume controls
 
 ## 🚀 Quick Start
 
