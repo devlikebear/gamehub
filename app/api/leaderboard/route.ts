@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { sanitizeNickname } from '@/lib/leaderboard/nickname';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
+import { validateScore } from '@/lib/leaderboard/validation';
+import { checkRateLimit } from '@/lib/leaderboard/rate-limiter';
 import type { LeaderboardSubmissionPayload } from '@/lib/leaderboard/types';
 
 export async function GET(request: NextRequest) {
@@ -22,6 +24,27 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  // 1. Origin/Referer 검증
+  const origin = request.headers.get('origin');
+  const referer = request.headers.get('referer');
+
+  const ALLOWED_ORIGINS = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    'http://localhost:3000',
+    'http://localhost:3001',
+  ].filter(Boolean);
+
+  if (origin && !ALLOWED_ORIGINS.some((allowed) => origin.startsWith(allowed!))) {
+    console.warn(`Blocked request from unauthorized origin: ${origin}`);
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  if (referer && !ALLOWED_ORIGINS.some((allowed) => referer.startsWith(allowed!))) {
+    console.warn(`Blocked request from unauthorized referer: ${referer}`);
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  // 2. Payload 파싱
   let payload: LeaderboardSubmissionPayload;
 
   try {
@@ -35,12 +58,26 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid payload' }, { status: 400 });
   }
 
-  if (payload.score < 0) {
-    return NextResponse.json({ error: 'Score must be non-negative' }, { status: 400 });
+  // 3. 점수 범위 검증
+  if (!validateScore(payload.gameId, payload.score)) {
+    console.warn(`Invalid score ${payload.score} for game ${payload.gameId}`);
+    return NextResponse.json({ error: 'Invalid score' }, { status: 400 });
   }
 
+  // 4. Rate Limiting
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+             request.headers.get('x-real-ip') ||
+             'unknown';
+
+  if (!checkRateLimit(ip, payload.gameId)) {
+    console.warn(`Rate limit exceeded for IP ${ip} on game ${payload.gameId}`);
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 });
+  }
+
+  // 5. 닉네임 검증
   payload.nickname = sanitizeNickname(payload.nickname ?? '');
 
+  // 6. 점수 저장
   try {
     const result = await submitScore(payload);
     const leaderboard = await fetchLeaderboard(payload.gameId);
