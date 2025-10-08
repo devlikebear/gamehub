@@ -106,6 +106,12 @@ MIT License - feel free to use this project for learning or building your own ar
 
 Inspired by classic arcade games and retro gaming culture.
 
+### Fonts
+
+- **Press Start 2P** - Pixel font by CodeMan38 ([SIL OFL 1.1](https://scripts.sil.org/OFL))
+- **Inter** - Modern sans-serif by Rasmus Andersson ([SIL OFL 1.1](https://scripts.sil.org/OFL))
+- **DungGeunMo (둥근모꼴)** - Korean pixel font by jungu ([SIL OFL 1.1](https://scripts.sil.org/OFL)) - [Download](https://cactus.tistory.com/193)
+
 ### Audio Attribution
 
 Background music by [Oblidivm](https://oblidivmmusic.blogspot.com) licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/):
@@ -117,6 +123,8 @@ Background music by [Oblidivm](https://oblidivmmusic.blogspot.com) licensed unde
 - The Undefeated
 
 Source: [OpenGameArt.org - Chiptune Music for Arcade Games](https://opengameart.org/content/chiptune-music-for-arcade-games)
+
+For detailed credits and licensing information, see [CREDITS.md](./CREDITS.md).
 
 ---
 

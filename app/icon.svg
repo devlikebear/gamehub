@@ -1,64 +1,42 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000"/>
+
+  <!-- Glow effects -->
   <defs>
-    <linearGradient id="cabinet-body" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#9d00ff" />
-    </linearGradient>
-    <radialGradient id="screen-glow" cx="50%" cy="50%" r="55%">
-      <stop offset="0%" stop-color="#ffff00" stop-opacity="0.85" />
-      <stop offset="70%" stop-color="#ff10f0" stop-opacity="0.25" />
-      <stop offset="100%" stop-color="#ff10f0" stop-opacity="0" />
-    </radialGradient>
-    <filter id="neon-glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
+    <filter id="glow-cyan">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
       <feMerge>
-        <feMergeNode in="blur" />
-        <feMergeNode in="SourceGraphic" />
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-pink">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
   </defs>
 
-  <!-- Neon outline of a retro arcade cabinet -->
-  <path
-    d="M72 28 L184 28 L208 96 L192 104 L212 200 L168 228 L88 228 L44 200 L64 104 L48 96 Z"
-    fill="none"
-    stroke="url(#cabinet-body)"
-    stroke-width="14"
-    stroke-linejoin="round"
-    filter="url(#neon-glow)"
-  />
+  <!-- Joystick base (cyan) -->
+  <circle cx="256" cy="340" r="80" fill="#00f0ff" filter="url(#glow-cyan)" opacity="0.3"/>
+  <circle cx="256" cy="340" r="60" fill="none" stroke="#00f0ff" stroke-width="8" filter="url(#glow-cyan)"/>
 
-  <!-- Control panel -->
-  <path
-    d="M72 138 L184 138 L176 178 L80 178 Z"
-    fill="none"
-    stroke="#ff10f0"
-    stroke-width="10"
-    stroke-linejoin="round"
-    opacity="0.9"
-  />
+  <!-- Joystick stick -->
+  <rect x="240" y="180" width="32" height="160" fill="#00f0ff" filter="url(#glow-cyan)"/>
 
-  <!-- Buttons -->
-  <circle cx="110" cy="160" r="8" fill="#ff10f0" />
-  <circle cx="146" cy="160" r="8" fill="#00f0ff" />
-  <circle cx="166" cy="160" r="8" fill="#ffff00" />
+  <!-- Joystick ball (pink) -->
+  <circle cx="256" cy="160" r="60" fill="#ff10f0" filter="url(#glow-pink)"/>
+  <circle cx="256" cy="160" r="50" fill="#ff10f0" opacity="0.8"/>
+  <circle cx="236" cy="140" r="20" fill="#ff10f0" opacity="0.4"/>
 
-  <!-- Screen -->
-  <path
-    d="M92 50 H164 L176 120 H80 Z"
-    fill="#050511"
-    stroke="#00f0ff"
-    stroke-width="10"
-    stroke-linejoin="round"
-  />
+  <!-- Action buttons (right side) -->
+  <circle cx="380" cy="300" r="24" fill="none" stroke="#00ff00" stroke-width="6" filter="url(#glow-cyan)"/>
+  <circle cx="420" cy="260" r="24" fill="none" stroke="#ffff00" stroke-width="6" filter="url(#glow-pink)"/>
 
-  <!-- Screen glow -->
-  <ellipse cx="128" cy="86" rx="44" ry="30" fill="url(#screen-glow)" />
-
-  <!-- Pixel star inside screen -->
-  <path
-    d="M128 72 l10 8 -4 12 h-12 l-4-12z"
-    fill="#ffff00"
-    opacity="0.9"
-  />
+  <!-- D-pad (left side) -->
+  <rect x="108" y="260" width="48" height="16" fill="#9d00ff" filter="url(#glow-pink)"/>
+  <rect x="124" y="244" width="16" height="48" fill="#9d00ff" filter="url(#glow-pink)"/>
 </svg>
