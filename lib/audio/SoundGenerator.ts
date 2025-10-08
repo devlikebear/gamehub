@@ -248,33 +248,111 @@ export class SoundGenerator {
    */
   generateSimpleBGM(): AudioBuffer {
     const sampleRate = this.audioContext!.sampleRate;
-    const duration = 8.0; // 8초 루프
+    const bpm = 150; // 빠른 템포
+    const beatDuration = 60 / bpm; // 0.4초
+    const duration = beatDuration * 16; // 16박자 = 6.4초 루프
     const length = sampleRate * duration;
-    const buffer = this.audioContext!.createBuffer(1, length, sampleRate);
-    const data = buffer.getChannelData(0);
+    const buffer = this.audioContext!.createBuffer(2, length, sampleRate);
+    const dataL = buffer.getChannelData(0);
+    const dataR = buffer.getChannelData(1);
 
-    // 간단한 베이스 라인 (C-G-Am-F 코드)
-    const bassline = [
-      { freq: 130.81, start: 0, duration: 2 },    // C3
-      { freq: 196.00, start: 2, duration: 2 },    // G3
-      { freq: 220.00, start: 4, duration: 2 },    // A3
-      { freq: 174.61, start: 6, duration: 2 },    // F3
+    // 아르페지오 패턴 (Am-F-C-G 코드 진행, 16분음표)
+    const arpeggio = [
+      // Am (0-4박)
+      220, 277.18, 329.63, 440,  220, 277.18, 329.63, 440,
+      220, 277.18, 329.63, 440,  220, 277.18, 329.63, 440,
+      // F (4-8박)
+      174.61, 220, 261.63, 349.23,  174.61, 220, 261.63, 349.23,
+      174.61, 220, 261.63, 349.23,  174.61, 220, 261.63, 349.23,
+      // C (8-12박)
+      130.81, 164.81, 196, 261.63,  130.81, 164.81, 196, 261.63,
+      130.81, 164.81, 196, 261.63,  130.81, 164.81, 196, 261.63,
+      // G (12-16박)
+      196, 246.94, 293.66, 392,  196, 246.94, 293.66, 392,
+      196, 246.94, 293.66, 392,  196, 246.94, 293.66, 392,
     ];
 
-    for (const note of bassline) {
-      const startSample = Math.floor(note.start * sampleRate);
-      const endSample = Math.floor((note.start + note.duration) * sampleRate);
+    // 베이스 라인 (2박마다)
+    const bassline = [
+      { freq: 110, start: 0, duration: beatDuration * 4 },       // A2
+      { freq: 87.31, start: beatDuration * 4, duration: beatDuration * 4 }, // F2
+      { freq: 65.41, start: beatDuration * 8, duration: beatDuration * 4 }, // C2
+      { freq: 98, start: beatDuration * 12, duration: beatDuration * 4 },   // G2
+    ];
+
+    // 아르페지오 생성 (우측 채널)
+    const noteLength = beatDuration / 4; // 16분음표
+    for (let i = 0; i < arpeggio.length; i++) {
+      const startTime = i * noteLength;
+      const startSample = Math.floor(startTime * sampleRate);
+      const noteDuration = noteLength * 0.8; // 약간 짧게
+      const endSample = Math.floor((startTime + noteDuration) * sampleRate);
+
+      for (let j = startSample; j < endSample && j < length; j++) {
+        const t = (j - startSample) / sampleRate;
+        const envelope = Math.exp(-t * 12); // 빠른 감쇠
+        const wave = Math.sin(2 * Math.PI * arpeggio[i] * t);
+        dataR[j] += wave * envelope * 0.12;
+      }
+    }
+
+    // 베이스 라인 생성 (좌측 채널)
+    for (const bass of bassline) {
+      const startSample = Math.floor(bass.start * sampleRate);
+      const endSample = Math.floor((bass.start + bass.duration) * sampleRate);
 
       for (let i = startSample; i < endSample && i < length; i++) {
         const t = (i - startSample) / sampleRate;
-        // 베이스: 사각파 + 감쇠
-        const bass = Math.sign(Math.sin(2 * Math.PI * note.freq * t)) * 0.15;
-        data[i] += bass;
+        // 펄스파 베이스
+        const pulse = Math.sign(Math.sin(2 * Math.PI * bass.freq * t)) * 0.2;
+        dataL[i] += pulse;
+      }
+    }
 
-        // 하이햇 리듬 (매 0.25초마다)
-        if (Math.floor(t * 4) !== Math.floor((t - 1/sampleRate) * 4)) {
-          const hihat = (Math.random() * 2 - 1) * 0.05;
-          data[i] += hihat;
+    // 드럼 패턴 (양쪽 채널)
+    for (let beat = 0; beat < 16; beat++) {
+      const beatTime = beat * beatDuration;
+
+      // 킥 드럼 (1, 5, 9, 13박)
+      if (beat % 4 === 0) {
+        const startSample = Math.floor(beatTime * sampleRate);
+        const kickLength = Math.floor(0.1 * sampleRate);
+
+        for (let i = 0; i < kickLength && (startSample + i) < length; i++) {
+          const t = i / sampleRate;
+          const freq = 80 * Math.exp(-t * 50); // 피치 하강
+          const envelope = Math.exp(-t * 20);
+          const kick = Math.sin(2 * Math.PI * freq * t) * envelope * 0.3;
+          dataL[startSample + i] += kick;
+          dataR[startSample + i] += kick;
+        }
+      }
+
+      // 스네어 (3, 7, 11, 15박)
+      if (beat % 4 === 2) {
+        const startSample = Math.floor(beatTime * sampleRate);
+        const snareLength = Math.floor(0.08 * sampleRate);
+
+        for (let i = 0; i < snareLength && (startSample + i) < length; i++) {
+          const t = i / sampleRate;
+          const envelope = Math.exp(-t * 25);
+          const noise = (Math.random() * 2 - 1) * envelope * 0.15;
+          dataL[startSample + i] += noise;
+          dataR[startSample + i] += noise;
+        }
+      }
+
+      // 하이햇 (매 8분음표)
+      if (beat % 2 === 1) {
+        const startSample = Math.floor(beatTime * sampleRate);
+        const hihatLength = Math.floor(0.03 * sampleRate);
+
+        for (let i = 0; i < hihatLength && (startSample + i) < length; i++) {
+          const t = i / sampleRate;
+          const envelope = Math.exp(-t * 50);
+          const hihat = (Math.random() * 2 - 1) * envelope * 0.08;
+          dataL[startSample + i] += hihat;
+          dataR[startSample + i] += hihat;
         }
       }
     }
