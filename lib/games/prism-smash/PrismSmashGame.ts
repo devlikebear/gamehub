@@ -1,4 +1,5 @@
 import { BaseGame, GameConfig, InputHandler, ScoreManager, StorageManager, NEON_COLORS, BACKGROUND_COLORS } from '../engine';
+import { playSound, SOUNDS } from '@/lib/audio/sounds';
 
 interface Paddle {
   x: number;
@@ -232,6 +233,7 @@ export class PrismSmashGame extends BaseGame {
       this.ball.y = this.paddle.y - this.ball.radius - 1;
       this.scoreManager.breakCombo();
       this.flashTimer = 200;
+      playSound(SOUNDS.CLICK); // 패들 충돌음
     }
 
     const layer = this.layers[this.activeLayer];
@@ -275,10 +277,15 @@ export class PrismSmashGame extends BaseGame {
     this.scoreManager.add(baseScore, 1);
     this.updateHighScore();
     this.flashTimer = 280;
+
+    // 사운드: 프리즘이면 파워업, 일반 벽돌이면 폭발음
     if (brick.isPrism) {
+      playSound(SOUNDS.POWER_UP);
       this.messageText = 'PRISM SPLIT!';
       this.messageTimer = 800;
       this.spawnPrismFragments(brick);
+    } else {
+      playSound(SOUNDS.EXPLOSION);
     }
   }
 
@@ -320,6 +327,9 @@ export class PrismSmashGame extends BaseGame {
       this.messageText = '필드 붕괴!';
       this.messageTimer = 2000;
       this.updateHighScore();
+      playSound(SOUNDS.GAME_OVER); // 게임 오버
+    } else {
+      playSound(SOUNDS.BEEP); // 생명 감소
     }
   }
 

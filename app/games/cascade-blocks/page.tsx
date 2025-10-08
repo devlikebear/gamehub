@@ -8,6 +8,8 @@ import { generateNickname, sanitizeNickname } from '@/lib/leaderboard/nickname';
 import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
+import { loadAllSounds } from '@/lib/audio/sounds';
+import { playGameBGM, stopGameBGM } from '@/lib/audio/bgmPlayer';
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'cascade-blocks';
@@ -22,6 +24,19 @@ export default function CascadeBlocksPage() {
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
     setModalOpen(true);
+  }, []);
+
+  // 오디오 시스템 초기화 및 BGM 재생
+  useEffect(() => {
+    // 효과음 로드
+    loadAllSounds();
+
+    // BGM 재생 (랜덤 선택)
+    playGameBGM(GAME_ID);
+
+    return () => {
+      stopGameBGM();
+    };
   }, []);
 
   useEffect(() => {
@@ -132,11 +147,35 @@ export default function CascadeBlocksPage() {
           </div>
         </section>
 
+        {/* 오디오 크레딧 */}
+        <section className="text-center pt-4 pb-2">
+          <p className="pixel-text text-[10px] text-gray-500">
+            {t.audio.bgmBy}{' '}
+            <a
+              href="https://oblidivmmusic.blogspot.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bright-purple hover:text-bright-cyan transition-colors"
+            >
+              Oblidivm
+            </a>
+            {' '}•{' '}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bright-purple hover:text-bright-cyan transition-colors"
+            >
+              CC-BY 4.0
+            </a>
+          </p>
+        </section>
+
         {/* 하단 네비게이션 */}
         <section className="text-center pt-4">
           <Link
             href="/games"
-            className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
+            className="inline-block px-8 py-3 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan/20 hover:shadow-[0_0_20px_rgba(0,240,255,0.8)] transition-all duration-300"
           >
             {t.gameUI.backToArcade}
           </Link>
@@ -215,6 +254,7 @@ function ScoreSubmissionModal({
         nickname,
         score: result.score,
       });
+
       // Fetch updated leaderboard
       const leaderboard = await fetchLeaderboard(gameId, 100);
       onSubmitted(response, leaderboard);
@@ -264,7 +304,7 @@ function ScoreSubmissionModal({
             </button>
             <button
               type="submit"
-              className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none disabled:opacity-60"
+              className="pixel-text text-xs px-4 py-2 border-2 border-bright-cyan text-bright rounded hover:bg-bright-cyan/20 hover:shadow-[0_0_20px_rgba(0,240,255,0.8)] transition-all duration-300 disabled:opacity-60"
               disabled={status === 'submitting'}
             >
               {status === 'submitting' ? t.gameUI.saving : t.gameUI.saveScore}

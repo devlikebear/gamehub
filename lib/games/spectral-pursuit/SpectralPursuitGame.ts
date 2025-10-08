@@ -6,6 +6,7 @@ import {
   InputHandler,
   NEON_COLORS,
 } from '../engine';
+import { playSound, SOUNDS } from '@/lib/audio/sounds';
 import {
   LabyrinthNode,
   LabyrinthState,
@@ -229,6 +230,7 @@ export class SpectralPursuitGame extends BaseGame {
 
       if (advanced.awareness >= 0.98) {
         this.gameOver = true;
+        playSound(SOUNDS.GAME_OVER); // 탐지 소리
       }
 
       nextHunters.push(advanced);
@@ -247,9 +249,11 @@ export class SpectralPursuitGame extends BaseGame {
       if (distance < 1.2) {
         shard.collected = true;
         this.player.shards += 1;
+        playSound(SOUNDS.COIN); // 파편 수집 소리
         if (this.player.shards >= this.player.targetShards) {
           this.exitUnlocked = true;
           this.exitPortal = getActivePortals(this.labyrinth)[0] ?? null;
+          playSound(SOUNDS.POWER_UP); // 탈출구 활성화 소리
         }
       }
     }
@@ -263,6 +267,7 @@ export class SpectralPursuitGame extends BaseGame {
         );
         if (distance < 1.4) {
           this.missionComplete = true;
+          playSound(SOUNDS.VICTORY); // 미션 완료 소리
         }
       }
     }
@@ -281,6 +286,7 @@ export class SpectralPursuitGame extends BaseGame {
 
   private triggerDecoy(): void {
     this.decoyCooldown = DECOY_COOLDOWN_MS;
+    playSound(SOUNDS.LASER); // 미끼 발사 소리
     this.stealth = decayThreat(
       {
         ...this.stealth,

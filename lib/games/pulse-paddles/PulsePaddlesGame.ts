@@ -1,6 +1,7 @@
 import { BaseGame, GameConfig, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 import { ArenaPattern, pickRandomPattern } from './arena';
 import { Ball, Paddle, clamp, createBall, createPaddle } from './entities';
+import { playSound, SOUNDS } from '@/lib/audio/sounds';
 
 const FIELD_MARGIN_X = 70;
 const FIELD_MARGIN_Y = 80;
@@ -270,6 +271,7 @@ export class PulsePaddlesGame extends BaseGame {
         this.ball.vy = clamp(this.ball.vy, -speedLimit, speedLimit);
         this.zoneStates[index] = true;
         this.pulseFlash = 1;
+        playSound(SOUNDS.POWER_UP); // 존 가속 소리
       }
 
       if (!inside && this.zoneStates[index]) {
@@ -305,6 +307,7 @@ export class PulsePaddlesGame extends BaseGame {
       this.ball.vy += this.ball.baseSpeed * (offset * 0.6 + spin * 0.18);
       this.ball.vx = clamp(this.ball.vx, this.ball.baseSpeed * 0.5, this.ball.baseSpeed * 2);
       this.comboGlow = Math.min(1.6, this.comboGlow + 0.35 + spin * 0.3);
+      playSound(SOUNDS.CLICK); // 패들 충돌음
     }
 
     // 오른쪽 패들
@@ -323,6 +326,7 @@ export class PulsePaddlesGame extends BaseGame {
       this.ball.vy += this.ball.baseSpeed * (offset * 0.6 - spin * 0.18);
       this.ball.vx = clamp(this.ball.vx, -this.ball.baseSpeed * 2, -this.ball.baseSpeed * 0.5);
       this.comboGlow = Math.min(1.6, this.comboGlow + 0.35 + spin * 0.3);
+      playSound(SOUNDS.CLICK); // 패들 충돌음
     }
   }
 
@@ -337,12 +341,15 @@ export class PulsePaddlesGame extends BaseGame {
   private handleScore(winner: 'left' | 'right'): void {
     if (winner === 'left') {
       this.scoreLeft += 1;
+      playSound(SOUNDS.COIN); // 득점 소리
     } else {
       this.scoreRight += 1;
+      playSound(SOUNDS.BEEP); // 실점 소리
     }
 
     if (this.scoreLeft >= SCORE_TO_WIN || this.scoreRight >= SCORE_TO_WIN) {
       this.matchOver = true;
+      playSound(this.scoreLeft >= SCORE_TO_WIN ? SOUNDS.VICTORY : SOUNDS.GAME_OVER); // 승리/패배 소리
       this.notifyGameComplete({
         gameId: this.gameId,
         outcome: this.scoreLeft >= SCORE_TO_WIN ? 'victory' : 'defeat',

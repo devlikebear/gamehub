@@ -127,6 +127,11 @@
     font-weight: 600;
   }
 
+  .text-bright-cyan {
+    color: var(--neon-cyan);
+    font-weight: 600;
+  }
+
   .text-bright-pink {
     color: var(--neon-pink);
     font-weight: 600;

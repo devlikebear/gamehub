@@ -13,6 +13,20 @@ export const ko = {
     links: 'Links',
     connect: 'Connect',
     openSource: 'Open Source Project',
+    close: '닫기',
+  },
+
+  // Audio Settings
+  audio: {
+    settings: '사운드 설정',
+    masterVolume: '마스터 볼륨',
+    bgm: 'BGM (배경음악)',
+    sfx: 'SFX (효과음)',
+    on: 'ON',
+    off: 'OFF',
+    note: '설정은 브라우저에 자동 저장됩니다',
+    bgmBy: 'BGM',
+    license: '라이선스',
   },
 
   // Home Page

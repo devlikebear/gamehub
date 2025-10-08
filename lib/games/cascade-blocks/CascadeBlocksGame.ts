@@ -5,6 +5,7 @@
 
 import { BaseGame, GameConfig, InputHandler, StorageManager, NEON_COLORS, BACKGROUND_COLORS, FONTS } from '../engine';
 import { GameBoard, FallingBlock, GameStats, MatchGroup, BlockColor } from './types';
+import { playSound, SOUNDS } from '@/lib/audio/sounds';
 import {
   createEmptyBoard,
   createRandomBlock,
@@ -256,6 +257,7 @@ export class CascadeBlocksGame extends BaseGame {
 
     if (isValidPosition(this.board, testBlock)) {
       this.currentBlock.orientation = newOrientation;
+      playSound(SOUNDS.BEEP); // 회전 소리
     }
   }
 
@@ -266,6 +268,7 @@ export class CascadeBlocksGame extends BaseGame {
       // 바닥까지 이동
     }
 
+    playSound(SOUNDS.LASER); // 하드 드롭 소리
     this.lockCurrentBlock();
   }
 
@@ -274,6 +277,7 @@ export class CascadeBlocksGame extends BaseGame {
 
     lockBlock(this.board, this.currentBlock);
     this.stats.blocksPlaced++;
+    playSound(SOUNDS.CLICK); // 블록 고정 소리
     this.currentBlock = null;
 
     await this.processMatches();
@@ -302,6 +306,15 @@ export class CascadeBlocksGame extends BaseGame {
     const blocksRemoved = removeMatches(this.board, matches);
     this.stats.blocksCleared += blocksRemoved;
     this.stats.score += blocksRemoved * 100 * this.currentCombo;
+
+    // 콤보에 따라 다른 소리
+    if (this.currentCombo > 3) {
+      playSound(SOUNDS.POWER_UP); // 높은 콤보
+    } else if (this.currentCombo > 1) {
+      playSound(SOUNDS.COIN); // 일반 콤보
+    } else {
+      playSound(SOUNDS.EXPLOSION); // 단일 매치
+    }
 
     this.matchingBlocks = [];
 
@@ -613,6 +626,7 @@ export class CascadeBlocksGame extends BaseGame {
 
   private gameOver(): void {
     this.isGameOver = true;
+    playSound(SOUNDS.GAME_OVER); // 게임 오버 소리
     this.notifyGameComplete({
       gameId: this.gameId,
       outcome: 'defeat',

@@ -104,6 +104,18 @@ MIT License - feel free to use this project for learning or building your own ar
 
 Inspired by classic arcade games and retro gaming culture.
 
+### Audio Attribution
+
+Background music by [Oblidivm](https://oblidivmmusic.blogspot.com) licensed under [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/):
+- The Challenge
+- The Fun Begins
+- The Labyrinth
+- Survive
+- Jump2Sky
+- The Undefeated
+
+Source: [OpenGameArt.org - Chiptune Music for Arcade Games](https://opengameart.org/content/chiptune-music-for-arcade-games)
+
 ---
 
 **Made with ❤️ by devlikebear**
