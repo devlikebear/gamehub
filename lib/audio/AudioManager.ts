@@ -54,7 +54,10 @@ class AudioManager {
 
     try {
       // AudioContext 생성 (Safari 호환성 고려)
-      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+      if (!AudioContextClass) {
+        throw new Error('AudioContext not supported');
+      }
       this.audioContext = new AudioContextClass();
 
       // Gain 노드 생성 (볼륨 조절용)
@@ -315,6 +318,20 @@ class AudioManager {
     this.audioBuffers.clear();
     this.initialized = false;
     console.log('[AudioManager] Cleaned up');
+  }
+
+  /**
+   * AudioContext 가져오기 (사운드 생성용)
+   */
+  getAudioContext(): AudioContext | null {
+    return this.audioContext;
+  }
+
+  /**
+   * 사운드 버퍼 등록 (프로그래밍 방식 생성)
+   */
+  registerSound(key: string, buffer: AudioBuffer): void {
+    this.audioBuffers.set(key, buffer);
   }
 }
 

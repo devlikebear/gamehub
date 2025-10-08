@@ -7,6 +7,14 @@ import { useI18n } from '@/lib/i18n/provider';
 type GameStatus = 'playable' | 'coming-soon';
 type GameColor = 'green' | 'pink' | 'cyan' | 'yellow' | 'purple';
 
+// i18n 게임 타입 정의
+interface GameI18n {
+  name: string;
+  controlsSummary?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
 interface GameInfo {
   id: string;
   name: string;
@@ -153,7 +161,7 @@ export default function GamesPage() {
               </span>
               <span className="px-3 py-1 border border-bright-purple text-bright-purple pixel-text text-[10px] rounded-md">
                 {'controlsSummary' in t.games[selectedGame.id as keyof typeof t.games]
-                  ? (t.games[selectedGame.id as keyof typeof t.games] as any).controlsSummary
+                  ? (t.games[selectedGame.id as keyof typeof t.games] as GameI18n).controlsSummary
                   : selectedGame.controls}
               </span>
               <span className="px-3 py-1 border border-bright-green text-bright-green pixel-text text-[10px] rounded-md">
@@ -218,7 +226,7 @@ export default function GamesPage() {
                 <div className="text-center mb-4">
                   <p className="pixel-text text-bright-purple text-xs">
                     {'controlsSummary' in t.games[game.id as keyof typeof t.games]
-                      ? (t.games[game.id as keyof typeof t.games] as any).controlsSummary
+                      ? (t.games[game.id as keyof typeof t.games] as GameI18n).controlsSummary
                       : game.controls}
                   </p>
                 </div>
