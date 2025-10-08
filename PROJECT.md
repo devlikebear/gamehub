@@ -173,7 +173,7 @@ gamehub/
 - [x] PWA 지원 (오프라인 플레이) [#27](https://github.com/devlikebear/gamehub/issues/27)
 - [x] Open Graph 이미지 (게임별) [#57](https://github.com/devlikebear/gamehub/issues/57)
 - [x] 다국어 지원 (한국어/영어)
-- [ ] 애니메이션 효과 (CRT 스캔라인, 글로우)
+- [x] 애니메이션 효과 (CRT 스캔라인, 글로우) [#59](https://github.com/devlikebear/gamehub/issues/59)
 - [ ] 성능 최적화 (Canvas, 코드 스플리팅)
 
 ### Phase 7: 추가 기능
