@@ -117,9 +117,9 @@
 
   .neon-text {
     text-shadow:
+      0 0 1px currentColor,
       0 0 2px currentColor,
-      0 0 4px currentColor,
-      0 0 8px currentColor;
+      0 0 4px currentColor;
   }
 
   .text-bright {
