@@ -95,7 +95,7 @@ Deno.serve(async (req) => {
       const limit = limitParam ? Math.min(Number(limitParam) || 100, 100) : 100;
 
       const { data, error } = await supabase
-        .from('leaderboard')
+        .from('leaderboard_entries')
         .select('*')
         .eq('game_id', gameId)
         .order('score', { ascending: false })
@@ -187,7 +187,7 @@ Deno.serve(async (req) => {
       const supabase = createClient(supabaseUrl, supabaseKey);
 
       const { data: result, error: insertError } = await supabase
-        .from('leaderboard')
+        .from('leaderboard_entries')
         .insert({
           game_id: payload.gameId,
           nickname: payload.nickname,
@@ -202,7 +202,7 @@ Deno.serve(async (req) => {
 
       // Fetch updated leaderboard
       const { data: leaderboard, error: fetchError } = await supabase
-        .from('leaderboard')
+        .from('leaderboard_entries')
         .select('*')
         .eq('game_id', payload.gameId)
         .order('score', { ascending: false })
