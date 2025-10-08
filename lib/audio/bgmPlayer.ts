@@ -73,10 +73,13 @@ class BGMPlayer {
     this.audio.loop = true;
     this.audio.volume = settings.masterVolume * settings.bgmVolume;
 
-    // 재생
-    this.audio.play().catch(err => {
-      console.error('[BGMPlayer] Failed to play BGM:', err);
-    });
+    // 재생 (비동기 처리)
+    const playPromise = this.audio.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.error('[BGMPlayer] Failed to play BGM:', err);
+      });
+    }
 
     console.log(`[BGMPlayer] Playing: ${track.title} (${gameId})`);
   }
@@ -98,7 +101,7 @@ class BGMPlayer {
    * BGM 일시정지
    */
   pause(): void {
-    if (this.audio) {
+    if (this.audio && !this.audio.paused) {
       this.audio.pause();
     }
   }
@@ -110,9 +113,12 @@ class BGMPlayer {
     if (this.audio && this.audio.paused) {
       const settings = loadAudioSettings();
       if (settings.bgmEnabled) {
-        this.audio.play().catch(err => {
-          console.error('[BGMPlayer] Failed to resume BGM:', err);
-        });
+        const playPromise = this.audio.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.error('[BGMPlayer] Failed to resume BGM:', err);
+          });
+        }
       }
     }
   }
