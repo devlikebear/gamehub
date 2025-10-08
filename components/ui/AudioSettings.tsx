@@ -81,7 +81,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
           <div className="space-y-4">
             {/* 마스터 볼륨 */}
             <div>
-              <label className="pixel-text text-[10px] text-neon-yellow block mb-2">
+              <label className="pixel-text text-xs block mb-2" style={{ color: '#ffff00' }}>
                 {t.audio.masterVolume}
               </label>
               <div className="flex items-center gap-3">
@@ -94,7 +94,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
                   className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-yellow"
                   style={{ accentColor: '#ffff00' }}
                 />
-                <span className="pixel-text text-[10px] text-white w-10 text-right">
+                <span className="pixel-text text-xs text-white w-12 text-right">
                   {Math.round(settings.masterVolume * 100)}%
                 </span>
               </div>
@@ -103,16 +103,17 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
             {/* BGM */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="pixel-text text-[10px] text-neon-purple">
+                <label className="pixel-text text-xs block" style={{ color: '#9d00ff' }}>
                   {t.audio.bgm}
                 </label>
                 <button
                   onClick={() => handleToggle('bgmEnabled')}
-                  className={`pixel-text text-[10px] px-2 py-1 border rounded transition-colors ${
+                  className={`pixel-text text-xs px-2 py-1 border rounded transition-colors ${
                     settings.bgmEnabled
-                      ? 'border-neon-green text-neon-green hover:bg-neon-green/20'
+                      ? 'border-neon-green hover:bg-neon-green/20'
                       : 'border-gray-600 text-gray-600 hover:bg-gray-600/20'
                   }`}
+                  style={settings.bgmEnabled ? { color: '#00ff00' } : undefined}
                 >
                   {settings.bgmEnabled ? t.audio.on : t.audio.off}
                 </button>
@@ -130,7 +131,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
                   }`}
                   style={{ accentColor: '#9d00ff' }}
                 />
-                <span className="pixel-text text-[10px] text-white w-10 text-right">
+                <span className="pixel-text text-xs text-white w-12 text-right">
                   {Math.round(settings.bgmVolume * 100)}%
                 </span>
               </div>
@@ -139,16 +140,17 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
             {/* SFX */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="pixel-text text-[10px] text-neon-pink">
+                <label className="pixel-text text-xs block" style={{ color: '#ff10f0' }}>
                   {t.audio.sfx}
                 </label>
                 <button
                   onClick={() => handleToggle('sfxEnabled')}
-                  className={`pixel-text text-[10px] px-2 py-1 border rounded transition-colors ${
+                  className={`pixel-text text-xs px-2 py-1 border rounded transition-colors ${
                     settings.sfxEnabled
-                      ? 'border-neon-green text-neon-green hover:bg-neon-green/20'
+                      ? 'border-neon-green hover:bg-neon-green/20'
                       : 'border-gray-600 text-gray-600 hover:bg-gray-600/20'
                   }`}
+                  style={settings.sfxEnabled ? { color: '#00ff00' } : undefined}
                 >
                   {settings.sfxEnabled ? t.audio.on : t.audio.off}
                 </button>
@@ -166,7 +168,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
                   }`}
                   style={{ accentColor: '#ff10f0' }}
                 />
-                <span className="pixel-text text-[10px] text-white w-10 text-right">
+                <span className="pixel-text text-xs text-white w-12 text-right">
                   {Math.round(settings.sfxVolume * 100)}%
                 </span>
               </div>
