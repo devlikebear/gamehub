@@ -115,13 +115,6 @@
     text-transform: uppercase;
   }
 
-  .neon-text {
-    text-shadow:
-      0 0 1px currentColor,
-      0 0 2px currentColor,
-      0 0 4px currentColor;
-  }
-
   .text-bright {
     color: var(--neon-cyan);
     font-weight: 600;
