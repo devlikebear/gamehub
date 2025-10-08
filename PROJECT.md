@@ -160,11 +160,11 @@ gamehub/
   - 스테이지마다 중력 파동 패턴이 변화
   - 난이도: ⭐⭐⭐⭐
 
-### Phase 5: 리더보드 & 소셜 기능
+### Phase 5: 리더보드 & 소셜 기능 ✅
 
 - [x] 리더보드 페이지 [#24](https://github.com/devlikebear/gamehub/issues/24)
 - [x] 로컬 최고 점수 기록 (게임별)
-- [ ] 점수 공유 기능 (SNS)
+- [x] 점수 공유 기능 (SNS) [#55](https://github.com/devlikebear/gamehub/issues/55)
 
 ### Phase 6: 개선 & 최적화
 
