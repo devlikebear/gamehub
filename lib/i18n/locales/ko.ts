@@ -25,6 +25,8 @@ export const ko = {
     on: 'ON',
     off: 'OFF',
     note: '설정은 브라우저에 자동 저장됩니다',
+    bgmBy: 'BGM',
+    license: '라이선스',
   },
 
   // Home Page

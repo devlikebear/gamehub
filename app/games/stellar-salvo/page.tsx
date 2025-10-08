@@ -150,6 +150,30 @@ export default function StellarSalvoPage() {
           </div>
         </section>
 
+        {/* 오디오 크레딧 */}
+        <section className="text-center pt-4 pb-2">
+          <p className="pixel-text text-[10px] text-gray-500">
+            {t.audio.bgmBy}{' '}
+            <a
+              href="https://oblidivmmusic.blogspot.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bright-purple hover:text-bright-cyan transition-colors"
+            >
+              Oblidivm
+            </a>
+            {' '}•{' '}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-bright-purple hover:text-bright-cyan transition-colors"
+            >
+              CC-BY 4.0
+            </a>
+          </p>
+        </section>
+
         {/* 하단 네비게이션 */}
         <section className="text-center pt-4">
           <Link

@@ -27,6 +27,8 @@ export const en: Translations = {
     on: 'ON',
     off: 'OFF',
     note: 'Settings are saved automatically to your browser',
+    bgmBy: 'BGM by',
+    license: 'License',
   },
 
   // Home Page
