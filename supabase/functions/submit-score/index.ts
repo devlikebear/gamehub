@@ -124,6 +124,7 @@ Deno.serve(async (req) => {
 
     const ALLOWED_ORIGINS = [
       Deno.env.get('NEXT_PUBLIC_SITE_URL'),
+      'https://gamehub.marvin-42.com',
       'http://localhost:3000',
       'http://localhost:3001',
     ].filter(Boolean);
