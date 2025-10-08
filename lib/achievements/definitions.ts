@@ -343,17 +343,101 @@ const cascadeBlocksAchievements: Achievement[] = [
   },
 ];
 
+// Photon Vanguard 업적 (기본)
+const photonVanguardAchievements: Achievement[] = [
+  {
+    id: 'photon-vanguard-first-defense',
+    gameId: 'photon-vanguard',
+    name: '첫 번째 방어',
+    nameEn: 'First Defense',
+    description: '10,000점 달성',
+    descriptionEn: 'Reach 10,000 points',
+    icon: '🛡️',
+    tier: 'bronze',
+    category: 'score',
+    requirement: { type: 'score', target: 10000, description: '10,000점 달성' },
+    reward: { points: 25 },
+  },
+];
+
+// Spectral Pursuit 업적 (기본)
+const spectralPursuitAchievements: Achievement[] = [
+  {
+    id: 'spectral-pursuit-first-escape',
+    gameId: 'spectral-pursuit',
+    name: '첫 번째 탈출',
+    nameEn: 'First Escape',
+    description: '5,000점 달성',
+    descriptionEn: 'Reach 5,000 points',
+    icon: '👻',
+    tier: 'bronze',
+    category: 'score',
+    requirement: { type: 'score', target: 5000, description: '5,000점 달성' },
+    reward: { points: 25 },
+  },
+];
+
+// Starshard Drift 업적 (기본)
+const starshardDriftAchievements: Achievement[] = [
+  {
+    id: 'starshard-drift-first-collection',
+    gameId: 'starshard-drift',
+    name: '첫 번째 회수',
+    nameEn: 'First Collection',
+    description: '8,000점 달성',
+    descriptionEn: 'Reach 8,000 points',
+    icon: '💎',
+    tier: 'bronze',
+    category: 'score',
+    requirement: { type: 'score', target: 8000, description: '8,000점 달성' },
+    reward: { points: 25 },
+  },
+];
+
+// Prism Smash 업적 (기본)
+const prismSmashAchievements: Achievement[] = [
+  {
+    id: 'prism-smash-first-break',
+    gameId: 'prism-smash',
+    name: '첫 번째 파괴',
+    nameEn: 'First Break',
+    description: '5,000점 달성',
+    descriptionEn: 'Reach 5,000 points',
+    icon: '🔨',
+    tier: 'bronze',
+    category: 'score',
+    requirement: { type: 'score', target: 5000, description: '5,000점 달성' },
+    reward: { points: 25 },
+  },
+];
+
+// Pulse Paddles 업적 (기본)
+const pulsePaddlesAchievements: Achievement[] = [
+  {
+    id: 'pulse-paddles-first-win',
+    gameId: 'pulse-paddles',
+    name: '첫 번째 승리',
+    nameEn: 'First Win',
+    description: '첫 매치 승리',
+    descriptionEn: 'Win your first match',
+    icon: '🏓',
+    tier: 'bronze',
+    category: 'skill',
+    requirement: { type: 'special', target: 1, description: '매치 승리' },
+    reward: { points: 50 },
+  },
+];
+
 // 전체 업적 맵
 export const ALL_ACHIEVEMENTS: Record<string, Achievement[]> = {
   'stellar-salvo': stellarSalvoAchievements,
   'neon-serpent': neonSerpentAchievements,
   'cascade-blocks': cascadeBlocksAchievements,
-  // 다른 게임 업적은 추후 추가
-  'prism-smash': [],
-  'pulse-paddles': [],
-  'photon-vanguard': [],
-  'spectral-pursuit': [],
-  'starshard-drift': [],
+  'photon-vanguard': photonVanguardAchievements,
+  'spectral-pursuit': spectralPursuitAchievements,
+  'starshard-drift': starshardDriftAchievements,
+  'prism-smash': prismSmashAchievements,
+  'pulse-paddles': pulsePaddlesAchievements,
 };
 
 // 게임별 업적 가져오기

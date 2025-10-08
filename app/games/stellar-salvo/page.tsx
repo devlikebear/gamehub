@@ -11,6 +11,8 @@ import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse
 import { loadAllSounds } from '@/lib/audio/sounds';
 import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { useI18n } from '@/lib/i18n/provider';
+import { useAchievements } from '@/hooks/useAchievements';
+import { AchievementNotificationQueue } from '@/components/achievements/AchievementNotification';
 
 const GAME_ID = 'stellar-salvo';
 
@@ -20,11 +22,20 @@ export default function StellarSalvoPage() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const { unlockedAchievements, checkAchievements, clearUnlocked } = useAchievements();
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
     setModalOpen(true);
-  }, []);
+
+    // 업적 체크
+    checkAchievements(GAME_ID, {
+      score: payload.score,
+      time: payload.stats?.timeElapsed,
+      killCount: payload.stats?.killCount,
+      special: payload.stats?.special,
+    });
+  }, [checkAchievements]);
 
   // 오디오 시스템 초기화 및 BGM 재생
   useEffect(() => {
@@ -70,6 +81,14 @@ export default function StellarSalvoPage() {
 
   return (
     <main className="min-h-screen py-16 px-4 md:py-20">
+      {/* 업적 해금 알림 */}
+      {unlockedAchievements.length > 0 && (
+        <AchievementNotificationQueue
+          achievements={unlockedAchievements}
+          onAllComplete={clearUnlocked}
+        />
+      )}
+
       <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">

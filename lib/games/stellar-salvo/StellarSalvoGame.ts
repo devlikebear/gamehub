@@ -49,6 +49,7 @@ export class StellarSalvoGame extends BaseGame {
   private score: ScoreState = { value: 0, multiplier: 1, streakTimer: 0 };
   private energy = 1;
   private timeElapsed = 0;
+  private killCount = 0;
   private gameOver = false;
   private victory = false;
   private readonly gameId = 'stellar-salvo';
@@ -207,6 +208,7 @@ export class StellarSalvoGame extends BaseGame {
 
       if (hitByPulse) {
         destroyedThisFrame += 1;
+        this.killCount += 1;
         this.score.value += 120 * this.score.multiplier;
         this.energy = Math.min(1, this.energy + 0.08);
         continue;
@@ -244,11 +246,25 @@ export class StellarSalvoGame extends BaseGame {
   }
 
   private reportGameResult(outcome: 'victory' | 'defeat'): void {
+    const special: Record<string, number> = {};
+
+    // Perfect Defense 업적 체크: 웨이브 10을 90% 이상 에너지로 클리어
+    if (this.waves.waveNumber >= 10 && this.energy >= 0.9) {
+      special['perfect-defense-wave10'] = 1;
+    }
+
     this.notifyGameComplete({
       gameId: this.gameId,
       outcome,
       score: this.score.value,
       timestamp: new Date().toISOString(),
+      stats: {
+        timeElapsed: this.timeElapsed,
+        killCount: this.killCount,
+        wave: this.waves.waveNumber,
+        energy: this.energy,
+        special,
+      },
     });
   }
 
