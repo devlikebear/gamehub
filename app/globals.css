@@ -77,6 +77,29 @@
 @layer components {
   .pixel-text {
     font-family: var(--font-pixel), cursive;
+  }
+
+  /* Force Galmuri for Korean text */
+  html[lang="ko"] .pixel-text,
+  html[lang="ko"] h1,
+  html[lang="ko"] h2,
+  html[lang="ko"] h3,
+  html[lang="ko"] button,
+  html[lang="ko"] .text-bright,
+  html[lang="ko"] .text-bright-pink,
+  html[lang="ko"] .text-bright-yellow,
+  html[lang="ko"] .text-bright-green,
+  html[lang="ko"] .text-bright-purple {
+    font-family: var(--font-galmuri), monospace;
+  }
+
+  /* Force Press Start 2P for English text */
+  html[lang="en"] .pixel-text,
+  html[lang="en"] h1,
+  html[lang="en"] h2,
+  html[lang="en"] h3,
+  html[lang="en"] button {
+    font-family: var(--font-press-start), monospace;
     text-transform: uppercase;
   }
 

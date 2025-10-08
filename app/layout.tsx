@@ -22,6 +22,7 @@ const galmuri = localFont({
   src: "./fonts/Galmuri11.woff2",
   display: "swap",
   variable: "--font-galmuri",
+  weight: "400",
 });
 
 export const metadata: Metadata = {
