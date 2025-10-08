@@ -81,7 +81,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
           <div className="space-y-4">
             {/* 마스터 볼륨 */}
             <div>
-              <label className="pixel-text text-[10px] text-bright-yellow block mb-2">
+              <label className="pixel-text text-[10px] text-neon-yellow block mb-2">
                 {t.audio.masterVolume}
               </label>
               <div className="flex items-center gap-3">
@@ -91,7 +91,8 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
                   max="100"
                   value={settings.masterVolume * 100}
                   onChange={(e) => handleVolumeChange('masterVolume', Number(e.target.value) / 100)}
-                  className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-bright-yellow slider-thumb"
+                  className="flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-yellow"
+                  style={{ accentColor: '#ffff00' }}
                 />
                 <span className="pixel-text text-[10px] text-white w-10 text-right">
                   {Math.round(settings.masterVolume * 100)}%
@@ -102,14 +103,14 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
             {/* BGM */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="pixel-text text-[10px] text-bright-purple">
+                <label className="pixel-text text-[10px] text-neon-purple">
                   {t.audio.bgm}
                 </label>
                 <button
                   onClick={() => handleToggle('bgmEnabled')}
                   className={`pixel-text text-[10px] px-2 py-1 border rounded transition-colors ${
                     settings.bgmEnabled
-                      ? 'border-bright-green text-bright-green hover:bg-bright-green/20'
+                      ? 'border-neon-green text-neon-green hover:bg-neon-green/20'
                       : 'border-gray-600 text-gray-600 hover:bg-gray-600/20'
                   }`}
                 >
@@ -124,9 +125,10 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
                   value={settings.bgmVolume * 100}
                   onChange={(e) => handleVolumeChange('bgmVolume', Number(e.target.value) / 100)}
                   disabled={!settings.bgmEnabled}
-                  className={`flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-bright-purple slider-thumb ${
+                  className={`flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-purple ${
                     !settings.bgmEnabled ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
+                  style={{ accentColor: '#9d00ff' }}
                 />
                 <span className="pixel-text text-[10px] text-white w-10 text-right">
                   {Math.round(settings.bgmVolume * 100)}%
@@ -137,14 +139,14 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
             {/* SFX */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="pixel-text text-[10px] text-bright-pink">
+                <label className="pixel-text text-[10px] text-neon-pink">
                   {t.audio.sfx}
                 </label>
                 <button
                   onClick={() => handleToggle('sfxEnabled')}
                   className={`pixel-text text-[10px] px-2 py-1 border rounded transition-colors ${
                     settings.sfxEnabled
-                      ? 'border-bright-green text-bright-green hover:bg-bright-green/20'
+                      ? 'border-neon-green text-neon-green hover:bg-neon-green/20'
                       : 'border-gray-600 text-gray-600 hover:bg-gray-600/20'
                   }`}
                 >
@@ -159,9 +161,10 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
                   value={settings.sfxVolume * 100}
                   onChange={(e) => handleVolumeChange('sfxVolume', Number(e.target.value) / 100)}
                   disabled={!settings.sfxEnabled}
-                  className={`flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-bright-pink slider-thumb ${
+                  className={`flex-1 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-pink ${
                     !settings.sfxEnabled ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
+                  style={{ accentColor: '#ff10f0' }}
                 />
                 <span className="pixel-text text-[10px] text-white w-10 text-right">
                   {Math.round(settings.sfxVolume * 100)}%
@@ -178,24 +181,61 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
       )}
 
       <style jsx>{`
-        .slider-thumb::-webkit-slider-thumb {
+        .slider-yellow::-webkit-slider-thumb {
           appearance: none;
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: currentColor;
+          background: #ffff00;
           cursor: pointer;
-          box-shadow: 0 0 8px currentColor;
+          box-shadow: 0 0 8px #ffff00;
         }
-
-        .slider-thumb::-moz-range-thumb {
+        .slider-yellow::-moz-range-thumb {
           width: 16px;
           height: 16px;
           border-radius: 50%;
-          background: currentColor;
+          background: #ffff00;
           cursor: pointer;
           border: none;
-          box-shadow: 0 0 8px currentColor;
+          box-shadow: 0 0 8px #ffff00;
+        }
+
+        .slider-purple::-webkit-slider-thumb {
+          appearance: none;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: #9d00ff;
+          cursor: pointer;
+          box-shadow: 0 0 8px #9d00ff;
+        }
+        .slider-purple::-moz-range-thumb {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: #9d00ff;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 0 8px #9d00ff;
+        }
+
+        .slider-pink::-webkit-slider-thumb {
+          appearance: none;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: #ff10f0;
+          cursor: pointer;
+          box-shadow: 0 0 8px #ff10f0;
+        }
+        .slider-pink::-moz-range-thumb {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: #ff10f0;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 0 8px #ff10f0;
         }
       `}</style>
     </div>
