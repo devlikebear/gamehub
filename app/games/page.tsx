@@ -152,7 +152,9 @@ export default function GamesPage() {
                 {t.gamesPage.difficulty} {selectedGame.difficulty}
               </span>
               <span className="px-3 py-1 border border-bright-purple text-bright-purple pixel-text text-[10px] rounded-md">
-                {t.games[selectedGame.id as keyof typeof t.games]?.controlsSummary || selectedGame.controls}
+                {'controlsSummary' in t.games[selectedGame.id as keyof typeof t.games]
+                  ? (t.games[selectedGame.id as keyof typeof t.games] as any).controlsSummary
+                  : selectedGame.controls}
               </span>
               <span className="px-3 py-1 border border-bright-green text-bright-green pixel-text text-[10px] rounded-md">
                 {selectedGame.status === 'playable' ? t.gamesPage.playable : t.gamesPage.comingSoon}
@@ -214,7 +216,11 @@ export default function GamesPage() {
                 </div>
                 <p className="pixel-text text-xs text-center mb-3 leading-relaxed" style={{ color: '#00f0ff' }}>{t.games[game.id as keyof typeof t.games]?.description || game.description}</p>
                 <div className="text-center mb-4">
-                  <p className="pixel-text text-bright-purple text-xs">{t.games[game.id as keyof typeof t.games]?.controlsSummary || game.controls}</p>
+                  <p className="pixel-text text-bright-purple text-xs">
+                    {'controlsSummary' in t.games[game.id as keyof typeof t.games]
+                      ? (t.games[game.id as keyof typeof t.games] as any).controlsSummary
+                      : game.controls}
+                  </p>
                 </div>
                 {game.status === 'coming-soon' && (
                   <div className="absolute top-4 right-4">

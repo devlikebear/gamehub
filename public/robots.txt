@@ -1,0 +1,28 @@
+# GameHub - Robots.txt
+
+# Allow all robots
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes (if any in future)
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://gamehub.example.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Specific rules for Google
+User-agent: Googlebot
+Allow: /
+Allow: /games/
+Allow: /leaderboard/
+Allow: /about/
+
+# Specific rules for Bing
+User-agent: Bingbot
+Allow: /
+Allow: /games/
+Allow: /leaderboard/
+Allow: /about/
