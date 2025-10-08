@@ -38,9 +38,9 @@ interface PulseState {
   lifetime: number;
 }
 
-const FIELD_WIDTH = 1400;
-const FIELD_HEIGHT = 900;
-const CANVAS_PADDING = 60;
+const FIELD_WIDTH = 80;
+const FIELD_HEIGHT = 56;
+const CANVAS_PADDING = 54;
 const BOOST_DURATION = 900;
 const PULSE_COOLDOWN = 3600;
 const PULSE_LIFETIME = 620;
@@ -99,6 +99,7 @@ export class StarshardDriftGame extends BaseGame {
       rotation: rotationInput,
       damping,
     });
+    this.physics = this.constrainShipToField(this.physics);
 
     if (this.input.justPressed('Shift')) {
       this.physics = applyBoostPulse(this.physics, { boostScale: 1.45, durationMs: BOOST_DURATION });
@@ -112,6 +113,7 @@ export class StarshardDriftGame extends BaseGame {
     this.resonance = stepResonanceField(this.resonance, deltaTime, {
       stabilization: this.pulses.some((pulse) => pulse.active) ? 0.35 : 0,
     });
+    this.resonance = this.constrainShardsToField(this.resonance);
 
     this.handleShardCollisions();
     this.updateTrails(deltaTime);
@@ -430,6 +432,39 @@ export class StarshardDriftGame extends BaseGame {
     this.timeElapsed = 0;
     this.pulses = [];
     this.trails = [];
+  }
+
+  private constrainShipToField(state: DriftPhysicsState): DriftPhysicsState {
+    const halfWidth = FIELD_WIDTH / 2;
+    const halfHeight = FIELD_HEIGHT / 2;
+    const clampedPosition = {
+      x: clamp(-halfWidth, halfWidth, state.ship.position.x),
+      y: clamp(-halfHeight, halfHeight, state.ship.position.y),
+    };
+
+    return {
+      ...state,
+      ship: {
+        ...state.ship,
+        position: clampedPosition,
+      },
+    };
+  }
+
+  private constrainShardsToField(state: ResonanceFieldState): ResonanceFieldState {
+    const halfWidth = FIELD_WIDTH / 2;
+    const halfHeight = FIELD_HEIGHT / 2;
+
+    return {
+      ...state,
+      shards: state.shards.map((shard) => ({
+        ...shard,
+        position: {
+          x: clamp(-halfWidth, halfWidth, shard.position.x),
+          y: clamp(-halfHeight, halfHeight, shard.position.y),
+        },
+      })),
+    };
   }
 }
 
