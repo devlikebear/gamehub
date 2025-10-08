@@ -9,7 +9,7 @@ import { saveLocalRank, loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 import { loadAllSounds } from '@/lib/audio/sounds';
-import { playGameBGM, stopGameBGM } from '@/lib/audio/bgmPlayer';
+import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { useI18n } from '@/lib/i18n/provider';
 
 const GAME_ID = 'stellar-salvo';
