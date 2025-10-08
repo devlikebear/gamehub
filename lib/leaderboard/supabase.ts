@@ -1,51 +1,38 @@
 import type { LeaderboardEntry, LeaderboardSubmissionPayload, LeaderboardSubmissionResponse } from './types';
 
-const TABLE_NAME = 'leaderboard_entries';
+/**
+ * Supabase Edge Function 클라이언트
+ * Edge Function URL로 리더보드 요청을 전송합니다.
+ */
 
-function getEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing environment variable: ${name}`);
+function getEdgeFunctionUrl(): string {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!supabaseUrl) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_URL environment variable');
   }
-  return value;
-}
-
-function getSupabaseUrl(): string {
-  return getEnv('NEXT_PUBLIC_SUPABASE_URL');
+  // Edge Function URL format: https://<project-ref>.supabase.co/functions/v1/<function-name>
+  return `${supabaseUrl}/functions/v1/submit-score`;
 }
 
 function getAnonKey(): string {
-  return getEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-}
-
-function getServiceKey(): string {
-  return getEnv('SUPABASE_SERVICE_ROLE_KEY');
-}
-
-async function supabaseFetch(path: string, init: RequestInit = {}, useServiceKey = false): Promise<Response> {
-  const url = `${getSupabaseUrl()}${path}`;
-  const headers = new Headers(init.headers);
-  const key = useServiceKey ? getServiceKey() : getAnonKey();
-  headers.set('apikey', key);
-  headers.set('Authorization', `Bearer ${key}`);
-  if (!headers.has('Content-Type') && init.method && init.method !== 'GET') {
-    headers.set('Content-Type', 'application/json');
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!key) {
+    throw new Error('Missing NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable');
   }
-  return fetch(url, { ...init, headers });
+  return key;
 }
 
+/**
+ * 리더보드 조회 (GET)
+ */
 export async function fetchLeaderboard(gameId: string, limit = 100): Promise<LeaderboardEntry[]> {
-  const params = new URLSearchParams({
-    select: 'id,game_id,nickname,score,created_at',
-    'game_id': `eq.${gameId}`,
-  });
-  params.append('order', 'score.desc');
-  params.append('order', 'created_at.asc');
-  params.append('limit', String(limit));
+  const url = `${getEdgeFunctionUrl()}?gameId=${encodeURIComponent(gameId)}&limit=${limit}`;
 
-  const response = await supabaseFetch(`/rest/v1/${TABLE_NAME}?${params.toString()}`, {
+  const response = await fetch(url, {
+    method: 'GET',
     headers: {
-      Prefer: 'count=exact',
+      'Authorization': `Bearer ${getAnonKey()}`,
+      'Content-Type': 'application/json',
     },
   });
 
@@ -53,7 +40,10 @@ export async function fetchLeaderboard(gameId: string, limit = 100): Promise<Lea
     throw new Error(`Failed to fetch leaderboard: ${response.statusText}`);
   }
 
-  const data = (await response.json()) as Array<{
+  const data = await response.json();
+
+  // Edge Function response format: { entries: [...] }
+  const entries = data.entries as Array<{
     id: string;
     game_id: string;
     nickname: string;
@@ -61,7 +51,7 @@ export async function fetchLeaderboard(gameId: string, limit = 100): Promise<Lea
     created_at: string;
   }>;
 
-  return data.map((entry) => ({
+  return entries.map((entry) => ({
     id: entry.id,
     gameId: entry.game_id,
     nickname: entry.nickname,
@@ -70,105 +60,52 @@ export async function fetchLeaderboard(gameId: string, limit = 100): Promise<Lea
   }));
 }
 
+/**
+ * 점수 제출 (POST)
+ */
 export async function submitScore(payload: LeaderboardSubmissionPayload): Promise<LeaderboardSubmissionResponse> {
-  const insertResponse = await supabaseFetch(`/rest/v1/${TABLE_NAME}`, {
+  const url = getEdgeFunctionUrl();
+
+  const response = await fetch(url, {
     method: 'POST',
     headers: {
-      Prefer: 'return=representation',
+      'Authorization': `Bearer ${getAnonKey()}`,
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify([
-      {
-        game_id: payload.gameId,
-        nickname: payload.nickname,
-        score: payload.score,
-      },
-    ]),
-  }, true);
+    body: JSON.stringify(payload),
+  });
 
-  if (!insertResponse.ok) {
-    const detail = await safeJson(insertResponse);
-    throw new Error(`Failed to submit score: ${insertResponse.statusText} ${detail ? JSON.stringify(detail) : ''}`);
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(`Failed to submit score: ${response.statusText} ${JSON.stringify(errorData)}`);
   }
 
-  const [inserted] = (await insertResponse.json()) as Array<{
+  const data = await response.json();
+
+  // Edge Function response format: { result: {...}, leaderboard: [...] }
+  const result = data.result as {
     id: string;
-    created_at: string;
+    game_id: string;
+    nickname: string;
     score: number;
+    created_at: string;
+  };
+
+  const leaderboard = data.leaderboard as Array<{
+    id: string;
+    game_id: string;
+    nickname: string;
+    score: number;
+    created_at: string;
   }>;
 
-  await trimLeaderboard(payload.gameId);
-
-  const rank = await fetchRank(payload.gameId, payload.score, inserted.created_at);
+  // Calculate rank from leaderboard position
+  const rank = leaderboard.findIndex((entry) => entry.id === result.id) + 1;
 
   return {
-    rank,
-    nickname: payload.nickname,
-    score: payload.score,
-    submittedAt: inserted.created_at,
+    rank: rank > 0 ? rank : leaderboard.length + 1,
+    nickname: result.nickname,
+    score: result.score,
+    submittedAt: result.created_at,
   };
-}
-
-async function fetchRank(gameId: string, score: number, createdAt: string): Promise<number> {
-  const query = new URLSearchParams({
-    select: 'id',
-    'game_id': `eq.${gameId}`,
-    'score': `gt.${score}`,
-  });
-  const responseGreater = await supabaseFetch(`/rest/v1/${TABLE_NAME}?${query.toString()}`, {
-    headers: {
-      Prefer: 'count=exact',
-    },
-  }, true);
-  const countGreater = parseCount(responseGreater.headers.get('content-range'));
-
-  // handle ties by counting equal scores with earlier creation time
-  const tieQuery = new URLSearchParams({
-    select: 'id',
-    'game_id': `eq.${gameId}`,
-    'score': `eq.${score}`,
-    'created_at': `lt.${createdAt}`,
-  });
-  const responseEqual = await supabaseFetch(`/rest/v1/${TABLE_NAME}?${tieQuery.toString()}`, {
-    headers: {
-      Prefer: 'count=exact',
-    },
-  }, true);
-  const countEqualBefore = parseCount(responseEqual.headers.get('content-range'));
-
-  return countGreater + countEqualBefore + 1;
-}
-
-async function trimLeaderboard(gameId: string): Promise<void> {
-  const params = new URLSearchParams({
-    select: 'id',
-    'game_id': `eq.${gameId}`,
-    order: 'score.desc',
-  });
-  params.append('order', 'created_at.asc');
-  params.append('limit', '100');
-  params.append('offset', '100');
-
-  const response = await supabaseFetch(`/rest/v1/${TABLE_NAME}?${params.toString()}`, {}, true);
-  if (!response.ok) return;
-  const extra = (await response.json()) as Array<{ id: string }>;
-  if (extra.length === 0) return;
-
-  const ids = extra.map((entry) => `"${entry.id}"`).join(',');
-  await supabaseFetch(`/rest/v1/${TABLE_NAME}?id=in.(${ids})`, { method: 'DELETE' }, true);
-}
-
-function parseCount(contentRange: string | null): number {
-  if (!contentRange) return 0;
-  const parts = contentRange.split('/');
-  if (parts.length !== 2) return 0;
-  const total = Number(parts[1]);
-  return Number.isFinite(total) ? total : 0;
-}
-
-async function safeJson(response: Response): Promise<unknown | null> {
-  try {
-    return await response.json();
-  } catch {
-    return null;
-  }
 }
