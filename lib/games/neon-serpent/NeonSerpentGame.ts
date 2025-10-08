@@ -26,7 +26,6 @@ const OVERLOAD_THRESHOLD = 100;
 const MIN_SEGMENTS_AFTER_HAZARD = 3;
 
 export class NeonSerpentGame extends BaseGame {
-  private readonly gameId = 'neon-serpent';
   private serpent: SerpentSegment[] = [];
   private direction: Vector2 = { x: 1, y: 0 };
   private nextDirection: Vector2 = { x: 1, y: 0 };

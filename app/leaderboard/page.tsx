@@ -6,6 +6,7 @@ import type { LeaderboardEntry } from '@/lib/leaderboard/types';
 import { loadLocalRank } from '@/lib/leaderboard/storage';
 import { fetchLeaderboard } from '@/lib/leaderboard/supabase';
 import { useI18n } from '@/lib/i18n/provider';
+import { StatisticsPanel } from '@/components/statistics/StatisticsPanel';
 
 export default function LeaderboardPage() {
   const { t } = useI18n();
@@ -65,6 +66,9 @@ export default function LeaderboardPage() {
             {t.leaderboard.description}
           </p>
         </section>
+
+        {/* 전체 통계 패널 */}
+        <StatisticsPanel />
 
         <section className="flex flex-wrap items-center justify-center gap-3">
           {GAME_OPTIONS.map((option) => (

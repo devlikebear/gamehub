@@ -49,7 +49,6 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 export class PrismSmashGame extends BaseGame {
-  private readonly gameId = 'prism-smash';
   private paddle: Paddle;
   private ball: Ball;
 

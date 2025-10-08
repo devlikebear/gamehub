@@ -52,7 +52,6 @@ export class StellarSalvoGame extends BaseGame {
   private killCount = 0;
   private gameOver = false;
   private victory = false;
-  private readonly gameId = 'stellar-salvo';
 
   constructor(config: GameConfig) {
     super(config);

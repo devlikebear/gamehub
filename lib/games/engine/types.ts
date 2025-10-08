@@ -1,7 +1,7 @@
 export type GameOutcome = 'victory' | 'defeat';
 
 export interface GameCompletionPayload {
-  gameId: string;
+  gameId?: string; // Optional for backwards compatibility
   score: number;
   outcome: GameOutcome;
   timestamp: string;

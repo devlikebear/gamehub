@@ -47,7 +47,6 @@ const PULSE_COOLDOWN = 3600;
 const PULSE_LIFETIME = 620;
 
 export class StarshardDriftGame extends BaseGame {
-  private readonly gameId = 'starshard-drift';
   private readonly input: InputHandler;
   private physics: DriftPhysicsState;
   private resonance: ResonanceFieldState;

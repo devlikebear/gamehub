@@ -55,7 +55,6 @@ interface AfterimageBarrier {
 }
 
 export class PhotonVanguardGame extends BaseGame {
-  private readonly gameId = 'photon-vanguard';
   private readonly input: InputHandler;
   private orbitState: OrbitState;
   private enemies: EnemyInstance[] = [];
