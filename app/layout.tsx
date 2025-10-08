@@ -1,7 +1,21 @@
 import type { Metadata } from "next";
+import { Inter, Press_Start_2P } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-press-start",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="font-sans">
+    <html lang="ko" className={`${inter.variable} ${pressStart2P.variable}`}>
       <body className="antialiased font-sans flex flex-col min-h-screen">
         <Navbar />
         <div className="flex-1 pt-16">

@@ -7,8 +7,15 @@
     --neon-purple: #9d00ff;
     --neon-yellow: #ffff00;
     --neon-green: #00ff00;
-    --font-inter: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    --font-press-start: 'Press Start 2P', 'Courier New', Courier, monospace;
+  }
+
+  /* Language-specific pixel fonts */
+  html[lang="en"] {
+    --font-pixel: var(--font-press-start);
+  }
+
+  html[lang="ko"] {
+    --font-pixel: var(--font-galmuri);
   }
 
   * {
@@ -24,7 +31,7 @@
   }
 
   body {
-    font-family: var(--font-inter);
+    font-family: var(--font-inter), 'Segoe UI', system-ui, sans-serif;
     background: linear-gradient(135deg, #1a0033 0%, #000000 50%, #001a33 100%);
     min-height: 100vh;
     position: relative;
@@ -69,7 +76,7 @@
 
 @layer components {
   .pixel-text {
-    font-family: var(--font-press-start), cursive;
+    font-family: var(--font-pixel), cursive;
     text-transform: uppercase;
   }
 
