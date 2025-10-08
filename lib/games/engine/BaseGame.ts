@@ -2,6 +2,9 @@ import { GameLoop } from './GameLoop';
 import { FONTS, NEON_COLORS, OVERLAY } from './constants';
 import type { GameCompletionPayload } from './types';
 import { startPlaySession, endPlaySession, type PlaySession } from '../../storage/statistics';
+import type { DifficultyLevel } from '../../difficulty/types';
+import { loadDifficulty } from '../../difficulty/storage';
+import { getDifficultyConfig } from '../../difficulty/data';
 
 /**
  * BaseGame - 모든 게임의 기본 클래스
@@ -14,6 +17,7 @@ export interface GameConfig {
   width?: number;
   height?: number;
   gameId?: string; // 통계 추적을 위한 게임 ID
+  difficulty?: DifficultyLevel; // 난이도 설정
   onGameComplete?: (payload: GameCompletionPayload) => void;
 }
 
@@ -35,12 +39,23 @@ export abstract class BaseGame extends GameLoop {
   private playSession?: PlaySession;
   private statisticsEnabled = true;
 
+  // Difficulty settings
+  protected difficulty: DifficultyLevel;
+  protected speedMultiplier: number = 1.0;
+  protected aiSpeedMultiplier: number = 1.0;
+  protected densityMultiplier: number = 1.0;
+  protected scoreMultiplier: number = 1.0;
+
   constructor(config: GameConfig) {
     super();
 
     this.canvas = config.canvas;
     this.gameId = config.gameId;
     this.onGameComplete = config.onGameComplete;
+
+    // 난이도 설정 로드 (config에 있으면 사용, 없으면 저장된 값 로드)
+    this.difficulty = config.difficulty || (config.gameId ? loadDifficulty(config.gameId) : 'normal');
+    this.applyDifficultySettings();
     const ctx = this.canvas.getContext('2d');
 
     if (!ctx) {
@@ -280,5 +295,38 @@ export abstract class BaseGame extends GameLoop {
     }
 
     ctx.restore();
+  }
+
+  /**
+   * 난이도 설정 적용
+   */
+  private applyDifficultySettings(): void {
+    const config = getDifficultyConfig(this.difficulty);
+    this.speedMultiplier = config.speedMultiplier;
+    this.aiSpeedMultiplier = config.aiSpeedMultiplier;
+    this.densityMultiplier = config.densityMultiplier;
+    this.scoreMultiplier = config.scoreMultiplier;
+  }
+
+  /**
+   * 난이도 변경
+   */
+  public setDifficulty(difficulty: DifficultyLevel): void {
+    this.difficulty = difficulty;
+    this.applyDifficultySettings();
+  }
+
+  /**
+   * 현재 난이도 가져오기
+   */
+  public getDifficulty(): DifficultyLevel {
+    return this.difficulty;
+  }
+
+  /**
+   * 난이도를 반영한 점수 계산
+   */
+  protected applyScoreMultiplier(baseScore: number): number {
+    return Math.floor(baseScore * this.scoreMultiplier);
   }
 }
