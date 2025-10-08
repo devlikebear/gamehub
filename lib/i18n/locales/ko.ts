@@ -38,24 +38,46 @@ export const ko = {
     callToAction: '모든 게임은 브라우저에서 즉시 실행됩니다! 자작된 컨셉이 없는 오리지널 컨텐츠입니다. 더 많은 내온 아케이드를 만들 수 있도록 피드백과 아이디어를 보내주세요!',
   },
 
+  // Game UI (common across all games)
+  gameUI: {
+    score: '점수',
+    highScore: '최고 점수',
+    level: '레벨',
+    lives: '생명',
+    time: '시간',
+    paused: '일시정지',
+    gameOver: '게임 오버',
+    pressSpace: 'Space를 눌러 시작',
+    pressEnter: 'Enter를 눌러 시작',
+    controls: '조작법',
+    backToMenu: '메뉴로 돌아가기',
+    playAgain: '다시 플레이',
+    submitScore: '점수 제출',
+    leaderboard: '리더보드',
+    topScores: '최고 점수',
+    yourScore: '내 점수',
+    enterNickname: '닉네임 입력',
+    loading: '로딩 중...',
+  },
+
   // Game specific
   games: {
     'stellar-salvo': {
       name: 'STELLAR SALVO',
       tagline: 'NEW TITLE',
-      description: '일정 패드로 따라 VOID WRAITH를 견제하는 내온 디펜스 슈팅',
+      description: '원형 궤도를 따라 VOID WRAITH를 견제하는 네온 디펜스 슈팅',
     },
     'photon-vanguard': {
       name: 'PHOTON VANGUARD',
-      description: '사각 방어권 파동 방어로 포문 근접을 막아내는 레드 슈팅',
+      description: '시간 왜곡과 파동 방어로 포톤 군단을 막아내는 궤도 수비',
     },
     'spectral-pursuit': {
       name: 'SPECTRAL PURSUIT',
-      description: '위장을 유지하며 리바이언스를 빠아내는 내온 스텔스 추격전',
+      description: '위장을 유지하며 라비린스를 벗어나는 네온 스텔스 추격전',
     },
     'cascade-blocks': {
       name: 'CASCADE BLOCKS',
-      description: '같은 공향을 이어가는 내온 퍼즐',
+      description: '컬러 공명을 이어가는 네온 퍼즐',
     },
     'starshard-drift': {
       name: 'STARSHARD DRIFT',

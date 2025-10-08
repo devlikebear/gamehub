@@ -40,6 +40,28 @@ export const en: Translations = {
     callToAction: 'All games run instantly in your browser with zero derived concepts! Send feedback and ideas to help create more neon arcade titles!',
   },
 
+  // Game UI (common across all games)
+  gameUI: {
+    score: 'Score',
+    highScore: 'High Score',
+    level: 'Level',
+    lives: 'Lives',
+    time: 'Time',
+    paused: 'Paused',
+    gameOver: 'Game Over',
+    pressSpace: 'Press Space to Start',
+    pressEnter: 'Press Enter to Start',
+    controls: 'Controls',
+    backToMenu: 'Back to Menu',
+    playAgain: 'Play Again',
+    submitScore: 'Submit Score',
+    leaderboard: 'Leaderboard',
+    topScores: 'Top Scores',
+    yourScore: 'Your Score',
+    enterNickname: 'Enter Nickname',
+    loading: 'Loading...',
+  },
+
   // Game specific
   games: {
     'stellar-salvo': {
