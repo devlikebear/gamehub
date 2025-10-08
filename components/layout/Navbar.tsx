@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import LanguageSwitcher from './LanguageSwitcher';
+import AudioSettings from '@/components/ui/AudioSettings';
 import { useI18n } from '@/lib/i18n/provider';
 
 export default function Navbar() {
@@ -38,12 +39,16 @@ export default function Navbar() {
               {t.common.about}
             </Link>
 
+            {/* Audio Settings */}
+            <AudioSettings />
+
             {/* Language Switcher */}
             <LanguageSwitcher />
           </div>
 
-          {/* Mobile: Language Switcher + Menu Button */}
+          {/* Mobile: Audio Settings + Language Switcher + Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
+            <AudioSettings />
             <LanguageSwitcher />
             <button className="text-neon-cyan hover:text-neon-pink transition-colors">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

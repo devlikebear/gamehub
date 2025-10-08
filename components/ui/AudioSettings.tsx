@@ -51,14 +51,14 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
   };
 
   return (
-    <div className="fixed top-20 right-4 z-50">
+    <div className="relative">
       {/* 토글 버튼 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="pixel-text text-xs px-3 py-2 bg-black/80 border-2 border-neon-cyan text-neon-cyan rounded-md hover:bg-neon-cyan/20 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.5)]"
+        className="text-neon-cyan hover:text-neon-pink transition-colors duration-300"
         aria-label={t.audio.settings}
       >
-        🔊 {t.audio.settings}
+        🔊
       </button>
 
       {/* 설정 패널 */}

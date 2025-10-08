@@ -6,7 +6,6 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { I18nProvider } from "@/lib/i18n/provider";
 import { StructuredData } from "./structured-data";
-import AudioSettings from "@/components/ui/AudioSettings";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -116,7 +115,6 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
         <I18nProvider>
           <Navbar />
-          <AudioSettings />
           <div className="flex-1 pt-16">
             {children}
           </div>
