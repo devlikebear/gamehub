@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useI18n } from '@/lib/i18n/provider';
 
 type GameStatus = 'playable' | 'coming-soon';
 type GameColor = 'green' | 'pink' | 'cyan' | 'yellow' | 'purple';
@@ -126,6 +127,7 @@ const playButtonClasses = {
 } as const;
 
 export default function GamesPage() {
+  const { t } = useI18n();
   const [selectedGameId, setSelectedGameId] = useState<string>(defaultSpotlightId);
   const selectedGame = games.find((game) => game.id === selectedGameId) ?? games[0];
 
@@ -133,54 +135,54 @@ export default function GamesPage() {
     <main className="min-h-screen py-20 px-4">
       <div className="container mx-auto">
         <section className="text-center mb-12 md:mb-16 space-y-3">
-          <h1 className="pixel-text text-4xl md:text-6xl text-bright neon-text">GAME ARCADE</h1>
-          <p className="text-bright-pink pixel-text text-sm tracking-wide">NEON DEFENSE · RETRO SHOOTERS · PUZZLE FUSION</p>
-          <p className="text-bright text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-            모든 타이틀이 플레이 가능한 오리지널 네온 아케이드입니다. 카드에 마우스를 올리거나 클릭해서 게임을 미리 소개받고,
-            마음에 드는 타이틀은 즉시 플레이하세요.
+          <h1 className="pixel-text text-4xl md:text-6xl neon-text" style={{ color: '#00f0ff' }}>{t.gamesPage.title}</h1>
+          <p className="text-bright-pink pixel-text text-sm tracking-wide">{t.gamesPage.subtitle}</p>
+          <p className="pixel-text text-sm md:text-base max-w-3xl mx-auto leading-relaxed" style={{ color: '#00f0ff' }}>
+            {t.gamesPage.description}
           </p>
         </section>
 
-        <section className="mb-12 md:mb-16 bg-black/60 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center">
+        <section className="mb-12 md:mb-16 bg-black/60 border border-[#00f0ff]/60 rounded-xl shadow-[0_0_20px_rgba(0,240,255,0.3)] p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center">
           <div className="flex-1 space-y-3 text-center md:text-left">
-            <span className="pixel-text text-xs text-bright-cyan uppercase tracking-wider">Game Spotlight</span>
-            <h2 className="pixel-text text-2xl md:text-3xl text-bright">{selectedGame.name}</h2>
-            <p className="text-bright text-sm md:text-base leading-relaxed">{selectedGame.description}</p>
+            <span className="pixel-text text-xs uppercase tracking-wider" style={{ color: '#00f0ff' }}>{t.gamesPage.spotlight}</span>
+            <h2 className="pixel-text text-2xl md:text-3xl" style={{ color: '#00f0ff' }}>{t.games[selectedGame.id as keyof typeof t.games]?.name || selectedGame.name}</h2>
+            <p className="pixel-text text-sm md:text-base leading-relaxed" style={{ color: '#00f0ff' }}>{t.games[selectedGame.id as keyof typeof t.games]?.description || selectedGame.description}</p>
             <div className="flex flex-wrap gap-3 justify-center md:justify-start pt-1">
               <span className="px-3 py-1 border border-bright-yellow text-bright-yellow pixel-text text-[10px] rounded-md">
-                난이도 {selectedGame.difficulty}
+                {t.gamesPage.difficulty} {selectedGame.difficulty}
               </span>
               <span className="px-3 py-1 border border-bright-purple text-bright-purple pixel-text text-[10px] rounded-md">
                 {selectedGame.controls}
               </span>
               <span className="px-3 py-1 border border-bright-green text-bright-green pixel-text text-[10px] rounded-md">
-                {selectedGame.status === 'playable' ? '플레이 가능' : '곧 공개'}
+                {selectedGame.status === 'playable' ? t.gamesPage.playable : t.gamesPage.comingSoon}
               </span>
             </div>
             <div>
               {selectedGame.status === 'playable' ? (
                 <Link
                   href={selectedGame.href ?? '#'}
-                  className="inline-block mt-4 px-6 py-2 border-2 border-bright-cyan text-bright pixel-text text-xs rounded-lg hover:bg-bright-cyan hover:text-black transition-all duration-300 shadow-neon-cyan hover:shadow-none"
+                  className="inline-block mt-4 px-6 py-2 border-2 border-[#00f0ff] pixel-text text-xs rounded-lg hover:bg-[#00f0ff]/10 transition-all duration-300 shadow-[0_0_15px_rgba(0,240,255,0.5)]"
+                  style={{ color: '#00f0ff' }}
                 >
-                  Play {selectedGame.name}
+                  {t.gamesPage.play} {t.games[selectedGame.id as keyof typeof t.games]?.name || selectedGame.name}
                 </Link>
               ) : (
                 <button
                   disabled
                   className="inline-block mt-4 px-6 py-2 border border-gray-600 text-gray-500 pixel-text text-xs rounded-lg cursor-not-allowed"
                 >
-                  Coming Soon
+                  {t.gamesPage.comingSoon}
                 </button>
               )}
             </div>
           </div>
           <div className="flex-1 w-full">
-            <div className="relative w-full aspect-video bg-gradient-to-br from-cyan-700/40 via-black to-purple-900/50 border border-bright-cyan/40 rounded-xl overflow-hidden">
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-bright">
+            <div className="relative w-full aspect-video bg-gradient-to-br from-cyan-700/40 via-black to-purple-900/50 border border-[#00f0ff]/40 rounded-xl overflow-hidden">
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
                 <span className="pixel-text text-5xl">{selectedGame.icon}</span>
-                <p className="text-bright text-xs md:text-sm max-w-sm text-center leading-relaxed px-4">
-                  카드 선택에 따라 이 영역이 갱신됩니다. 플레이 버튼을 누르면 해당 게임으로 이동합니다.
+                <p className="pixel-text text-xs md:text-sm max-w-sm text-center leading-relaxed px-4" style={{ color: '#00f0ff' }}>
+                  {t.gamesPage.previewNote}
                 </p>
               </div>
             </div>
@@ -205,12 +207,12 @@ export default function GamesPage() {
               >
                 <div className="text-6xl mb-4 text-center">{game.icon}</div>
                 <h2 className={`pixel-text text-sm text-center mb-2 ${textColorClasses[game.color]}`}>
-                  {game.name}
+                  {t.games[game.id as keyof typeof t.games]?.name || game.name}
                 </h2>
                 <div className="text-center mb-3">
                   <span className="text-bright-yellow text-sm">{game.difficulty}</span>
                 </div>
-                <p className="text-bright text-xs text-center mb-3 leading-relaxed">{game.description}</p>
+                <p className="pixel-text text-xs text-center mb-3 leading-relaxed" style={{ color: '#00f0ff' }}>{t.games[game.id as keyof typeof t.games]?.description || game.description}</p>
                 <div className="text-center mb-4">
                   <p className="text-bright-purple text-xs">{game.controls}</p>
                 </div>
@@ -237,11 +239,11 @@ export default function GamesPage() {
                       }`}
                       onClick={(event) => event.stopPropagation()}
                     >
-                      PLAY
+                      {t.gamesPage.play}
                     </Link>
                   ) : (
                     <span className="pixel-text text-xs px-6 py-2 rounded border border-gray-600 text-gray-500">
-                      COMING SOON
+                      {t.gamesPage.comingSoon}
                     </span>
                   )}
                 </div>
@@ -251,8 +253,8 @@ export default function GamesPage() {
         </section>
 
         <section className="text-center">
-          <p className="pixel-text text-bright text-xs md:text-sm max-w-2xl mx-auto leading-relaxed">
-            새로운 네온 아이디어가 떠오른다면 언제든 제보해주세요. 커뮤니티 피드백을 바탕으로 더 많은 오리지널 타이틀이 제작될 거예요.
+          <p className="pixel-text text-xs md:text-sm max-w-2xl mx-auto leading-relaxed" style={{ color: '#00f0ff' }}>
+            {t.gamesPage.feedbackNote}
           </p>
         </section>
       </div>

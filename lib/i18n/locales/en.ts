@@ -95,32 +95,52 @@ export const en: Translations = {
     nicknameNote: 'Don\'t like your nickname? A new randomly generated name is assigned each time you submit a score in-game.',
   },
 
+  // Games Page
+  gamesPage: {
+    title: 'GAME ARCADE',
+    subtitle: 'NEON DEFENSE · RETRO SHOOTERS · PUZZLE FUSION',
+    description: 'All titles are playable in this original neon arcade. Hover or click cards to preview games, then jump right into your favorite titles.',
+    spotlight: 'Game Spotlight',
+    difficulty: 'Difficulty',
+    playable: 'Playable',
+    comingSoon: 'Coming Soon',
+    play: 'PLAY',
+    previewNote: 'This area updates based on card selection. Click the play button to launch the game.',
+    feedbackNote: 'Got a neon game idea? Send it our way! Community feedback drives the creation of new original titles.',
+  },
+
   // About
   about: {
-    title: 'About GameHub',
-    mission: 'Our Mission',
-    missionText: 'GameHub is an original game platform that modernly reinterprets the essence of classic arcade games.',
-    coreValues: 'Core Values',
+    title: 'ABOUT GAMEHUB',
+    subtitle: 'Experience classic arcade games in your browser',
+    mission: 'OUR MISSION',
+    missionText1: 'GameHub evokes nostalgia for 80s-90s arcade parlors, providing easily accessible classic games for everyone.',
+    missionText2: 'No login or installation required - just click and play. All games are completely free with no ads.',
+    coreValues: 'CORE VALUES',
     values: {
-      original: {
-        title: '100% Original',
-        description: 'Every game is uniquely crafted content',
+      retro: {
+        title: 'RETRO VIBES',
+        description: 'Recreating the neon aesthetics and pixel art of 80s-90s arcade parlors.',
       },
-      opensource: {
-        title: 'Open Source',
-        description: 'Anyone can view and learn from the code',
+      instant: {
+        title: 'INSTANT PLAY',
+        description: 'Start playing with a single click - no complex setup required.',
+      },
+      easy: {
+        title: 'EASY CONTROLS',
+        description: 'Intuitive arrow keys and simple controls anyone can enjoy.',
       },
       free: {
-        title: 'Forever Free',
-        description: 'Pure gaming experience without ads',
-      },
-      community: {
-        title: 'Community Driven',
-        description: 'Built together based on your feedback',
+        title: 'FREE & OPEN',
+        description: 'Completely free and open source - everyone can contribute.',
       },
     },
-    techStack: 'Tech Stack',
-    openSource: 'Open Source',
-    openSourceText: 'This project is open source. Check out the code and contribute on GitHub.',
+    techStack: 'TECH STACK',
+    frontend: 'Frontend',
+    infrastructure: 'Infrastructure',
+    gameEngine: 'Game Engine',
+    openSource: 'OPEN SOURCE',
+    openSourceText: 'GameHub is an open source project. Anyone can check the source code and contribute on GitHub.',
+    viewOnGithub: 'VIEW ON GITHUB',
   },
 };

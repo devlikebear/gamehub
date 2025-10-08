@@ -93,33 +93,53 @@ export const ko = {
     nicknameNote: '닉네임이 마음에 들지 않으면 게임 내에서 새 점수를 등록할 때마다 자동으로 생성된 다른 이름을 선택할 수 있어요.',
   },
 
+  // Games Page
+  gamesPage: {
+    title: 'GAME ARCADE',
+    subtitle: 'NEON DEFENSE · RETRO SHOOTERS · PUZZLE FUSION',
+    description: '모든 타이틀이 플레이 가능한 오리지널 네온 아케이드입니다. 카드에 마우스를 올리거나 클릭해서 게임을 미리 소개받고, 마음에 드는 타이틀은 즉시 플레이하세요.',
+    spotlight: 'Game Spotlight',
+    difficulty: '난이도',
+    playable: '플레이 가능',
+    comingSoon: '곧 공개',
+    play: 'PLAY',
+    previewNote: '카드 선택에 따라 이 영역이 갱신됩니다. 플레이 버튼을 누르면 해당 게임으로 이동합니다.',
+    feedbackNote: '새로운 네온 아이디어가 떠오른다면 언제든 제보해주세요. 커뮤니티 피드백을 바탕으로 더 많은 오리지널 타이틀이 제작될 거예요.',
+  },
+
   // About
   about: {
-    title: 'About GameHub',
-    mission: '우리의 미션',
-    missionText: 'GameHub는 클래식 아케이드 게임의 감성을 현대적으로 재해석한 오리지널 게임 플랫폼입니다.',
-    coreValues: 'Core Values',
+    title: 'ABOUT GAMEHUB',
+    subtitle: '추억의 고전 아케이드 게임을 브라우저에서 즐기는 온라인 오락실',
+    mission: 'OUR MISSION',
+    missionText1: 'GameHub는 80-90년대 아케이드 오락실의 향수를 불러일으키며, 누구나 쉽게 접근할 수 있는 클래식 게임들을 제공합니다.',
+    missionText2: '로그인이나 설치 없이 바로 플레이할 수 있으며, 모든 게임은 완전 무료이고 광고도 없습니다.',
+    coreValues: 'CORE VALUES',
     values: {
-      original: {
-        title: '100% 오리지널',
-        description: '모든 게임은 직접 제작한 독창적인 콘텐츠',
+      retro: {
+        title: 'RETRO VIBES',
+        description: '80-90년대 아케이드 오락실의 네온 감성과 픽셀 아트를 재현했습니다.',
       },
-      opensource: {
-        title: '오픈소스',
-        description: '누구나 코드를 보고 배울 수 있음',
+      instant: {
+        title: 'INSTANT PLAY',
+        description: '복잡한 설정 없이 클릭 한 번으로 바로 게임을 시작할 수 있습니다.',
+      },
+      easy: {
+        title: 'EASY CONTROLS',
+        description: '직관적인 방향키와 간단한 조작으로 누구나 쉽게 즐길 수 있습니다.',
       },
       free: {
-        title: '영원히 무료',
-        description: '광고 없이 순수하게 즐기는 게임',
-      },
-      community: {
-        title: '커뮤니티 중심',
-        description: '피드백을 바탕으로 함께 만들어가는 게임',
+        title: 'FREE & OPEN',
+        description: '완전 무료이며 오픈소스로 누구나 기여할 수 있습니다.',
       },
     },
-    techStack: '기술 스택',
-    openSource: '오픈소스',
-    openSourceText: '이 프로젝트는 오픈소스입니다. GitHub에서 코드를 확인하고 기여할 수 있습니다.',
+    techStack: 'TECH STACK',
+    frontend: 'Frontend',
+    infrastructure: 'Infrastructure',
+    gameEngine: 'Game Engine',
+    openSource: 'OPEN SOURCE',
+    openSourceText: 'GameHub는 오픈소스 프로젝트입니다. 누구나 GitHub에서 소스코드를 확인하고 기여할 수 있습니다.',
+    viewOnGithub: 'VIEW ON GITHUB',
   },
 };
 
