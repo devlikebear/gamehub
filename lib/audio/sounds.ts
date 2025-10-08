@@ -38,7 +38,7 @@ export type SoundKey = (typeof SOUNDS)[keyof typeof SOUNDS];
 export async function loadAllSounds(): Promise<void> {
   await audioManager.init();
 
-  const context = (audioManager as any).audioContext;
+  const context = audioManager.getAudioContext();
   if (!context) {
     console.error('[Sounds] AudioContext not available');
     return;
@@ -65,7 +65,7 @@ export async function loadAllSounds(): Promise<void> {
 
     // AudioManager에 등록
     for (const [key, buffer] of Object.entries(soundBuffers)) {
-      (audioManager as any).audioBuffers.set(key, buffer);
+      audioManager.registerSound(key, buffer);
     }
 
     console.log('[Sounds] All sounds loaded successfully');
