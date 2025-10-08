@@ -19,10 +19,10 @@ const pressStart2P = Press_Start_2P({
   variable: "--font-press-start",
 });
 
-const galmuri = localFont({
-  src: "./fonts/Galmuri11.woff2",
+const dunggeunmo = localFont({
+  src: "../public/fonts/DungGeunMo.woff",
   display: "swap",
-  variable: "--font-galmuri",
+  variable: "--font-dunggeunmo",
   weight: "400",
 });
 
@@ -41,7 +41,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${inter.variable} ${pressStart2P.variable} ${galmuri.variable}`}>
+    <html lang="ko" className={`${inter.variable} ${pressStart2P.variable} ${dunggeunmo.variable}`}>
       <body className={`${inter.className} antialiased flex flex-col min-h-screen`}>
         <I18nProvider>
           <Navbar />

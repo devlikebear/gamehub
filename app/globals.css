@@ -15,7 +15,7 @@
   }
 
   html[lang="ko"] {
-    --font-pixel: var(--font-galmuri);
+    --font-pixel: var(--font-dunggeunmo);
   }
 
   * {
@@ -40,7 +40,7 @@
 
   /* Apply pixel font to all Korean text */
   html[lang="ko"] body {
-    font-family: var(--font-galmuri), monospace;
+    font-family: var(--font-dunggeunmo), monospace;
   }
 
   /* Apply pixel font to all English text */
@@ -90,7 +90,7 @@
     font-family: var(--font-pixel), cursive;
   }
 
-  /* Force Galmuri for Korean text */
+  /* Force DungGeunMo for Korean text */
   html[lang="ko"] .pixel-text,
   html[lang="ko"] h1,
   html[lang="ko"] h2,
@@ -101,7 +101,7 @@
   html[lang="ko"] .text-bright-yellow,
   html[lang="ko"] .text-bright-green,
   html[lang="ko"] .text-bright-purple {
-    font-family: var(--font-galmuri), monospace;
+    font-family: var(--font-dunggeunmo), monospace;
   }
 
   /* Force Press Start 2P for English text */
