@@ -51,11 +51,11 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="fixed top-20 right-4 z-50">
       {/* 토글 버튼 */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="pixel-text text-xs px-3 py-2 bg-black/80 border-2 border-bright-cyan text-bright-cyan rounded-md hover:bg-bright-cyan/20 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.5)]"
+        className="pixel-text text-xs px-3 py-2 bg-black/80 border-2 border-neon-cyan text-neon-cyan rounded-md hover:bg-neon-cyan/20 transition-colors shadow-[0_0_10px_rgba(0,240,255,0.5)]"
         aria-label={t.audio.settings}
       >
         🔊 {t.audio.settings}
@@ -63,7 +63,7 @@ export default function AudioSettings({ onClose }: AudioSettingsProps) {
 
       {/* 설정 패널 */}
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 w-80 bg-black/95 border-2 border-bright-cyan rounded-lg p-4 shadow-[0_0_20px_rgba(0,240,255,0.6)]">
+        <div className="absolute top-full right-0 mt-2 w-80 bg-black/95 border-2 border-neon-cyan rounded-lg p-4 shadow-[0_0_20px_rgba(0,240,255,0.6)]">
           <div className="flex items-center justify-between mb-4">
             <h3 className="pixel-text text-sm text-white uppercase">{t.audio.settings}</h3>
             <button
