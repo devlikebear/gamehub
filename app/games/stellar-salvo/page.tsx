@@ -13,6 +13,7 @@ import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { useI18n } from '@/lib/i18n/provider';
 import { useAchievements } from '@/hooks/useAchievements';
 import { AchievementNotificationQueue } from '@/components/achievements/AchievementNotification';
+import { ShareButton } from '@/components/share/ShareButton';
 
 const GAME_ID = 'stellar-salvo';
 
@@ -294,10 +295,25 @@ function ScoreSubmissionModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur">
       <div className="w-full max-w-md bg-black/80 border border-bright-cyan/60 rounded-xl shadow-neon-cyan p-6 space-y-4">
-        <div className="space-y-2 text-center">
+        <div className="space-y-3 text-center">
           <p className="pixel-text text-xs text-bright-cyan uppercase">{t.gameUI.submitScore}</p>
           <h2 className="pixel-text text-2xl text-bright">{result.outcome === 'victory' ? t.gameUI.victory : t.gameUI.defeat}</h2>
           <p className="pixel-text text-bright text-sm">{t.gameUI.thisRoundScore}: {result.score.toLocaleString()} pts</p>
+
+          {/* 공유 버튼 */}
+          <div className="pt-2">
+            <ShareButton
+              shareData={{
+                gameId: gameId,
+                gameName: '스텔라 살보',
+                gameNameEn: 'Stellar Salvo',
+                score: result.score,
+                url: typeof window !== 'undefined' ? window.location.href : '',
+              }}
+              variant="secondary"
+              className="w-full"
+            />
+          </div>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
           <label className="block text-left pixel-text text-bright text-xs">

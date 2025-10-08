@@ -162,19 +162,17 @@ gamehub/
 
 ### Phase 5: 리더보드 & 소셜 기능
 
-- [ ] 리더보드 페이지 [#24](https://github.com/devlikebear/gamehub/issues/24)
-- [ ] 로컬 최고 점수 기록 (게임별)
+- [x] 리더보드 페이지 [#24](https://github.com/devlikebear/gamehub/issues/24)
+- [x] 로컬 최고 점수 기록 (게임별)
 - [ ] 점수 공유 기능 (SNS)
-- [ ] 친구 초대 기능
 
 ### Phase 6: 개선 & 최적화
 
-- [ ] SEO 최적화 (메타 태그, sitemap) [#25](https://github.com/devlikebear/gamehub/issues/25)
-- [ ] 게임 효과음 & BGM [#26](https://github.com/devlikebear/gamehub/issues/26)
-- [ ] PWA 지원 (오프라인 플레이) [#27](https://github.com/devlikebear/gamehub/issues/27)
+- [x] SEO 최적화 (메타 태그, sitemap) [#25](https://github.com/devlikebear/gamehub/issues/25)
+- [x] 게임 효과음 & BGM [#26](https://github.com/devlikebear/gamehub/issues/26)
+- [x] PWA 지원 (오프라인 플레이) [#27](https://github.com/devlikebear/gamehub/issues/27)
 - [ ] Open Graph 이미지 (게임별)
-- [ ] 다국어 지원 (한국어/영어)
-- [ ] 다크모드 토글 (기본: 다크)
+- [x] 다국어 지원 (한국어/영어)
 - [ ] 애니메이션 효과 (CRT 스캔라인, 글로우)
 - [ ] 성능 최적화 (Canvas, 코드 스플리팅)
 
