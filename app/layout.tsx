@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { I18nProvider } from "@/lib/i18n/provider";
 import { StructuredData } from "./structured-data";
+import ServiceWorkerRegistration from "@/components/pwa/ServiceWorkerRegistration";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -119,6 +120,7 @@ export default function RootLayout({
             {children}
           </div>
           <Footer />
+          <ServiceWorkerRegistration />
         </I18nProvider>
       </body>
     </html>

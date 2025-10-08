@@ -1,0 +1,42 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000"/>
+
+  <!-- Glow effects -->
+  <defs>
+    <filter id="glow-cyan">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-pink">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Joystick base (cyan) -->
+  <circle cx="256" cy="340" r="80" fill="#00f0ff" filter="url(#glow-cyan)" opacity="0.3"/>
+  <circle cx="256" cy="340" r="60" fill="none" stroke="#00f0ff" stroke-width="8" filter="url(#glow-cyan)"/>
+
+  <!-- Joystick stick -->
+  <rect x="240" y="180" width="32" height="160" fill="#00f0ff" filter="url(#glow-cyan)"/>
+
+  <!-- Joystick ball (pink) -->
+  <circle cx="256" cy="160" r="60" fill="#ff10f0" filter="url(#glow-pink)"/>
+  <circle cx="256" cy="160" r="50" fill="#ff10f0" opacity="0.8"/>
+  <circle cx="236" cy="140" r="20" fill="#ff10f0" opacity="0.4"/>
+
+  <!-- Action buttons (right side) -->
+  <circle cx="380" cy="300" r="24" fill="none" stroke="#00ff00" stroke-width="6" filter="url(#glow-cyan)"/>
+  <circle cx="420" cy="260" r="24" fill="none" stroke="#ffff00" stroke-width="6" filter="url(#glow-pink)"/>
+
+  <!-- D-pad (left side) -->
+  <rect x="108" y="260" width="48" height="16" fill="#9d00ff" filter="url(#glow-pink)"/>
+  <rect x="124" y="244" width="16" height="48" fill="#9d00ff" filter="url(#glow-pink)"/>
+</svg>

@@ -1,0 +1,72 @@
+{
+  "name": "GameHub Arcade - 추억의 고전 게임",
+  "short_name": "GameHub",
+  "description": "브라우저에서 즐기는 80-90년대 레트로 아케이드 게임 모음. 네온 서펀트, 캐스케이드 블록, 프리즘 스매시 등 다양한 클래식 게임을 오프라인으로 플레이하세요.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "lang": "ko-KR",
+  "dir": "auto",
+  "shortcuts": [
+    {
+      "name": "게임 목록",
+      "short_name": "Games",
+      "description": "전체 게임 목록 보기",
+      "url": "/games",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "리더보드",
+      "short_name": "Leaderboard",
+      "description": "최고 점수 랭킹",
+      "url": "/leaderboard",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/home.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "GameHub 메인 화면"
+    },
+    {
+      "src": "/screenshots/game.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "게임 플레이 화면"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
