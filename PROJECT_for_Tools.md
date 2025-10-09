@@ -356,9 +356,16 @@ class UsageTracker {
 
 ### Phase 1: 기반 구축 (1-2주)
 
-- [ ] PWA 설정 (Service Worker, manifest.json)
+**기존 완료 항목** ✅:
+
+- ✅ PWA 기본 설정 - 게임용 [manifest.json](public/manifest.json), [sw.js](public/sw.js) 존재
+
+**추가 작업 필요**:
+
+- [ ] Service Worker에 도구 페이지 경로 추가 (`/tools/audio`, `/tools/sprite`)
+- [ ] manifest.json에 도구 shortcuts 추가
 - [ ] 보안 라이브러리 설치 (crypto-js)
-- [ ] IndexedDB 캐시 시스템 구축
+- [ ] IndexedDB 캐시 시스템 구축 (생성 에셋 저장용)
 - [ ] 공통 UI 컴포넌트 개발
 
 ### Phase 2: 오디오 생성기 (2-3주)
