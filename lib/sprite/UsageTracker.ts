@@ -19,16 +19,22 @@ export class UsageTracker {
    * 사용량 기록
    */
   static recordUsage(
-    operation: 'sprite' | 'animation' | 'spritesheet',
-    imageCount: number,
+    operation: 'sprite' | 'animation' | 'spritesheet' | 'bgm' | 'sfx',
+    imageCountOrCost: number,
     cached: boolean = false
   ): void {
-    const cost = cached ? 0 : imageCount * this.PRICING.imageGeneration;
+    // BGM/SFX는 직접 cost를 전달, 이미지는 개수로 계산
+    const cost =
+      operation === 'bgm' || operation === 'sfx'
+        ? imageCountOrCost
+        : cached
+          ? 0
+          : imageCountOrCost * this.PRICING.imageGeneration;
 
     const record: UsageRecord = {
       timestamp: Date.now(),
       operation,
-      imageCount,
+      imageCount: operation === 'bgm' || operation === 'sfx' ? 1 : imageCountOrCost,
       estimatedCost: cost,
       cached,
     };

@@ -127,7 +127,7 @@ export interface SpriteSheetConfig {
 // API 사용량 기록
 export interface UsageRecord {
   timestamp: number;
-  operation: 'sprite' | 'animation' | 'spritesheet';
+  operation: 'sprite' | 'animation' | 'spritesheet' | 'bgm' | 'sfx';
   imageCount: number;
   estimatedCost: number; // USD
   cached: boolean;

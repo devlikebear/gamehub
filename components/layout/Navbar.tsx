@@ -45,6 +45,36 @@ export default function Navbar() {
             >
               {t.common.achievements || '업적'}
             </Link>
+
+            {/* Tools Dropdown */}
+            <div className="relative group">
+              <button className="pixel-text text-xs text-bright hover:text-bright-cyan transition-colors duration-300 flex items-center space-x-1">
+                <span>🛠️ 도구</span>
+                <span className="text-[8px]">▼</span>
+              </button>
+
+              <div className="absolute top-full left-0 mt-2 bg-black/95 border border-neon-cyan/50 rounded shadow-lg min-w-[200px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <Link
+                  href="/tools/audio"
+                  className="block px-4 py-2 text-sm text-bright hover:bg-neon-cyan/20 hover:text-neon-cyan transition-colors"
+                >
+                  🎹 Web Audio 생성기
+                </Link>
+                <Link
+                  href="/tools/sprite"
+                  className="block px-4 py-2 text-sm text-bright hover:bg-neon-pink/20 hover:text-neon-pink transition-colors"
+                >
+                  🎨 스프라이트 생성기
+                </Link>
+                <Link
+                  href="/tools/ai-audio"
+                  className="block px-4 py-2 text-sm text-gray-400 hover:bg-yellow-500/20 hover:text-yellow-400 transition-colors"
+                >
+                  🎵 AI 음악 생성기 <span className="text-xs">(준비중)</span>
+                </Link>
+              </div>
+            </div>
+
             <Link
               href="/about"
               className="pixel-text text-xs text-bright hover:text-bright-purple transition-colors duration-300"
