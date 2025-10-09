@@ -120,6 +120,22 @@
     font-weight: 600;
   }
 
+  /* Opacity variants for text-bright */
+  .text-bright\/90 {
+    color: rgba(0, 240, 255, 0.9);
+    font-weight: 600;
+  }
+
+  .text-bright\/70 {
+    color: rgba(0, 240, 255, 0.7);
+    font-weight: 600;
+  }
+
+  .text-bright\/60 {
+    color: rgba(0, 240, 255, 0.6);
+    font-weight: 600;
+  }
+
   .text-bright-cyan {
     color: var(--neon-cyan);
     font-weight: 600;
@@ -163,14 +179,6 @@
 
   .border-bright-purple {
     border-color: var(--neon-purple);
-  }
-
-  .text-neon-cyan {
-    color: rgba(0, 240, 255)
-  }
-
-  .neon-text {
-    color: rgba(0, 240, 255)
   }
 
   .arcade-button {
