@@ -119,7 +119,7 @@ export default function PrismSmashPage() {
         />
       )}
 
- mx-auto max-w-5xl space-y-12">
+      <div className="container mx-auto max-w-5xl space-y-12">
         <section className="text-center space-y-4">
           <p className="pixel-text text-xs text-bright-cyan">{t.games['prism-smash'].tagline}</p>
           <h1 className="pixel-text text-5xl md:text-6xl text-bright neon-text">{t.games['prism-smash'].name}</h1>
