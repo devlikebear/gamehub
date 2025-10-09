@@ -11,12 +11,14 @@ export interface BGMParams {
   tempo: number; // BPM (60-180)
   length: number; // seconds (30-120)
   mood: Mood;
+  [key: string]: string | number | string[] | undefined;
 }
 
 export interface SFXParams {
   type: SFXType;
   style: 'simple' | 'fancy' | 'retro';
   duration: number; // seconds (0.1-2)
+  [key: string]: string | number | string[] | undefined;
 }
 
 export interface AudioGenerationResult {
