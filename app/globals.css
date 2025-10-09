@@ -165,6 +165,14 @@
     border-color: var(--neon-purple);
   }
 
+  .text-neon-cyan {
+    color: rgba(0, 240, 255)
+  }
+
+  .neon-text {
+    color: rgba(0, 240, 255)
+  }
+
   .arcade-button {
     position: relative;
     transform: translateY(0);

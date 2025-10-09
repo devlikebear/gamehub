@@ -149,7 +149,7 @@ export default function AchievementsPage() {
               onClick={() => setSelectedGame('all')}
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedGame === 'all'
-                  ? 'bg-bright-cyan text-black'
+                  ? 'bg-bright-cyan text-white'
                   : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
@@ -161,7 +161,7 @@ export default function AchievementsPage() {
                 onClick={() => setSelectedGame(game.id)}
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedGame === game.id
-                    ? 'bg-bright-cyan text-black'
+                    ? 'bg-bright-cyan text-white'
                     : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
@@ -181,7 +181,7 @@ export default function AchievementsPage() {
               onClick={() => setSelectedTier('all')}
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedTier === 'all'
-                  ? 'bg-bright-cyan text-black'
+                  ? 'bg-bright-cyan text-white'
                   : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
@@ -193,7 +193,7 @@ export default function AchievementsPage() {
                 onClick={() => setSelectedTier(tier)}
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedTier === tier
-                    ? 'bg-bright-cyan text-black'
+                    ? 'bg-bright-cyan text-white'
                     : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
@@ -213,7 +213,7 @@ export default function AchievementsPage() {
               onClick={() => setSelectedCategory('all')}
               className={`px-4 py-2 rounded text-xs transition-all ${
                 selectedCategory === 'all'
-                  ? 'bg-bright-cyan text-black'
+                  ? 'bg-bright-cyan text-white'
                   : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
               }`}
             >
@@ -225,7 +225,7 @@ export default function AchievementsPage() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 rounded text-xs transition-all ${
                   selectedCategory === category
-                    ? 'bg-bright-cyan text-black'
+                    ? 'bg-bright-cyan text-white'
                     : 'bg-black/50 border border-gray-700 text-gray-300 hover:border-bright-cyan hover:text-bright-cyan'
                 }`}
               >
