@@ -96,22 +96,22 @@ interface DifficultyCardProps {
 }
 
 function DifficultyCard({ difficulty, isSelected, onSelect, language }: DifficultyCardProps) {
-  const borderColor = {
-    green: 'border-neon-green',
-    cyan: 'border-neon-cyan',
-    pink: 'border-neon-pink',
-  }[difficulty.color];
-
-  const glowColor = {
-    green: 'shadow-neon-green',
-    cyan: 'shadow-neon-cyan',
-    pink: 'shadow-neon-pink',
-  }[difficulty.color];
-
-  const textColorStyle = {
-    green: '#00ff00',
-    cyan: '#00f0ff',
-    pink: '#ff10f0',
+  const colorStyles = {
+    green: {
+      border: 'border-neon-green',
+      shadow: 'shadow-neon-green',
+      text: '#00ff00',
+    },
+    cyan: {
+      border: 'border-neon-cyan',
+      shadow: 'shadow-neon-cyan',
+      text: '#00f0ff',
+    },
+    pink: {
+      border: 'border-neon-pink',
+      shadow: 'shadow-neon-pink',
+      text: '#ff10f0',
+    },
   }[difficulty.color];
 
   return (
@@ -119,13 +119,16 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
       onClick={onSelect}
       className={`
         relative p-6 bg-black/50 border-2 rounded-lg transition-all duration-300
-        hover:scale-105 hover:${glowColor}
-        ${isSelected ? `${borderColor} ${glowColor}` : 'border-white/30'}
+        hover:scale-105
+        ${isSelected ? `${colorStyles.border} ${colorStyles.shadow}` : 'border-white/30'}
+        ${difficulty.color === 'green' ? 'hover:shadow-neon-green' : ''}
+        ${difficulty.color === 'cyan' ? 'hover:shadow-neon-cyan' : ''}
+        ${difficulty.color === 'pink' ? 'hover:shadow-neon-pink' : ''}
       `}
     >
       {/* Selected indicator */}
       {isSelected && (
-        <div className="absolute top-2 right-2" style={{ color: textColorStyle }}>
+        <div className="absolute top-2 right-2" style={{ color: colorStyles.text }}>
           <span className="text-xl">✓</span>
         </div>
       )}
@@ -136,7 +139,7 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
       </div>
 
       {/* Title */}
-      <h3 className="pixel-text text-2xl mb-3 font-bold" style={{ color: textColorStyle }}>
+      <h3 className="pixel-text text-2xl mb-3 font-bold" style={{ color: colorStyles.text }}>
         {language === 'ko' ? difficulty.nameKo : difficulty.name}
       </h3>
 
