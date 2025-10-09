@@ -57,17 +57,17 @@ export function DifficultySelector({ gameId, isOpen, onClose, onSelect, language
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-bright hover:text-neon-cyan transition-colors"
+          className="absolute top-4 right-4 text-white/80 hover:text-bright-cyan transition-colors"
           aria-label="Close"
         >
           <span className="text-2xl">✕</span>
         </button>
 
         {/* Title */}
-        <h2 className="pixel-text text-3xl text-center text-neon-cyan mb-2">
+        <h2 className="pixel-text text-3xl text-center text-bright-cyan mb-2">
           {language === 'ko' ? '난이도 선택' : 'SELECT DIFFICULTY'}
         </h2>
-        <p className="text-center text-bright/70 mb-8">
+        <p className="text-center text-white/90 text-sm mb-8">
           {language === 'ko' ? '게임 난이도를 선택하세요' : 'Choose your challenge level'}
         </p>
 
@@ -137,20 +137,20 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
       <h3 className={`pixel-text text-xl mb-3 ${textColor}`}>{language === 'ko' ? difficulty.nameKo : difficulty.name}</h3>
 
       {/* Description */}
-      <p className="text-bright/80 text-sm mb-3">
+      <p className="text-white/80 text-sm mb-3">
         {language === 'ko' ? difficulty.descriptionKo : difficulty.description}
       </p>
 
       {/* Recommended for */}
-      <p className="text-bright/60 text-xs">{language === 'ko' ? difficulty.recommendedKo : difficulty.recommended}</p>
+      <p className="text-white/60 text-xs">{language === 'ko' ? difficulty.recommendedKo : difficulty.recommended}</p>
 
       {/* Stats */}
       <div className="mt-4 pt-4 border-t border-white/20 space-y-1">
-        <div className="flex justify-between text-xs text-bright/70">
+        <div className="flex justify-between text-xs text-white/70">
           <span>{language === 'ko' ? '속도' : 'Speed'}:</span>
           <span>{Math.round(difficulty.speedMultiplier * 100)}%</span>
         </div>
-        <div className="flex justify-between text-xs text-bright/70">
+        <div className="flex justify-between text-xs text-white/70">
           <span>{language === 'ko' ? '점수 배율' : 'Score'}:</span>
           <span>{Math.round(difficulty.scoreMultiplier * 100)}%</span>
         </div>
