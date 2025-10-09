@@ -10,21 +10,40 @@ import { fetchLeaderboard, submitScore } from '@/lib/leaderboard/supabase';
 import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse } from '@/lib/leaderboard/types';
 import { loadAllSounds } from '@/lib/audio/sounds';
 import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
+import { DifficultySelector } from '@/components/ui/DifficultySelector';
+import { loadDifficulty } from '@/lib/difficulty/storage';
+import type { DifficultyLevel } from '@/lib/difficulty/types';
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'prism-smash';
 
 export default function PrismSmashPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [showDifficultySelector, setShowDifficultySelector] = useState(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
+  const [gameKey, setGameKey] = useState(0);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
     setModalOpen(true);
   }, []);
+
+  // 난이도 로딩
+  useEffect(() => {
+    const savedDifficulty = loadDifficulty(GAME_ID);
+    setDifficulty(savedDifficulty);
+  }, []);
+
+  // 난이도 선택 핸들러
+  const handleDifficultySelect = (selected: DifficultyLevel) => {
+    setDifficulty(selected);
+    setShowDifficultySelector(false);
+    setGameKey((prev) => prev + 1);
+  };
 
   // 오디오 시스템 초기화 및 BGM 재생
   useEffect(() => {
@@ -70,6 +89,13 @@ export default function PrismSmashPage() {
 
   return (
     <main className="min-h-screen py-20 px-4">
+      <DifficultySelector
+        gameId={GAME_ID}
+        isOpen={showDifficultySelector}
+        onClose={() => setShowDifficultySelector(false)}
+        onSelect={handleDifficultySelect}
+        language={locale}
+      />
       <div className="container mx-auto max-w-5xl space-y-12">
         <section className="text-center space-y-4">
           <p className="pixel-text text-xs text-bright-cyan">{t.games['prism-smash'].tagline}</p>
@@ -77,14 +103,22 @@ export default function PrismSmashPage() {
           <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
             {t.games['prism-smash'].intro}
           </p>
+          <button
+            onClick={() => setShowDifficultySelector(true)}
+            className="inline-block px-4 py-2 border border-bright-cyan/60 text-bright pixel-text text-xs rounded hover:bg-bright-cyan/20 transition-colors"
+          >
+            {locale === 'ko' ? '난이도 변경' : 'Change Difficulty'}
+          </button>
         </section>
 
         <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-6 md:p-8">
           <GameCanvas
+            key={gameKey}
             GameClass={PrismSmashGame}
             width={900}
             height={560}
             onGameComplete={handleGameComplete}
+            difficulty={difficulty}
           />
         </section>
 

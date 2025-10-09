@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import type { GameCompletionPayload } from '@/lib/games/engine/types';
+import type { DifficultyLevel } from '@/lib/difficulty/types';
 
 interface GameCanvasProps {
   GameClass: new (config: {
@@ -9,6 +10,7 @@ interface GameCanvasProps {
     width?: number;
     height?: number;
     gameId?: string;
+    difficulty?: DifficultyLevel;
     onGameComplete?: (payload: GameCompletionPayload) => void;
   }) => {
     start: () => void;
@@ -19,6 +21,7 @@ interface GameCanvasProps {
   width?: number;
   height?: number;
   pauseOnSpace?: boolean;
+  difficulty?: DifficultyLevel;
   onGameComplete?: (payload: GameCompletionPayload) => void;
 }
 
@@ -28,6 +31,7 @@ export function GameCanvas({
   width = 800,
   height = 600,
   pauseOnSpace = true,
+  difficulty,
   onGameComplete,
 }: GameCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -42,11 +46,13 @@ export function GameCanvas({
       width,
       height,
       gameId,
+      difficulty,
     } as {
       canvas: HTMLCanvasElement;
       width?: number;
       height?: number;
       gameId?: string;
+      difficulty?: DifficultyLevel;
       onGameComplete?: (payload: GameCompletionPayload) => void;
     };
 
@@ -80,7 +86,7 @@ export function GameCanvas({
       }
       game.stop();
     };
-  }, [GameClass, gameId, width, height, pauseOnSpace, onGameComplete]);
+  }, [GameClass, gameId, width, height, pauseOnSpace, difficulty, onGameComplete]);
 
   return (
     <div className="flex items-center justify-center">

@@ -11,20 +11,39 @@ import type { GameResultPayload, LeaderboardEntry, LeaderboardSubmissionResponse
 import { loadAllSounds } from '@/lib/audio/sounds';
 import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { useI18n } from '@/lib/i18n/provider';
+import { DifficultySelector } from '@/components/ui/DifficultySelector';
+import { loadDifficulty } from '@/lib/difficulty/storage';
+import type { DifficultyLevel } from '@/lib/difficulty/types';
 
 const GAME_ID = 'photon-vanguard';
 
 export default function PhotonVanguardPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [showDifficultySelector, setShowDifficultySelector] = useState(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
+  const [gameKey, setGameKey] = useState(0);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
     setModalOpen(true);
   }, []);
+
+  // 난이도 로딩
+  useEffect(() => {
+    const savedDifficulty = loadDifficulty(GAME_ID);
+    setDifficulty(savedDifficulty);
+  }, []);
+
+  // 난이도 선택 핸들러
+  const handleDifficultySelect = (selected: DifficultyLevel) => {
+    setDifficulty(selected);
+    setShowDifficultySelector(false);
+    setGameKey((prev) => prev + 1);
+  };
 
   // 오디오 시스템 초기화 및 BGM 재생
   useEffect(() => {
@@ -70,6 +89,13 @@ export default function PhotonVanguardPage() {
 
   return (
     <main className="min-h-screen py-16 px-4 md:py-20">
+      <DifficultySelector
+        gameId={GAME_ID}
+        isOpen={showDifficultySelector}
+        onClose={() => setShowDifficultySelector(false)}
+        onSelect={handleDifficultySelect}
+        language={locale}
+      />
       <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
@@ -82,16 +108,24 @@ export default function PhotonVanguardPage() {
           <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
             {t.games['photon-vanguard'].intro}
           </p>
+          <button
+            onClick={() => setShowDifficultySelector(true)}
+            className="inline-block px-4 py-2 border border-bright-yellow/60 text-bright pixel-text text-xs rounded hover:bg-bright-yellow/20 transition-colors"
+          >
+            {locale === 'ko' ? '난이도 변경' : 'Change Difficulty'}
+          </button>
         </section>
 
         {/* 게임 캔버스 */}
         <section className="bg-black/60 border-2 border-bright-yellow rounded-xl shadow-neon-yellow p-4 md:p-6 lg:p-8">
           <GameCanvas
+            key={gameKey}
             GameClass={PhotonVanguardGame}
             width={860}
             height={620}
             pauseOnSpace={false}
             onGameComplete={handleGameComplete}
+            difficulty={difficulty}
           />
         </section>
 
