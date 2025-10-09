@@ -57,7 +57,7 @@ export function DifficultySelector({ gameId, isOpen, onClose, onSelect, language
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-bright hover:text-neon-cyan transition-colors"
+          className="absolute top-4 right-4 text-white/80 hover:text-neon-cyan transition-colors"
           aria-label="Close"
         >
           <span className="text-2xl">✕</span>
@@ -67,7 +67,7 @@ export function DifficultySelector({ gameId, isOpen, onClose, onSelect, language
         <h2 className="pixel-text text-3xl text-center text-neon-cyan mb-2">
           {language === 'ko' ? '난이도 선택' : 'SELECT DIFFICULTY'}
         </h2>
-        <p className="text-center text-bright/70 mb-8">
+        <p className="text-center text-white/90 text-sm mb-8">
           {language === 'ko' ? '게임 난이도를 선택하세요' : 'Choose your challenge level'}
         </p>
 
@@ -96,22 +96,22 @@ interface DifficultyCardProps {
 }
 
 function DifficultyCard({ difficulty, isSelected, onSelect, language }: DifficultyCardProps) {
-  const borderColor = {
-    green: 'border-neon-green',
-    cyan: 'border-neon-cyan',
-    pink: 'border-neon-pink',
-  }[difficulty.color];
-
-  const glowColor = {
-    green: 'shadow-[0_0_20px_rgba(0,255,0,0.5)]',
-    cyan: 'shadow-[0_0_20px_rgba(0,240,255,0.5)]',
-    pink: 'shadow-[0_0_20px_rgba(255,16,240,0.5)]',
-  }[difficulty.color];
-
-  const textColor = {
-    green: 'text-neon-green',
-    cyan: 'text-neon-cyan',
-    pink: 'text-neon-pink',
+  const colorStyles = {
+    green: {
+      border: 'border-neon-green',
+      shadow: 'shadow-neon-green',
+      text: '#00ff00',
+    },
+    cyan: {
+      border: 'border-neon-cyan',
+      shadow: 'shadow-neon-cyan',
+      text: '#00f0ff',
+    },
+    pink: {
+      border: 'border-neon-pink',
+      shadow: 'shadow-neon-pink',
+      text: '#ff10f0',
+    },
   }[difficulty.color];
 
   return (
@@ -119,38 +119,45 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
       onClick={onSelect}
       className={`
         relative p-6 bg-black/50 border-2 rounded-lg transition-all duration-300
-        hover:scale-105 hover:${glowColor}
-        ${isSelected ? `${borderColor} ${glowColor}` : 'border-white/30'}
+        hover:scale-105
+        ${isSelected ? `${colorStyles.border} ${colorStyles.shadow}` : 'border-white/30'}
+        ${difficulty.color === 'green' ? 'hover:shadow-neon-green' : ''}
+        ${difficulty.color === 'cyan' ? 'hover:shadow-neon-cyan' : ''}
+        ${difficulty.color === 'pink' ? 'hover:shadow-neon-pink' : ''}
       `}
     >
       {/* Selected indicator */}
       {isSelected && (
-        <div className={`absolute top-2 right-2 ${textColor}`}>
+        <div className="absolute top-2 right-2" style={{ color: colorStyles.text }}>
           <span className="text-xl">✓</span>
         </div>
       )}
 
       {/* Icon */}
-      <div className="text-6xl mb-4 text-center">{difficulty.icon}</div>
+      <div className="text-7xl mb-4 text-center leading-none" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+        {difficulty.icon}
+      </div>
 
       {/* Title */}
-      <h3 className={`pixel-text text-xl mb-3 ${textColor}`}>{language === 'ko' ? difficulty.nameKo : difficulty.name}</h3>
+      <h3 className="pixel-text text-2xl mb-3 font-bold" style={{ color: colorStyles.text }}>
+        {language === 'ko' ? difficulty.nameKo : difficulty.name}
+      </h3>
 
       {/* Description */}
-      <p className="text-bright/80 text-sm mb-3">
+      <p className="text-white/80 text-sm mb-3">
         {language === 'ko' ? difficulty.descriptionKo : difficulty.description}
       </p>
 
       {/* Recommended for */}
-      <p className="text-bright/60 text-xs">{language === 'ko' ? difficulty.recommendedKo : difficulty.recommended}</p>
+      <p className="text-white/60 text-xs">{language === 'ko' ? difficulty.recommendedKo : difficulty.recommended}</p>
 
       {/* Stats */}
       <div className="mt-4 pt-4 border-t border-white/20 space-y-1">
-        <div className="flex justify-between text-xs text-bright/70">
+        <div className="flex justify-between text-xs text-white/70">
           <span>{language === 'ko' ? '속도' : 'Speed'}:</span>
           <span>{Math.round(difficulty.speedMultiplier * 100)}%</span>
         </div>
-        <div className="flex justify-between text-xs text-bright/70">
+        <div className="flex justify-between text-xs text-white/70">
           <span>{language === 'ko' ? '점수 배율' : 'Score'}:</span>
           <span>{Math.round(difficulty.scoreMultiplier * 100)}%</span>
         </div>

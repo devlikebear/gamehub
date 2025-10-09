@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useI18n } from '@/lib/i18n/provider';
 
 // BeforeInstallPromptEvent 타입 정의
 interface BeforeInstallPromptEvent extends Event {
@@ -12,6 +13,7 @@ interface BeforeInstallPromptEvent extends Event {
  * Service Worker 등록 및 PWA 설치 프롬프트 관리
  */
 export default function ServiceWorkerRegistration() {
+  const { locale } = useI18n();
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallButton, setShowInstallButton] = useState(false);
 
@@ -104,15 +106,18 @@ export default function ServiceWorkerRegistration() {
   // 설치 버튼 (선택적으로 UI에 표시)
   if (!showInstallButton) return null;
 
+  const installText = locale === 'ko' ? '앱으로 설치' : 'Install App';
+  const ariaLabel = locale === 'ko' ? '게임허브 앱 설치' : 'Install GameHub App';
+
   return (
     <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
       <button
         onClick={handleInstallClick}
-        className="pixel-text text-xs bg-neon-pink/90 hover:bg-neon-pink text-black px-6 py-3 rounded-lg shadow-[0_0_20px_rgba(255,16,240,0.6)] hover:shadow-[0_0_30px_rgba(255,16,240,0.8)] transition-all duration-300 flex items-center gap-2"
-        aria-label="게임허브 앱 설치"
+        className="pixel-text text-xs bg-neon-pink/90 hover:bg-neon-pink text-white px-6 py-3 rounded-lg shadow-neon-pink hover:shadow-[0_0_30px_rgba(255,16,240,0.8)] transition-all duration-300 flex items-center gap-2"
+        aria-label={ariaLabel}
       >
         <span className="text-lg">📱</span>
-        <span>앱으로 설치</span>
+        <span>{installText}</span>
       </button>
     </div>
   );

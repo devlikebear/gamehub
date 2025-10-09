@@ -14,16 +14,22 @@ import { useI18n } from '@/lib/i18n/provider';
 import { useAchievements } from '@/hooks/useAchievements';
 import { AchievementNotificationQueue } from '@/components/achievements/AchievementNotification';
 import { ShareButton } from '@/components/share/ShareButton';
+import { DifficultySelector } from '@/components/ui/DifficultySelector';
+import { loadDifficulty } from '@/lib/difficulty/storage';
+import type { DifficultyLevel } from '@/lib/difficulty/types';
 
 const GAME_ID = 'stellar-salvo';
 
 export default function StellarSalvoPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const { unlockedAchievements, checkAchievements, clearUnlocked } = useAchievements();
+  const [showDifficultySelector, setShowDifficultySelector] = useState(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
+  const [gameKey, setGameKey] = useState(0);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
@@ -37,6 +43,19 @@ export default function StellarSalvoPage() {
       special: payload.stats?.special,
     });
   }, [checkAchievements]);
+
+  // 난이도 로딩
+  useEffect(() => {
+    const savedDifficulty = loadDifficulty(GAME_ID);
+    setDifficulty(savedDifficulty);
+  }, []);
+
+  // 난이도 선택 핸들러
+  const handleDifficultySelect = (selected: DifficultyLevel) => {
+    setDifficulty(selected);
+    setShowDifficultySelector(false);
+    setGameKey((prev) => prev + 1);
+  };
 
   // 오디오 시스템 초기화 및 BGM 재생
   useEffect(() => {
@@ -90,6 +109,14 @@ export default function StellarSalvoPage() {
         />
       )}
 
+      <DifficultySelector
+        gameId={GAME_ID}
+        isOpen={showDifficultySelector}
+        onClose={() => setShowDifficultySelector(false)}
+        onSelect={handleDifficultySelect}
+        language={locale}
+      />
+
       <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
@@ -102,16 +129,25 @@ export default function StellarSalvoPage() {
           <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
             {t.games['stellar-salvo'].intro}
           </p>
+          <button
+            onClick={() => setShowDifficultySelector(true)}
+            className="inline-block px-4 py-2 border border-bright-cyan/60 text-bright pixel-text text-xs rounded hover:bg-bright-cyan/20 transition-colors"
+          >
+            {locale === 'ko' ? '난이도 변경' : 'Change Difficulty'}
+          </button>
         </section>
 
         {/* 게임 캔버스 */}
         <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-4 md:p-6 lg:p-8">
           <GameCanvas
+            key={gameKey}
+            gameId={GAME_ID}
             GameClass={StellarSalvoGame}
             width={880}
             height={620}
             pauseOnSpace={false}
             onGameComplete={handleGameComplete}
+            difficulty={difficulty}
           />
         </section>
 

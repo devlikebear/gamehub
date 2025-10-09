@@ -6,8 +6,10 @@
 'use client';
 
 import { useStatisticsSummary, useStatisticsSync } from '@/lib/hooks/useGameStatistics';
+import { useI18n } from '@/lib/i18n/provider';
 
 export function StatisticsPanel() {
+  const { locale } = useI18n();
   const { summary, isLoading, refresh } = useStatisticsSummary();
 
   // 다른 탭에서 통계 변경 시 자동 업데이트
@@ -33,49 +35,55 @@ export function StatisticsPanel() {
     return (
       <div className="bg-black/60 border border-bright-cyan/40 rounded-xl p-8 text-center">
         <div className="text-6xl mb-4">🎮</div>
-        <p className="pixel-text text-bright-cyan text-lg mb-2">No Games Played Yet</p>
-        <p className="text-gray-400 text-sm">Start playing to track your statistics!</p>
+        <p className="pixel-text text-neon-cyan text-lg mb-2">
+          {locale === 'ko' ? '아직 플레이한 게임이 없습니다' : 'No Games Played Yet'}
+        </p>
+        <p className="text-gray-400 text-sm">
+          {locale === 'ko' ? '게임을 플레이하고 통계를 확인하세요!' : 'Start playing to track your statistics!'}
+        </p>
       </div>
     );
   }
 
   const stats = [
     {
-      label: 'Games Played',
+      label: locale === 'ko' ? '플레이한 게임' : 'Games Played',
       value: summary.totalGamesPlayed.toString(),
       icon: '🎮',
-      color: 'text-bright-cyan',
+      color: 'text-neon-cyan',
     },
     {
-      label: 'Total Plays',
+      label: locale === 'ko' ? '총 플레이 횟수' : 'Total Plays',
       value: summary.totalPlayCount.toLocaleString(),
       icon: '🕹️',
-      color: 'text-bright-pink',
+      color: 'text-neon-pink',
     },
     {
-      label: 'Play Time',
+      label: locale === 'ko' ? '플레이 시간' : 'Play Time',
       value: summary.totalPlayTimeFormatted,
       icon: '⏱️',
-      color: 'text-bright-yellow',
+      color: 'text-neon-yellow',
     },
     {
-      label: 'Avg Per Session',
+      label: locale === 'ko' ? '평균 플레이' : 'Avg Per Session',
       value: Math.floor(summary.totalPlayTime / summary.totalPlayCount) + 's',
       icon: '📊',
-      color: 'text-bright-purple',
+      color: 'text-neon-purple',
     },
   ];
 
   return (
     <div className="bg-black/60 border border-bright-cyan/40 rounded-xl p-6 shadow-[0_0_20px_rgba(0,240,255,0.3)]">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="pixel-text text-xl text-bright-cyan">Your Statistics</h3>
+        <h3 className="pixel-text text-xl text-neon-cyan">
+          {locale === 'ko' ? '나의 통계' : 'Your Statistics'}
+        </h3>
         <button
           onClick={refresh}
-          className="text-xs px-3 py-1 border border-bright-cyan/60 text-bright-cyan rounded hover:bg-bright-cyan/10 transition-all duration-300"
-          aria-label="Refresh statistics"
+          className="text-xs px-3 py-1 border border-bright-cyan/60 text-neon-cyan rounded hover:bg-bright-cyan/10 transition-all duration-300"
+          aria-label={locale === 'ko' ? '통계 새로고침' : 'Refresh statistics'}
         >
-          Refresh
+          {locale === 'ko' ? '새로고침' : 'Refresh'}
         </button>
       </div>
 
@@ -95,15 +103,15 @@ export function StatisticsPanel() {
       {summary.mostPlayedGame && (
         <div className="mt-6 pt-6 border-t border-bright-cyan/20 grid grid-cols-2 gap-4 text-center">
           <div>
-            <p className="text-xs text-gray-400 mb-1">Most Played</p>
-            <p className="pixel-text text-bright-yellow text-sm">
+            <p className="text-xs text-gray-400 mb-1">{locale === 'ko' ? '가장 많이 플레이' : 'Most Played'}</p>
+            <p className="pixel-text text-neon-yellow text-sm">
               {summary.mostPlayedGame.replace(/-/g, ' ').toUpperCase()}
             </p>
           </div>
           {summary.highestScoringGame && (
             <div>
-              <p className="text-xs text-gray-400 mb-1">Top Scorer</p>
-              <p className="pixel-text text-bright-pink text-sm">
+              <p className="text-xs text-gray-400 mb-1">{locale === 'ko' ? '최고 점수 게임' : 'Top Scorer'}</p>
+              <p className="pixel-text text-neon-pink text-sm">
                 {summary.highestScoringGame.replace(/-/g, ' ').toUpperCase()}
               </p>
             </div>

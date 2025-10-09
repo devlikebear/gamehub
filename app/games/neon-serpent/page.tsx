@@ -12,18 +12,31 @@ import { loadAllSounds } from '@/lib/audio/sounds';
 import { playGameBGM, stopGameBGM } from '@/lib/audio/bgmPlayer';
 
 import { useI18n } from '@/lib/i18n/provider';
+import { DifficultySelector } from '@/components/ui/DifficultySelector';
+import { loadDifficulty } from '@/lib/difficulty/storage';
+import type { DifficultyLevel } from '@/lib/difficulty/types';
+
 const GAME_ID = 'neon-serpent';
 
 export default function NeonSerpentPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [pendingResult, setPendingResult] = useState<GameResultPayload | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [recentEntries, setRecentEntries] = useState<LeaderboardEntry[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [showDifficultySelector, setShowDifficultySelector] = useState(false);
+  const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
+  const [gameKey, setGameKey] = useState(0);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
     setModalOpen(true);
+  }, []);
+
+  // 저장된 난이도 불러오기
+  useEffect(() => {
+    const savedDifficulty = loadDifficulty(GAME_ID);
+    setDifficulty(savedDifficulty);
   }, []);
 
   // 오디오 시스템 초기화 및 BGM 재생
@@ -38,6 +51,12 @@ export default function NeonSerpentPage() {
       stopGameBGM(); // 페이지 떠날 때 BGM 정지
     };
   }, []);
+
+  const handleDifficultySelect = (selected: DifficultyLevel) => {
+    setDifficulty(selected);
+    setShowDifficultySelector(false);
+    setGameKey((prev) => prev + 1); // 게임 재시작
+  };
 
   useEffect(() => {
     let active = true;
@@ -60,6 +79,15 @@ export default function NeonSerpentPage() {
 
   return (
     <main className="min-h-screen py-16 px-4 md:py-20">
+      {/* 난이도 선택 모달 */}
+      <DifficultySelector
+        gameId={GAME_ID}
+        isOpen={showDifficultySelector}
+        onClose={() => setShowDifficultySelector(false)}
+        onSelect={handleDifficultySelect}
+        language={locale}
+      />
+
       <div className="container mx-auto max-w-6xl space-y-8 md:space-y-12">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
@@ -68,15 +96,25 @@ export default function NeonSerpentPage() {
           <p className="pixel-text text-bright text-sm md:text-base max-w-3xl mx-auto leading-relaxed px-4">
             {t.games['neon-serpent'].intro}
           </p>
+          {/* 난이도 변경 버튼 */}
+          <button
+            onClick={() => setShowDifficultySelector(true)}
+            className="inline-block px-4 py-2 border border-bright-cyan/60 text-bright pixel-text text-xs rounded hover:bg-bright-cyan/20 transition-colors"
+          >
+            {locale === 'ko' ? '난이도 변경' : 'Change Difficulty'}
+          </button>
         </section>
 
         {/* 게임 캔버스 */}
         <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-4 md:p-6 lg:p-8">
           <GameCanvas
+            key={gameKey}
+            gameId={GAME_ID}
             GameClass={NeonSerpentGame}
             width={840}
             height={560}
             onGameComplete={handleGameComplete}
+            difficulty={difficulty}
           />
         </section>
 
