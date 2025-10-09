@@ -59,6 +59,13 @@ export default function StellarSalvoPage() {
     setDifficulty(savedDifficulty);
   }, []);
 
+  // 첫 방문 시 튜토리얼 자동 표시
+  useEffect(() => {
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
+  }, []);
+
   // 난이도 선택 핸들러
   const handleDifficultySelect = (selected: DifficultyLevel) => {
     setDifficulty(selected);
@@ -125,6 +132,19 @@ export default function StellarSalvoPage() {
         onSelect={handleDifficultySelect}
         language={locale}
       />
+
+      {/* 튜토리얼 버튼 */}
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+
+      {/* 튜토리얼 모달 */}
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
 
       <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}

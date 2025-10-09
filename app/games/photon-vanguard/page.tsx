@@ -47,6 +47,13 @@ export default function PhotonVanguardPage() {
     setDifficulty(savedDifficulty);
   }, []);
 
+  // 첫 방문 시 튜토리얼 자동 표시
+  useEffect(() => {
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
+  }, []);
+
   // 난이도 선택 핸들러
   const handleDifficultySelect = (selected: DifficultyLevel) => {
     setDifficulty(selected);
@@ -119,7 +126,7 @@ export default function PhotonVanguardPage() {
         />
       )}
 
- mx-auto max-w-6xl space-y-10 md:space-y-14">
+      <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
           <p className="pixel-text text-xs text-bright-yellow uppercase tracking-wider">

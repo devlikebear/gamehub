@@ -47,6 +47,13 @@ export default function PrismSmashPage() {
     setDifficulty(savedDifficulty);
   }, []);
 
+  // 첫 방문 시 튜토리얼 자동 표시
+  useEffect(() => {
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
+  }, []);
+
   // 난이도 선택 핸들러
   const handleDifficultySelect = (selected: DifficultyLevel) => {
     setDifficulty(selected);
