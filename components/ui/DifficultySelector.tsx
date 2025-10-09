@@ -131,10 +131,14 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
       )}
 
       {/* Icon */}
-      <div className="text-6xl mb-4 text-center">{difficulty.icon}</div>
+      <div className="text-7xl mb-4 text-center leading-none" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+        {difficulty.icon}
+      </div>
 
       {/* Title */}
-      <h3 className={`pixel-text text-xl mb-3 ${textColor}`}>{language === 'ko' ? difficulty.nameKo : difficulty.name}</h3>
+      <h3 className={`pixel-text text-2xl mb-3 font-bold ${textColor}`}>
+        {language === 'ko' ? difficulty.nameKo : difficulty.name}
+      </h3>
 
       {/* Description */}
       <p className="text-white/80 text-sm mb-3">
