@@ -141,6 +141,7 @@ export default function StellarSalvoPage() {
         <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-4 md:p-6 lg:p-8">
           <GameCanvas
             key={gameKey}
+            gameId={GAME_ID}
             GameClass={StellarSalvoGame}
             width={880}
             height={620}

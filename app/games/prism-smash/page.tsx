@@ -114,6 +114,7 @@ export default function PrismSmashPage() {
         <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-6 md:p-8">
           <GameCanvas
             key={gameKey}
+            gameId={GAME_ID}
             GameClass={PrismSmashGame}
             width={900}
             height={560}

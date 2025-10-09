@@ -110,6 +110,7 @@ export default function CascadeBlocksPage() {
         <section className="bg-black/60 border-2 border-bright-cyan rounded-xl shadow-neon-cyan p-4 md:p-6 lg:p-8">
           <GameCanvas
             key={gameKey}
+            gameId={GAME_ID}
             GameClass={CascadeBlocksGame}
             width={840}
             height={600}

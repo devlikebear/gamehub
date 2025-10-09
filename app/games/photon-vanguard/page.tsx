@@ -120,6 +120,7 @@ export default function PhotonVanguardPage() {
         <section className="bg-black/60 border-2 border-bright-yellow rounded-xl shadow-neon-yellow p-4 md:p-6 lg:p-8">
           <GameCanvas
             key={gameKey}
+            gameId={GAME_ID}
             GameClass={PhotonVanguardGame}
             width={860}
             height={620}

@@ -110,6 +110,7 @@ export default function SpectralPursuitPage() {
         <section className="bg-black/60 border-2 border-bright-purple rounded-xl shadow-neon-purple p-4 md:p-6 lg:p-8">
           <GameCanvas
             key={gameKey}
+            gameId={GAME_ID}
             GameClass={SpectralPursuitGame}
             width={880}
             height={620}

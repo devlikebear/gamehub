@@ -116,6 +116,7 @@ export default function PulsePaddlesPage() {
         <section className="bg-black/60 border-2 border-bright-pink rounded-xl shadow-neon-pink p-4 md:p-6 lg:p-8">
           <GameCanvas
             key={gameKey}
+            gameId={GAME_ID}
             GameClass={PulsePaddlesGame}
             width={900}
             height={560}
