@@ -15,7 +15,7 @@ export interface BGMParams {
 }
 
 export interface SFXParams {
-  type: SFXType;
+  sfxType: SFXType;
   style: 'simple' | 'fancy' | 'retro';
   duration: number; // seconds (0.1-2)
   [key: string]: string | number | string[] | undefined;

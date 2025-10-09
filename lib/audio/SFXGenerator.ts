@@ -34,7 +34,7 @@ export class SFXGenerator {
     const right = buffer.getChannelData(1);
 
     // 타입별 효과음 생성
-    switch (params.type) {
+    switch (params.sfxType) {
       case 'ui':
         this.generateUISound(left, right, sampleRate, duration, params.style);
         break;

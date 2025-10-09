@@ -37,7 +37,7 @@ export default function AudioGeneratorPage() {
 
   // SFX 파라미터
   const [sfxParams, setSfxParams] = useState<SFXParams>({
-    type: 'ui',
+    sfxType: 'ui',
     style: 'retro',
     duration: 0.5,
   });
@@ -211,7 +211,7 @@ export default function AudioGeneratorPage() {
             <>
               <ParamSelect
                 label="타입"
-                value={sfxParams.type}
+                value={sfxParams.sfxType}
                 options={[
                   { value: 'ui', label: 'UI (클릭, 호버)' },
                   { value: 'action', label: '액션 (점프, 공격)' },
@@ -219,7 +219,7 @@ export default function AudioGeneratorPage() {
                   { value: 'status', label: '상태 (파워업, 게임오버)' },
                 ]}
                 onChange={(value) =>
-                  setSfxParams({ ...sfxParams, type: value as SFXType })
+                  setSfxParams({ ...sfxParams, sfxType: value as SFXType })
                 }
                 neonColor="cyan"
               />
