@@ -49,6 +49,30 @@
           "sizes": "192x192"
         }
       ]
+    },
+    {
+      "name": "오디오 생성기",
+      "short_name": "Audio",
+      "description": "레트로 BGM 및 효과음 생성",
+      "url": "/tools/audio",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "스프라이트 생성기",
+      "short_name": "Sprite",
+      "description": "2D 스프라이트 및 애니메이션 생성",
+      "url": "/tools/sprite",
+      "icons": [
+        {
+          "src": "/icons/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ],
   "screenshots": [

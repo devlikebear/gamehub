@@ -4,15 +4,17 @@
  * 오프라인 플레이를 위한 캐싱 전략:
  * - 정적 자산: Cache First
  * - 게임 페이지: Network First (빠른 업데이트)
+ * - 도구 페이지: Network First (빠른 업데이트)
  * - BGM/이미지: Cache First (대용량 파일)
  */
 
-const CACHE_VERSION = 'gamehub-v1';
+const CACHE_VERSION = 'gamehub-v2';
 const CACHE_NAMES = {
   static: `${CACHE_VERSION}-static`,
   dynamic: `${CACHE_VERSION}-dynamic`,
   images: `${CACHE_VERSION}-images`,
   audio: `${CACHE_VERSION}-audio`,
+  tools: `${CACHE_VERSION}-tools`, // 도구 페이지용 캐시
 };
 
 // 사전 캐싱할 필수 자산
@@ -21,6 +23,8 @@ const PRECACHE_URLS = [
   '/games',
   '/leaderboard',
   '/about',
+  '/tools/audio',
+  '/tools/sprite',
   '/manifest.json',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
@@ -88,6 +92,12 @@ self.addEventListener('fetch', (event) => {
   // 정적 자산 - Cache First
   if (url.pathname.match(/\.(js|css|woff|woff2|ttf)$/)) {
     event.respondWith(cacheFirst(request, CACHE_NAMES.static));
+    return;
+  }
+
+  // 도구 페이지 - Network First (빠른 업데이트)
+  if (url.pathname.startsWith('/tools/')) {
+    event.respondWith(networkFirst(request, CACHE_NAMES.tools));
     return;
   }
 
