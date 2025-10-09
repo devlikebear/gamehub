@@ -51,20 +51,20 @@ export function DifficultySelector({ gameId, isOpen, onClose, onSelect, language
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl mx-4 border-2 border-neon-cyan rounded-lg p-8 shadow-[0_0_30px_rgba(0,240,255,0.5)]"
+        className="relative w-full max-w-4xl mx-4 bg-black/90 border-2 border-neon-cyan rounded-lg p-8 shadow-[0_0_30px_rgba(0,240,255,0.5)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-white/80 hover:text-bright-cyan transition-colors"
+          className="absolute top-4 right-4 text-white/80 hover:text-neon-cyan transition-colors"
           aria-label="Close"
         >
           <span className="text-2xl">✕</span>
         </button>
 
         {/* Title */}
-        <h2 className="pixel-text text-3xl text-center text-bright-cyan mb-2">
+        <h2 className="pixel-text text-3xl text-center text-neon-cyan mb-2">
           {language === 'ko' ? '난이도 선택' : 'SELECT DIFFICULTY'}
         </h2>
         <p className="text-center text-white/90 text-sm mb-8">
