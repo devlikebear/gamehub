@@ -413,36 +413,45 @@ class UsageTracker {
 
 ### Phase 3.5: AI 오디오 생성기 (1-2주) - NEW
 
-**목적**: LLM 기반 자연어 → 오디오 생성 (텍스트 설명으로 BGM/SFX 생성)
+**목적**: Gemini 기반 자연어 → 음악 생성 (텍스트 설명으로 BGM/효과음 생성)
 
 #### 기술 스택
 
-- **모델**: OpenAI TTS API 또는 ElevenLabs API
+- **모델**: Gemini Lyria RealTime (`models/lyria-realtime-exp`)
 - **아키텍처**: 클라이언트 사이드 (스프라이트 생성기와 동일)
-- **워크플로우**: 텍스트 프롬프트 → API 호출 → 오디오 파일 → WAV/MP3 다운로드
+- **워크플로우**: 텍스트 프롬프트 → Gemini API → 오디오 파일 → WAV/MP3 다운로드
+- **API 키**: Gemini API 키 재사용 (스프라이트 생성기와 공유)
 
 #### 구현 계획
 
-##### 1. API 선택 및 통합
+##### 1. Gemini Lyria API 통합
 
-- [ ] OpenAI TTS vs ElevenLabs 비교 분석
-  - OpenAI: tts-1, tts-1-hd 모델 ($0.015/1K characters)
-  - ElevenLabs: 음성 품질 우수, 커스텀 보이스 ($0.30/1K characters)
-- [ ] 선택한 API 클라이언트 통합
-- [ ] API 키 관리 (스프라이트 생성기와 동일 방식)
+- [ ] Lyria RealTime 모델 연동 (`models/lyria-realtime-exp`)
+- [ ] API 엔드포인트 및 요청 형식 구현
+- [ ] 오디오 응답 처리 (Base64 또는 바이너리)
+- [ ] API 키 관리 (스프라이트 생성기와 공유)
 - [ ] 사용량 추적 및 비용 모니터링
 
 ##### 2. 프롬프트 생성 시스템
 
 - [ ] 장르별 프롬프트 템플릿
-  - Chiptune: "8-bit retro game music, upbeat tempo"
-  - Synthwave: "80s synthwave with neon atmosphere"
-  - Ambient: "atmospheric ambient music with ethereal pads"
+  - Chiptune: "8-bit retro arcade game music, upbeat chiptune melody, nostalgic 80s sound"
+  - Synthwave: "80s synthwave with neon atmosphere, analog synthesizers, dreamy pads"
+  - Arcade Rock: "energetic rock music for arcade games, electric guitar riffs, driving drums"
+  - Ambient: "atmospheric ambient music with ethereal pads, calm and peaceful"
+  - Action: "intense action music, fast tempo, heroic theme"
 - [ ] 무드별 수식어 추가
-  - 긴장감: "tense, suspenseful, dark"
-  - 경쾌함: "cheerful, upbeat, energetic"
+  - 긴장감: "tense, suspenseful, dark, ominous"
+  - 경쾌함: "cheerful, upbeat, energetic, playful"
+  - 신비로움: "mysterious, enigmatic, ethereal"
+  - 영웅적: "heroic, epic, triumphant"
 - [ ] 길이 및 구조 명시
-  - "30 second loop, 4/4 time signature, 120 BPM"
+  - "30 second seamless loop", "60 second game BGM", "2 minute boss battle music"
+  - "4/4 time signature, 120 BPM", "3/4 waltz time, 90 BPM"
+- [ ] 효과음 프롬프트
+  - "retro game jump sound effect, 8-bit style"
+  - "sci-fi laser shot sound, arcade game"
+  - "coin collection sound, cheerful chime"
 
 ##### 3. 오디오 후처리
 
@@ -454,36 +463,56 @@ class UsageTracker {
 ##### 4. UI 구현
 
 - [ ] `/tools/ai-audio` 페이지 생성
-- [ ] 텍스트 프롬프트 입력 (자유 형식 + 템플릿)
-- [ ] 프리셋 선택 (장르/무드/길이)
-- [ ] 생성 진행 상태 표시
-- [ ] 미리듣기 플레이어
-- [ ] 다운로드 및 캐싱
+- [ ] 오디오 타입 선택 (BGM / 효과음)
+- [ ] 텍스트 프롬프트 입력 (자유 형식 + 프리셋)
+- [ ] 프리셋 선택 (장르/무드/길이 조합)
+- [ ] 생성 진행 상태 표시 (스프라이트와 동일한 UI)
+- [ ] 미리듣기 플레이어 (Web Audio API)
+- [ ] WAV/MP3 다운로드
+- [ ] 사용량/비용 모니터링 대시보드
 
 ##### 5. 통합 기능
 
-- [ ] 기존 Web Audio 생성기와 비교 UI
-- [ ] 하이브리드 모드: AI 생성 → 파라미터 추출 → Web Audio 재생성
-- [ ] 생성 히스토리 관리 (IndexedDB)
+- [ ] 기존 Web Audio 생성기와 비교 UI (탭 전환)
+- [ ] API 키 공유 (스프라이트 생성기와 동일한 ApiKeyManager)
+- [ ] 생성 히스토리 관리 (IndexedDB 캐싱)
+- [ ] 루프 재생 테스트 (BGM용)
 
 #### 주요 차별점
 
-| 기능 | Web Audio 생성기 | AI 오디오 생성기 |
-|------|------------------|------------------|
+| 기능 | Web Audio 생성기 | AI 음악 생성기 (Gemini Lyria) |
+|------|------------------|-------------------------------|
 | 생성 방식 | 파라미터 기반 (장르/템포/무드) | 텍스트 프롬프트 기반 |
-| 품질 | 일관적, 게임 스타일 | 다양함, 실제 악기 소리 |
-| 비용 | 무료 (클라이언트 계산) | API 비용 ($0.015~0.30/1K chars) |
-| 속도 | 즉시 (< 1초) | API 호출 (3-10초) |
-| 커스터마이징 | 높음 (파라미터 조정) | 낮음 (프롬프트 의존) |
-| 사용 사례 | 즉시 생성, 프로토타입 | 고품질, 최종 사운드 |
+| 품질 | 일관적, 순수 게임 스타일 | 다양함, 실제 악기/보컬 가능 |
+| 비용 | 무료 (클라이언트 계산) | Gemini API 비용 (예상 무료 또는 저렴) |
+| 속도 | 즉시 (< 1초) | API 호출 (5-15초) |
+| 커스터마이징 | 높음 (파라미터 정밀 조정) | 중간 (프롬프트 변형) |
+| 사용 사례 | 즉시 생성, 프로토타입, 무한 생성 | 고품질, 최종 사운드, 커스텀 요구 |
+| API 키 | 불필요 | Gemini API 키 필요 (스프라이트와 공유) |
+
+#### 구현 장점
+
+- **API 키 재사용**: 스프라이트 생성기와 동일한 Gemini API 키 사용
+- **코드 재사용**: ApiKeyManager, UsageTracker 모듈 그대로 활용
+- **UI 일관성**: 스프라이트 생성기와 동일한 디자인 패턴
+- **통합 모니터링**: 이미지 + 음악 생성 통합 사용량 대시보드
 
 #### 예상 구현 시간
 
-- API 통합 및 프롬프트 시스템: 2-3일
-- 오디오 후처리: 1-2일
-- UI 구현: 2-3일
-- 테스트 및 최적화: 1-2일
+- Gemini Lyria API 통합: 1-2일
+- 프롬프트 시스템 및 템플릿: 1일
+- 오디오 후처리 (Web Audio API): 1-2일
+- UI 구현 (`/tools/ai-audio`): 2-3일
+- 기존 생성기와 통합 및 테스트: 1-2일
 - **총 예상**: 6-10일 (1-2주)
+
+#### 기술적 고려사항
+
+- Lyria 모델의 출력 형식 확인 (MP3, WAV, 또는 Base64)
+- 최대 생성 길이 제한 확인 (30초? 60초? 2분?)
+- 프롬프트 길이 제한 및 최적 형식
+- 루프 가능한 음악 생성 프롬프트 패턴 연구
+- 효과음 vs BGM 프롬프트 차별화
 
 ### Phase 4: 통합 및 배포 (1주)
 
