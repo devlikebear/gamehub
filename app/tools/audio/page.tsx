@@ -57,11 +57,21 @@ export default function AudioGeneratorPage() {
 
     try {
       let blob: Blob;
-      const params = audioType === 'bgm' ? bgmParams : sfxParams;
+
+      // 캐시 키 생성용 파라미터 (기본 필드만)
+      const cacheParams =
+        audioType === 'bgm'
+          ? {
+              genre: bgmParams.genre,
+              tempo: bgmParams.tempo,
+              length: bgmParams.length,
+              mood: bgmParams.mood,
+            }
+          : sfxParams;
 
       // 1. 캐시 확인
       console.log('🔍 캐시 확인 중...');
-      const cached = await assetCache.get(params);
+      const cached = await assetCache.get(cacheParams);
 
       if (cached) {
         console.log('✅ 캐시 히트!');
@@ -84,7 +94,7 @@ export default function AudioGeneratorPage() {
 
         // 3. 캐시에 저장
         await assetCache.save(
-          params,
+          cacheParams,
           blob,
           audioType === 'bgm' ? 'bgm' : 'sfx',
           {
