@@ -285,7 +285,14 @@ export default function SpriteGeneratorPage() {
             <ParamSelect
               label="애니메이션 프레임 수"
               value={String(params.frames || 1)}
-              onChange={(value) => setParams({ ...params, frames: Number(value) })}
+              onChange={(value) => {
+                const frameCount = Number(value);
+                setParams({
+                  ...params,
+                  frames: frameCount,
+                  animation: frameCount > 1 ? params.animation || 'idle' : undefined,
+                });
+              }}
               options={[
                 { value: '1', label: '1 (정적)' },
                 { value: '2', label: '2 프레임' },
@@ -293,6 +300,25 @@ export default function SpriteGeneratorPage() {
                 { value: '8', label: '8 프레임' },
               ]}
             />
+
+            {/* 애니메이션 타입 (프레임 > 1일 때만 표시) */}
+            {params.frames && params.frames > 1 && (
+              <ParamSelect
+                label="애니메이션 타입"
+                value={params.animation || 'idle'}
+                onChange={(value) =>
+                  setParams({ ...params, animation: value as 'idle' | 'walk' | 'run' | 'jump' | 'attack' | 'death' })
+                }
+                options={[
+                  { value: 'idle', label: '대기 (Idle)' },
+                  { value: 'walk', label: '걷기 (Walk)' },
+                  { value: 'run', label: '달리기 (Run)' },
+                  { value: 'jump', label: '점프 (Jump)' },
+                  { value: 'attack', label: '공격 (Attack)' },
+                  { value: 'death', label: '사망 (Death)' },
+                ]}
+              />
+            )}
 
             {/* 생성 버튼 */}
             <GenerateButton onClick={handleGenerate} loading={loading} fullWidth>

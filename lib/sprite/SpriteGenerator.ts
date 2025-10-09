@@ -62,7 +62,20 @@ export class SpriteGenerator {
 
     // 애니메이션 프레임
     if (frames && frames > 1 && animation) {
-      prompt += `. Create ${frames} animation frames for ${animation} motion in a sprite sheet layout`;
+      // 애니메이션 설명
+      const animationGuides: Record<string, string> = {
+        idle: 'idle/standing animation with subtle breathing or swaying motion',
+        walk: 'walking animation with alternating leg movement',
+        run: 'running animation with fast leg movement and forward lean',
+        jump: 'jumping animation showing takeoff, mid-air, and landing',
+        attack: 'attack animation with weapon swing or strike motion',
+        death: 'death animation showing character falling or disappearing',
+      };
+
+      const animDesc = animationGuides[animation] || `${animation} animation`;
+
+      // 스프라이트시트 레이아웃 지정
+      prompt += `. Create a sprite sheet with ${frames} animation frames showing ${animDesc}. Arrange frames horizontally in a single row (${frames} columns × 1 row). Each frame should show a distinct stage of the ${animation} motion. Frames must be evenly spaced and aligned.`;
     }
 
     // 투명 배경
