@@ -51,7 +51,7 @@ export function DifficultySelector({ gameId, isOpen, onClose, onSelect, language
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl mx-4 bg-black/90 border-2 border-neon-cyan rounded-lg p-8 shadow-[0_0_30px_rgba(0,240,255,0.5)]"
+        className="relative w-full max-w-4xl mx-4 border-2 border-neon-cyan rounded-lg p-8 shadow-[0_0_30px_rgba(0,240,255,0.5)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
@@ -103,15 +103,15 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
   }[difficulty.color];
 
   const glowColor = {
-    green: 'shadow-[0_0_20px_rgba(0,255,0,0.5)]',
-    cyan: 'shadow-[0_0_20px_rgba(0,240,255,0.5)]',
-    pink: 'shadow-[0_0_20px_rgba(255,16,240,0.5)]',
+    green: 'shadow-neon-green',
+    cyan: 'shadow-neon-cyan',
+    pink: 'shadow-neon-pink',
   }[difficulty.color];
 
-  const textColor = {
-    green: 'text-neon-green',
-    cyan: 'text-neon-cyan',
-    pink: 'text-neon-pink',
+  const textColorStyle = {
+    green: '#00ff00',
+    cyan: '#00f0ff',
+    pink: '#ff10f0',
   }[difficulty.color];
 
   return (
@@ -125,7 +125,7 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
     >
       {/* Selected indicator */}
       {isSelected && (
-        <div className={`absolute top-2 right-2 ${textColor}`}>
+        <div className="absolute top-2 right-2" style={{ color: textColorStyle }}>
           <span className="text-xl">✓</span>
         </div>
       )}
@@ -136,7 +136,7 @@ function DifficultyCard({ difficulty, isSelected, onSelect, language }: Difficul
       </div>
 
       {/* Title */}
-      <h3 className={`pixel-text text-2xl mb-3 font-bold ${textColor}`}>
+      <h3 className="pixel-text text-2xl mb-3 font-bold" style={{ color: textColorStyle }}>
         {language === 'ko' ? difficulty.nameKo : difficulty.name}
       </h3>
 
