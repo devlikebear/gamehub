@@ -13,6 +13,10 @@ import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { DifficultySelector } from '@/components/ui/DifficultySelector';
 import { loadDifficulty } from '@/lib/difficulty/storage';
 import type { DifficultyLevel } from '@/lib/difficulty/types';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'pulse-paddles';
@@ -26,6 +30,9 @@ export default function PulsePaddlesPage() {
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
   const [gameKey, setGameKey] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const tutorialContent = getTutorialContent(GAME_ID);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
@@ -36,6 +43,13 @@ export default function PulsePaddlesPage() {
   useEffect(() => {
     const savedDifficulty = loadDifficulty(GAME_ID);
     setDifficulty(savedDifficulty);
+  }, []);
+
+  // 첫 방문 시 튜토리얼 자동 표시
+  useEffect(() => {
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
   }, []);
 
   // 난이도 선택 핸들러
@@ -96,6 +110,20 @@ export default function PulsePaddlesPage() {
         onSelect={handleDifficultySelect}
         language={locale}
       />
+
+      {/* 튜토리얼 버튼 */}
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+
+      {/* 튜토리얼 모달 */}
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
+
       <div className="container mx-auto max-w-6xl space-y-8 md:space-y-12">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">

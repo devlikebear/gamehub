@@ -13,6 +13,11 @@ import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { DifficultySelector } from '@/components/ui/DifficultySelector';
 import { loadDifficulty } from '@/lib/difficulty/storage';
 import type { DifficultyLevel } from '@/lib/difficulty/types';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
+
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'starshard-drift';
@@ -26,6 +31,10 @@ export default function StarshardDriftPage() {
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
   const [gameKey, setGameKey] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const tutorialContent = getTutorialContent(GAME_ID);
+
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
@@ -96,7 +105,21 @@ export default function StarshardDriftPage() {
         onSelect={handleDifficultySelect}
         language={locale}
       />
-      <div className="container mx-auto max-w-6xl space-y-10 md:space-y-14">
+
+      {/* 튜토리얼 버튼 */}
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+
+      {/* 튜토리얼 모달 */}
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
+
+ mx-auto max-w-6xl space-y-10 md:space-y-14">
         {/* 헤더 */}
         <section className="text-center space-y-3 md:space-y-4">
           <p className="pixel-text text-xs text-bright-cyan uppercase tracking-wider">

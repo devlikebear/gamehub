@@ -13,6 +13,11 @@ import { playGameBGM, stopGameBGM, resumeGameBGM } from '@/lib/audio/bgmPlayer';
 import { DifficultySelector } from '@/components/ui/DifficultySelector';
 import { loadDifficulty } from '@/lib/difficulty/storage';
 import type { DifficultyLevel } from '@/lib/difficulty/types';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
+
 
 import { useI18n } from '@/lib/i18n/provider';
 const GAME_ID = 'prism-smash';
@@ -26,6 +31,10 @@ export default function PrismSmashPage() {
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
   const [gameKey, setGameKey] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const tutorialContent = getTutorialContent(GAME_ID);
+
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
@@ -96,7 +105,21 @@ export default function PrismSmashPage() {
         onSelect={handleDifficultySelect}
         language={locale}
       />
-      <div className="container mx-auto max-w-5xl space-y-12">
+
+      {/* 튜토리얼 버튼 */}
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+
+      {/* 튜토리얼 모달 */}
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
+
+ mx-auto max-w-5xl space-y-12">
         <section className="text-center space-y-4">
           <p className="pixel-text text-xs text-bright-cyan">{t.games['prism-smash'].tagline}</p>
           <h1 className="pixel-text text-5xl md:text-6xl text-bright neon-text">{t.games['prism-smash'].name}</h1>

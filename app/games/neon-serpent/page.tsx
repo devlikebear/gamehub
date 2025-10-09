@@ -15,6 +15,10 @@ import { useI18n } from '@/lib/i18n/provider';
 import { DifficultySelector } from '@/components/ui/DifficultySelector';
 import { loadDifficulty } from '@/lib/difficulty/storage';
 import type { DifficultyLevel } from '@/lib/difficulty/types';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
 
 const GAME_ID = 'neon-serpent';
 
@@ -27,6 +31,9 @@ export default function NeonSerpentPage() {
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
   const [gameKey, setGameKey] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const tutorialContent = getTutorialContent(GAME_ID);
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
@@ -37,6 +44,13 @@ export default function NeonSerpentPage() {
   useEffect(() => {
     const savedDifficulty = loadDifficulty(GAME_ID);
     setDifficulty(savedDifficulty);
+  }, []);
+
+  // 첫 방문 시 튜토리얼 자동 표시
+  useEffect(() => {
+    if (shouldShowTutorial(GAME_ID)) {
+      setShowTutorial(true);
+    }
   }, []);
 
   // 오디오 시스템 초기화 및 BGM 재생
@@ -87,6 +101,19 @@ export default function NeonSerpentPage() {
         onSelect={handleDifficultySelect}
         language={locale}
       />
+
+      {/* 튜토리얼 버튼 */}
+      <TutorialButton onClick={() => setShowTutorial(true)} language={locale} />
+
+      {/* 튜토리얼 모달 */}
+      {tutorialContent && (
+        <GameTutorial
+          content={tutorialContent}
+          isOpen={showTutorial}
+          onClose={() => setShowTutorial(false)}
+          language={locale}
+        />
+      )}
 
       <div className="container mx-auto max-w-6xl space-y-8 md:space-y-12">
         {/* 헤더 */}

@@ -17,6 +17,11 @@ import { ShareButton } from '@/components/share/ShareButton';
 import { DifficultySelector } from '@/components/ui/DifficultySelector';
 import { loadDifficulty } from '@/lib/difficulty/storage';
 import type { DifficultyLevel } from '@/lib/difficulty/types';
+import { TutorialButton } from '@/components/tutorial/TutorialButton';
+import { GameTutorial } from '@/components/tutorial/GameTutorial';
+import { getTutorialContent } from '@/lib/tutorial/data';
+import { shouldShowTutorial } from '@/lib/tutorial/storage';
+
 
 const GAME_ID = 'stellar-salvo';
 
@@ -30,6 +35,10 @@ export default function StellarSalvoPage() {
   const [showDifficultySelector, setShowDifficultySelector] = useState(false);
   const [difficulty, setDifficulty] = useState<DifficultyLevel>('normal');
   const [gameKey, setGameKey] = useState(0);
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  const tutorialContent = getTutorialContent(GAME_ID);
+
 
   const handleGameComplete = useCallback((payload: GameResultPayload) => {
     setPendingResult(payload);
