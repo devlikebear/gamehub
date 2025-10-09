@@ -113,7 +113,7 @@ export default function ServiceWorkerRegistration() {
     <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
       <button
         onClick={handleInstallClick}
-        className="pixel-text text-xs bg-neon-pink/90 hover:bg-neon-pink text-black px-6 py-3 rounded-lg shadow-neon-pink hover:shadow-[0_0_30px_rgba(255,16,240,0.8)] transition-all duration-300 flex items-center gap-2"
+        className="pixel-text text-xs bg-neon-pink/90 hover:bg-neon-pink text-white px-6 py-3 rounded-lg shadow-neon-pink hover:shadow-[0_0_30px_rgba(255,16,240,0.8)] transition-all duration-300 flex items-center gap-2"
         aria-label={ariaLabel}
       >
         <span className="text-lg">📱</span>
