@@ -14,12 +14,14 @@ import { ErrorMessage } from '@/components/tools/ErrorMessage';
 import { SpriteGenerator } from '@/lib/sprite/SpriteGenerator';
 import { ApiKeyManager } from '@/lib/sprite/ApiKeyManager';
 import { UsageTracker } from '@/lib/sprite/UsageTracker';
+import { getAnimationOptions } from '@/lib/sprite/animationOptions';
 import type {
   SpriteParams,
   SpriteType,
   SpriteStyle,
   ColorPalette,
   SpriteSize,
+  AnimationType,
 } from '@/lib/sprite/types';
 
 export default function SpriteGeneratorPage() {
@@ -214,7 +216,24 @@ export default function SpriteGeneratorPage() {
             <ParamSelect
               label="스프라이트 타입"
               value={params.type}
-              onChange={(value) => setParams({ ...params, type: value as SpriteType })}
+              onChange={(value) => {
+                const newType = value as SpriteType;
+                // 타입 변경 시 애니메이션도 초기화 (타입별 적합한 기본값)
+                const defaultAnimations: Record<SpriteType, AnimationType> = {
+                  character: 'idle',
+                  enemy: 'idle',
+                  item: 'idle',
+                  effect: 'explosion',
+                  ui: 'pulse',
+                  background: 'scroll',
+                };
+                setParams({
+                  ...params,
+                  type: newType,
+                  animation: defaultAnimations[newType],
+                  customAnimation: undefined,
+                });
+              }}
               options={[
                 { value: 'character', label: '캐릭터' },
                 { value: 'enemy', label: '적' },
@@ -303,21 +322,43 @@ export default function SpriteGeneratorPage() {
 
             {/* 애니메이션 타입 (프레임 > 1일 때만 표시) */}
             {params.frames && params.frames > 1 && (
-              <ParamSelect
-                label="애니메이션 타입"
-                value={params.animation || 'idle'}
-                onChange={(value) =>
-                  setParams({ ...params, animation: value as 'idle' | 'walk' | 'run' | 'jump' | 'attack' | 'death' })
-                }
-                options={[
-                  { value: 'idle', label: '대기 (Idle)' },
-                  { value: 'walk', label: '걷기 (Walk)' },
-                  { value: 'run', label: '달리기 (Run)' },
-                  { value: 'jump', label: '점프 (Jump)' },
-                  { value: 'attack', label: '공격 (Attack)' },
-                  { value: 'death', label: '사망 (Death)' },
-                ]}
-              />
+              <>
+                <ParamSelect
+                  label="애니메이션 타입"
+                  value={params.animation || 'idle'}
+                  onChange={(value) => {
+                    const animValue = value as AnimationType;
+                    setParams({
+                      ...params,
+                      animation: animValue,
+                      customAnimation: animValue === 'custom' ? params.customAnimation : undefined,
+                    });
+                  }}
+                  options={getAnimationOptions(params.type).map((opt) => ({
+                    value: opt.value,
+                    label: opt.label,
+                  }))}
+                />
+
+                {/* 커스텀 애니메이션 입력 (custom 선택 시만 표시) */}
+                {params.animation === 'custom' && (
+                  <div className="mb-4">
+                    <label className="mb-2 block text-sm font-bold text-gray-300">
+                      커스텀 애니메이션 설명
+                    </label>
+                    <input
+                      type="text"
+                      value={params.customAnimation || ''}
+                      onChange={(e) => setParams({ ...params, customAnimation: e.target.value })}
+                      placeholder="예: 날개 펄럭이며 선회하는 모션"
+                      className="w-full rounded bg-gray-800 px-4 py-2 text-white border border-gray-700 focus:border-cyan-500 focus:outline-none"
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      영어로 입력하면 더 정확한 결과를 얻을 수 있습니다
+                    </p>
+                  </div>
+                )}
+              </>
             )}
 
             {/* 생성 버튼 */}
